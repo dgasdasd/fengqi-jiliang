@@ -54,7 +54,7 @@ body{
 
 /* ---------- 全站底纹：除第二页外，每一页的底都是这张雾 ---------- */
 .cover .stage, .stub{
-  background:var(--paper) url("../assets/img/bg-smoke.jpg") center / cover no-repeat;
+  background:var(--paper) url("../assets/img/bg-smoke.webp") center / cover no-repeat;
 }
 /* 雾上压一层薄纸色：底纹要在，但不能抢前景（原片第一页的底其实很淡） */
 .cover .stage::after, .stub::after{

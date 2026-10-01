@@ -181,16 +181,33 @@ function measureEye() {
 /* 进入第二页视口后按原片量出的秒表依次出现，全部留在画面上（与原片一致）
    时刻写在各自的 data-t 上：超强台风 0.5 / 城乡紧急 2.0 / 城市内涝 2.5 /
    多方力量 3.0 / 大字标语 4.2 / 点击屏幕 6.0（秒） */
+/* 慢网保护：先等关键图加载完再开始念秒表。
+   否则在 GitHub Pages 这种高延迟链路上，动画会在背景还没出来时就开始跑，
+   看着就是"字先蹦出来、图后蹦出来"，像坏了。最多等 8 秒，等不到也照常开始。 */
+function whenImagesReady(urls, cb) {
+  var left = urls.length, done = false;
+  function fin() { if (!done) { done = true; cb(); } }
+  if (!left) { fin(); return; }
+  urls.forEach(function (u) {
+    var im = new Image();
+    im.onload = im.onerror = function () { if (--left <= 0) fin(); };
+    im.src = u;
+  });
+  setTimeout(fin, 8000);
+}
+
 var eyeStarted = false;
 function startEye() {
   if (eyeStarted) return;
   eyeStarted = true;
-  $$('.suck').forEach(function (el) {
-    var t = parseFloat(el.dataset.t || '0.5') * 1000;
-    setTimeout(function () { el.classList.add('in'); }, t);
+  whenImagesReady(['assets/img/bg-eye.webp'], function () {
+    $$('.suck').forEach(function (el) {
+      var t = parseFloat(el.dataset.t || '0.5') * 1000;
+      setTimeout(function () { el.classList.add('in'); }, t);
+    });
+    if (cta) setTimeout(function () { cta.classList.add('show'); },
+                       parseFloat(cta.dataset.t || '6') * 1000);
   });
-  if (cta) setTimeout(function () { cta.classList.add('show'); },
-                     parseFloat(cta.dataset.t || '6') * 1000);
 }
 
 /* 点击底部提示 → 画面上所有文案被吸进风眼 → 滑到第三页 */
