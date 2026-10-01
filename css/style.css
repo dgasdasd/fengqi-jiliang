@@ -6,14 +6,29 @@
    ============================================================ */
 
 *,*::before,*::after{ margin:0; padding:0; box-sizing:border-box; }
-html{ -webkit-text-size-adjust:100%; }
+
+/* ---------- 整屏翻页 ----------
+   每一页正好一屏高，滑动一次翻一页，不会一路滑到底。
+   mandatory = 松手一定吸附到最近的页边界；scroll-snap-stop:always = 快速划也只翻一页。 */
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-snap-type:y mandatory;
+  overflow-y:scroll;
+  /* 不设 scroll-behavior:smooth —— 翻页动画由 JS 自己做（glideTo），
+     两者同时生效会互相打架 */
+}
 [hidden]{ display:none !important; }
 
 body{
   font-family:var(--f-hei);
   color:var(--ink);
   background:#dfdedb;
+  /* 必须用 clip 不能用 hidden：overflow-x:hidden 会让 body 变成滚动容器，
+     从而**废掉 html 上的 scroll-snap-type**（整屏翻页就失效了）。
+     clip 同样裁掉横向溢出，但不创建滚动容器。
+     上一行是给不支持 clip 的老浏览器（Safari <16）兜底，支持的浏览器会用下一行覆盖它。 */
   overflow-x:hidden;
+  overflow-x:clip;
   -webkit-font-smoothing:antialiased;
 }
 
@@ -33,7 +48,13 @@ body{
   .frame{ box-shadow:0 24px 70px rgba(20,20,26,.28), 0 0 0 1px rgba(20,20,26,.06); }
 }
 
-.sec{ position:relative; width:100%; }
+.sec{
+  position:relative; width:100%;
+  height:100svh;                       /* 一页 = 一屏 */
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+  display:grid; place-items:center;    /* 舞台比屏幕小时居中，不留半截下一页 */
+}
 .stage{ position:relative; width:var(--sw); height:var(--sh); overflow:hidden; }
 
 /* ---------- 页码（原片右下角那个 n/15，位置与字号照量） ---------- */
@@ -49,7 +70,7 @@ body{
 /* ============================================================
    第一页 · 封面
    ============================================================ */
-.cover{ height:max(var(--sh), 100svh); background:var(--paper); }
+.cover{ background:var(--paper); }
 .cover .stage{ height:var(--sh); }
 
 /* ---------- 全站底纹：除第二页外，每一页的底都是这张雾 ---------- */
@@ -134,7 +155,7 @@ body{
    第二页 · 台风眼
    ============================================================ */
 /* 与原片一致：这一页是定屏，内容全部留在画面上，靠底部提示进入下一页 */
-.eye{ height:var(--sh); background:#05090d; }
+.eye{ background:#05090d; }
 .eye .sticky{
   position:relative; width:100%; height:var(--sh); overflow:hidden;
   background:#05090d;
@@ -219,7 +240,7 @@ body{
    第三页 · 占位
    ============================================================ */
 .stub{
-  height:max(var(--sh), 100svh); display:grid; place-content:center; justify-items:center;
+  display:grid; place-content:center; justify-items:center;
   gap:calc(16 * var(--u)); text-align:center;
   position:relative; overflow:hidden;
 }

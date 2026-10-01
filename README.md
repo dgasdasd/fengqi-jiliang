@@ -193,7 +193,27 @@ SVG 子元素的 CSS 遮罩参考框不可靠。改成在 SVG 用户坐标里放
 台风本体沿它平移 + 旋转 + 缩小（1 → 0.42），透明度在最后 28% 淡出——
 **画面上不画线、不留痕**。
 
-### 3.5 线上部署与"慢网"处理
+### 3.4 整屏翻页（scroll-snap）
+
+三页各占一屏，**一次滑动只翻一页**，不会一路滑到底：
+
+```css
+html{ scroll-snap-type:y mandatory; overflow-y:scroll; }
+.sec{ height:100svh; scroll-snap-align:start; scroll-snap-stop:always;
+      display:grid; place-items:center; }
+```
+
+- `mandatory` = 松手一定吸附到最近的页边界
+- `scroll-snap-stop:always` = 快速划也只翻一页，不会连翻
+- `.sec` 用 grid 居中，舞台（`--sh`）比屏幕矮时上下留白，不会露出下一页的半截
+
+> **踩过的坑**：`body{overflow-x:hidden}` 会**直接废掉 scroll-snap**。
+> 因为它让 body 变成滚动容器，html 上的 `scroll-snap-type` 就不生效了。
+> 必须改用 `overflow-x:clip`（同样裁横向溢出，但不创建滚动容器）。
+> 定位方法：写一个最小对照页二分——把 section 直接放 body 下吸附正常，
+> 一旦加上 `body{overflow-x:hidden}` 就失效。
+
+## 3.5 线上部署与"慢网"处理
 
 线上地址：**https://dgasdasd.github.io/fengqi-jiliang/**（GitHub Pages，免费长期）
 
