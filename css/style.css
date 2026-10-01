@@ -1,0 +1,240 @@
+/* ============================================================
+   style.css —— 风栖过的脊梁
+   第一页 封面：雾底 + 黑色山影（山脚化雾）+ 一笔墨从山川上飞过 + 人影与题目
+   第二页 台风眼：整屏漩涡，文案被吸进风眼
+   第三页 占位
+   ============================================================ */
+
+*,*::before,*::after{ margin:0; padding:0; box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+[hidden]{ display:none !important; }
+
+body{
+  font-family:var(--f-hei);
+  color:var(--ink);
+  background:#dfdedb;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* 桌面：把舞台摆成一台手机居中预览 */
+.frame{
+  position:relative;
+  width:var(--sw);
+  margin:0 auto;
+  background:var(--paper);
+}
+@media (max-width:599px){
+  /* 舞台锁 448:960，比这个比例更"矮"的手机上会留出侧边 —— 用纸色接住 */
+  body{ background:var(--paper); }
+}
+@media (min-width:600px){
+  body{ background:radial-gradient(120% 90% at 50% 0%, #f0efec 0%, #d8d7d3 60%, #c9c8c4 100%); }
+  .frame{ box-shadow:0 24px 70px rgba(20,20,26,.28), 0 0 0 1px rgba(20,20,26,.06); }
+}
+
+.sec{ position:relative; width:100%; }
+.stage{ position:relative; width:var(--sw); height:var(--sh); overflow:hidden; }
+
+/* ---------- 页码（原片右下角那个 n/15，位置与字号照量） ---------- */
+.pager{
+  position:fixed; z-index:var(--z-progress); pointer-events:none;
+  right:max(9px, calc((100vw - var(--sw)) / 2 - 32px));
+  bottom:calc(20 * var(--u));
+  font-family:var(--f-hei); font-size:calc(13 * var(--u));
+  letter-spacing:.06em; color:#fff; opacity:.55;
+  mix-blend-mode:difference;      /* 亮底显深、暗底显亮，一页到底不用换色 */
+}
+
+/* ============================================================
+   第一页 · 封面
+   ============================================================ */
+.cover{ height:max(var(--sh), 100svh); background:var(--paper); }
+.cover .stage{ height:var(--sh); }
+
+/* ---------- 全站底纹：除第二页外，每一页的底都是这张雾 ---------- */
+.cover .stage, .stub{
+  background:var(--paper) url("../assets/img/bg-smoke.jpg") center / cover no-repeat;
+}
+/* 雾上压一层薄纸色：底纹要在，但不能抢前景（原片第一页的底其实很淡） */
+.cover .stage::after, .stub::after{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:rgba(243,243,241,.62);   /* 原片第一页顶部亮度约 235：雾要看得见，但不能抢前景 */
+}
+
+.scene{
+  position:absolute; inset:0; width:100%; height:100%;
+  z-index:var(--z-scene); overflow:visible; pointer-events:none;
+}
+
+/* 山：黑剪影。素材已是"白=透明"（见 index.html 注释），
+   所以不用 mix-blend-mode —— 那样会把底下的雾一起挡掉 */
+.mount{
+  filter:contrast(1.3);
+  opacity:0; transform:translateY(calc(22 * var(--u)));
+  animation:mountIn 1.10s .20s var(--e-emph) forwards;
+}
+@keyframes mountIn{ to{ opacity:1; transform:none; } }
+
+/* 人影：原片里是"由小放大"出场的 —— 从约 0.35 倍缩放到原大（约 1.1s），
+   缩放支点在脚上（人往上长，不是原地膨胀），同时淡入。
+   题字比它晚 0.2s 起、晚 0.9s 收（原片里人和题字就是这么错开的）。 */
+.person{
+  opacity:0; transform:scale(.35);
+  transform-origin:25% 100%;        /* 25% = 双脚中心的横向位置 */
+  animation:personIn 1.15s 3.40s var(--e-out) forwards;
+}
+@keyframes personIn{
+  from{ opacity:0; transform:scale(.35); }
+  to  { opacity:1; transform:none; }
+}
+
+/* 山脚飞白：跟山一起浮起 */
+.splatter{ opacity:0; animation:mountIn 1.10s .20s var(--e-emph) forwards; }
+
+/* 水墨台风：只出现、旋转、缩小、飘走 —— 不留痕 */
+.typhoon{ opacity:0; }
+
+/* 标题：整块一起淡入 —— 原片逐帧看下来，六个字从 t≈0.2s 起就同时是淡的，
+   到 t≈2.0s 一起变实，**没有逐字出现**。所以动画加在 .title 上，.c 只负责 1:1 定位。 */
+.title{
+  position:absolute; inset:0; z-index:var(--z-title); pointer-events:none;
+  opacity:0;
+  animation:titleIn 1.90s 3.60s var(--e-out) forwards;
+}
+@keyframes titleIn{
+  from{ opacity:0; filter:blur(calc(5 * var(--u))); }
+  to  { opacity:1; filter:blur(0); }
+}
+.title .c{
+  position:absolute;
+  left:calc(var(--x) * var(--u)); top:calc(var(--y) * var(--u));
+  width:calc(var(--w) * var(--u)); height:calc(var(--h) * var(--u));
+}
+
+/* 下滑提示：原片只有一个"⌄"，没有文字 */
+.hint{
+  position:absolute; left:50%; bottom:calc(26 * var(--u)); transform:translateX(-50%);
+  z-index:var(--z-ui);
+  display:grid; justify-items:center; gap:calc(2 * var(--u));
+  color:var(--ink-soft);
+  opacity:0; animation:fadeIn .9s 5.40s var(--e-out) forwards;
+}
+@keyframes fadeIn{ to{ opacity:.9; } }
+.hint i{
+  width:calc(13 * var(--u)); height:calc(13 * var(--u));
+  border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg);
+  animation:float 1.7s var(--e-in) infinite;
+}
+.hint i + i{ margin-top:calc(-8 * var(--u)); animation-delay:.16s; }
+@keyframes float{ 50%{ transform:rotate(45deg) translate(calc(3 * var(--u)), calc(3 * var(--u))); } }
+
+/* ============================================================
+   第二页 · 台风眼
+   ============================================================ */
+/* 与原片一致：这一页是定屏，内容全部留在画面上，靠底部提示进入下一页 */
+.eye{ height:var(--sh); background:#05090d; }
+.eye .sticky{
+  position:relative; width:100%; height:var(--sh); overflow:hidden;
+  background:#05090d;
+}
+.eye-bg{
+  position:absolute; inset:0;   /* 与风眼坐标计算保持同一基准框 */
+  background:url("../assets/img/bg-eye.webp") center / cover no-repeat;
+  animation:swirl 26s ease-in-out infinite alternate;
+}
+@keyframes swirl{
+  from{ transform:scale(1.05) rotate(-1.1deg); }
+  to  { transform:scale(1.12) rotate(1.1deg); }
+}
+/* 压暗四周，把视线收进风眼 */
+.veil{
+  position:absolute; inset:0;
+  background:radial-gradient(75% 55% at 44% 48%, rgba(0,0,0,0) 30%, rgba(3,7,11,.55) 100%);
+}
+
+.news{
+  position:absolute; left:var(--x); top:var(--y); z-index:var(--z-title);
+  white-space:nowrap; font-family:var(--f-hei); font-weight:700;
+  font-size:calc(30 * var(--u));      /* 原片实测：10 字跨 293px → 约 30px */
+  letter-spacing:.04em;
+  text-shadow:0 2px 12px rgba(0,0,0,.6);
+  /* 原片里每一条是"从上方滑下来落位"的：先在上方若隐若现（模糊+半透明），
+     再往下滑到最终位置并变清晰。滑动距离由各自的 --dy 给（原片实测）。 */
+  opacity:0;
+  /* 模糊只是"轻微发虚"（原片里字一出来就是基本清晰的，只有一点点软），
+     千万别给大模糊 —— 那会变成"从雾里浮出来"，和原片完全不是一回事 */
+  filter:blur(calc(3 * var(--u)));
+  transform:translateY(calc(var(--dy, 40) * var(--u)));
+  /* 透明度收得快（0.75s），位移收得慢（1.15s）：
+     效果是"先看清、再慢慢落位"，而不是"落到位了才看清" */
+  transition:transform 1.15s var(--e-out),
+             opacity   .75s var(--e-out),
+             filter    .75s var(--e-out);
+  will-change:filter,opacity,transform;
+}
+.news.in{ opacity:1; filter:blur(0); transform:none; }
+.news b{ font-weight:inherit; color:var(--rev); }
+.news em{ font-style:normal; color:var(--zhu); }
+
+.slogan{
+  /* 原片里两行都是居中的（第一行 x 22→430，页宽 448，中心 226 ≈ 页面中心 224），
+     所以铺满整宽 + text-align:center，不要再 left:4% 左对齐 */
+  position:absolute; left:0; right:0; top:31.6%; z-index:var(--z-title);
+  text-align:center;
+  /* 行距按原片实测：风 的顶(300) 到 防 的顶(452) 相距 152px，字 74px → 行距约 2.05 */
+  font-family:var(--f-cal); font-size:calc(74 * var(--u)); line-height:2.02;
+  color:var(--rev); text-shadow:0 3px 20px rgba(0,0,0,.55);
+  opacity:0; filter:blur(calc(14 * var(--u)));
+  transition:opacity .95s var(--e-out), filter .95s var(--e-out);
+  will-change:filter,opacity; white-space:nowrap;
+}
+.slogan.in{ opacity:1; filter:blur(0); }
+.slogan em{
+  /* 原片里 风 / 防 高 148px、宽 197px，白字 74px —— 所以是 2.0em，不是 1.62em */
+  font-style:normal; color:var(--zhu); font-size:2.0em; line-height:.86; vertical-align:-.07em;
+  -webkit-text-stroke:.052em currentColor; paint-order:stroke fill;   /* 风 / 防 在原片里更大更重 */
+}
+.slogan span{ -webkit-text-stroke:.022em currentColor; paint-order:stroke fill; }
+.slogan .l2{ display:block; margin-left:.5em; }
+
+/* 整屏热区：文案是"点击屏幕"，就让人真的能点屏幕 */
+.cta{
+  position:absolute; inset:0; z-index:var(--z-ui);
+  border:0; background:none; cursor:pointer; padding:0;
+  display:grid; align-content:end; justify-items:center;
+  opacity:0; pointer-events:none;
+  transition:opacity .9s var(--e-out);
+  -webkit-tap-highlight-color:transparent;
+}
+.cta.show{ opacity:1; pointer-events:auto; }
+/* 热区上不放任何可见元素：文字和扩散圆环都按需求去掉了，只剩一个透明的整屏点击区 */
+.cta:active{ background:rgba(255,255,255,.04); }
+
+.eye .hint{ color:rgba(247,247,245,.85); text-shadow:0 1px 8px rgba(0,0,0,.6); }
+.eye .hint.gone{ opacity:0 !important; transition:opacity var(--d-slow); }
+
+/* ============================================================
+   第三页 · 占位
+   ============================================================ */
+.stub{
+  height:max(var(--sh), 100svh); display:grid; place-content:center; justify-items:center;
+  gap:calc(16 * var(--u)); text-align:center;
+  position:relative; overflow:hidden;
+}
+.stub > *{ position:relative; z-index:1; }
+.stub .big{ font-family:var(--f-cal); font-size:calc(46 * var(--u)); line-height:1.2; }
+.stub .small{
+  font-family:var(--f-hei); font-size:calc(13 * var(--u));
+  letter-spacing:.36em; text-indent:.36em; color:var(--ink-soft);
+}
+
+/* ---------- 动效减弱：全部静态呈现 ---------- */
+@media (prefers-reduced-motion: reduce){
+  .eye-bg, .hint i{ animation:none !important; }
+  .mount, .person, .title, .hint{ animation:none !important; opacity:1 !important; transform:none !important; filter:none !important; }
+  .mount{ filter:contrast(1.3) !important; }
+  .title .c{ filter:none !important; }
+  .typhoon{ display:none; }
+}

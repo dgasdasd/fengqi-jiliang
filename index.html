@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f3f3f1">
+<title>风栖过的脊梁</title>
+<meta name="description" content="风栖过的脊梁 —— 台风主题交互 H5：从风眼到重建。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23f3f3f1'/%3E%3Cpath d='M4 46 C16 34 26 30 34 32 C42 34 50 28 60 18' fill='none' stroke='%230d0d12' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='34' cy='32' r='6' fill='none' stroke='%23c8362f' stroke-width='4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main class="frame" id="frame">
+
+<!-- ═══════════ 第一页 · 封面 ═══════════ -->
+<section class="sec cover" id="p1" aria-label="封面：风栖过的脊梁">
+  <div class="stage">
+
+    <!-- 场景坐标系固定 448×960，与原片同尺寸；下面所有数值都是对原片逐帧量出来的
+         山：842×1190 原尺寸落在 x -106 / y -490，山脊最高点 x=230 / y=430（与原片一致）
+             山脚 y=500 起化雾，到 y=700 散尽（原片山脚那一大片灰白墨晕） -->
+    <svg class="scene" viewBox="0 0 448 960" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <linearGradient id="mistGrad" gradientUnits="userSpaceOnUse" x1="0" y1="470" x2="0" y2="700">
+          <stop offset="0"    stop-color="#fff" stop-opacity="1"/>
+          <stop offset="0.22" stop-color="#fff" stop-opacity=".42"/>
+          <stop offset="0.55" stop-color="#fff" stop-opacity=".15"/>
+          <stop offset="1"    stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="mistMask" maskUnits="userSpaceOnUse" x="-130" y="-510" width="900" height="1230">
+          <rect x="-130" y="-510" width="900" height="1230" fill="url(#mistGrad)"/>
+        </mask>
+
+      </defs>
+
+      <!-- 用 ridge-a.webp（白=透明，α=1−亮度，颜色取黑）而不是原图 + mix-blend-mode。
+           SVG 内部是独立混合组，multiply 里的白不是"乘没了"，而是**不透明地盖住**底纹，
+           结果整页上半部分的雾全被挡掉。手算 multiply 就不受混合组影响。 -->
+      <image class="mount" mask="url(#mistMask)" href="assets/img/ridge-a.webp"
+             x="-106" y="-490" width="841.9" height="1190" preserveAspectRatio="none"/>
+
+      <!-- 山脚飞白：沿山体下沿撒的墨点（对应原片山脚的溅墨） -->
+      <g class="splatter" id="splatter" fill="#0d0d12"></g>
+
+      <!-- 航线：只给台风定位用，本身不画任何东西（风飘走就是飘走，不留痕） -->
+      <path id="flyPath" fill="none" stroke="none" d=""/>
+
+      <g class="typhoon" id="typhoon">
+        <image href="assets/img/typhoon-ink.webp" x="-43" y="-48" width="86" height="96"/>
+      </g>
+
+      <!-- 人影：黑色剪影，站在山下留白里（落点由 main.js 算） -->
+      <image class="person" id="personImg" href="assets/img/person.webp"
+             x="49.9" y="536" width="201.2" height="430" preserveAspectRatio="none"/>
+    </svg>
+
+    <!-- 题字：直接从原片多帧合成后抠出的字形，1:1 落在原片的位置上
+         （马善政只有 Regular 一个字重，加描边会把笔锋糊平，所以改用原片字形） -->
+    <h1 class="title" aria-label="风栖过的脊梁">
+      <img class="c" src="assets/img/title-1feng.webp"  alt="" style="--x:21;--y:174;--w:93;--h:78">
+      <img class="c" src="assets/img/title-2qi.webp"    alt="" style="--x:94;--y:239;--w:97;--h:75">
+      <img class="c" src="assets/img/title-3guo.webp"   alt="" style="--x:176;--y:172;--w:87;--h:84">
+      <img class="c" src="assets/img/title-4de.webp"    alt="" style="--x:244;--y:240;--w:80;--h:76">
+      <img class="c" src="assets/img/title-5ji.webp"    alt="" style="--x:295;--y:170;--w:92;--h:88">
+      <img class="c" src="assets/img/title-6liang.webp" alt="" style="--x:358;--y:236;--w:80;--h:91">
+    </h1>
+
+    <div class="hint"><i></i><i></i></div>
+  </div>
+</section>
+
+<!-- ═══════════ 第二页 · 台风眼 ═══════════ -->
+<section class="sec eye" id="p2" aria-label="台风眼">
+  <div class="sticky" id="sticky2">
+    <div class="eye-bg" aria-hidden="true"></div>
+    <div class="veil" aria-hidden="true"></div>
+
+    <!-- 出场时刻 data-t（秒）照原片量出：
+         超强台风 0.5 / 城乡紧急 2.0 / 城市内涝 2.5 / 多方力量 3.0 /
+         大字标语 4.2（渐显到 5.0）/ 点击屏幕 6.0 -->
+    <!-- --dy = 出现时在最终位置"上方"多少舞台像素（原片实测的滑动距离）
+         data-t = 什么时候开始往下落（原片里上一行还没落定，下一行就已经在上面若隐若现了） -->
+    <p class="news suck" style="--x:3.6%;--y:16.7%;--dy:40"   data-t="0.5" data-spin="1.7"><em>超强台风</em><b>登陆沿海多地</b></p>
+    <p class="news suck" style="--x:29%;--y:24.8%;--dy:46"    data-t="1.6" data-spin="-1.9"><b>城乡紧急</b><em>人员转移</em></p>
+    <p class="news suck" style="--x:4.9%;--y:70.6%;--dy:118"  data-t="2.4" data-spin="2.0"><em>城市内涝</em><b>道路积水严重</b></p>
+    <p class="news suck" style="--x:24.6%;--y:78.1%;--dy:158" data-t="2.7" data-spin="-1.6"><em>多方力量</em><b>奔赴救灾一线</b></p>
+
+    <div class="slogan suck" data-t="4.2" data-spin="2.3">
+      <span class="l1"><em>风</em>起沧海</span>
+      <span class="l2">岁岁设<em>防</em></span>
+    </div>
+
+    <!-- 整屏热区：不留任何可见元素，点屏幕任意位置进下一页 -->
+    <button class="cta" id="cta" type="button" data-t="5.4" aria-label="继续"></button>
+  </div>
+</section>
+
+<!-- ═══════════ 第三页 · 占位 ═══════════ -->
+<section class="sec stub" id="p3" aria-label="第三页">
+  <p class="big">台风的一生</p>
+  <span class="small">第三页 · 制作中，敬请期待</span>
+</section>
+
+</main>
+
+<div class="pager" id="pager">1/3</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
