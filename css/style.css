@@ -50,7 +50,7 @@ body{
 
 .sec{
   position:relative; width:100%;
-  height:100svh;                       /* 一页 = 一屏 */
+  height:var(--vh, 100vh);             /* 一页 = 一屏。--vh 三级兜底见 tokens.css */
   scroll-snap-align:start;
   scroll-snap-stop:always;
   display:grid; place-items:center;    /* 舞台比屏幕小时居中，不留半截下一页 */
@@ -573,7 +573,7 @@ body{
 .p3-year-point:hover i,.p3-year-point:focus-visible i{transform:translate(-50%,-50%) scale(1.25);box-shadow:0 0 0 4px rgba(199,65,77,.18);}
 .p3-year-point span{position:absolute;left:calc(var(--lx) * var(--u));top:calc(var(--ly) * var(--u));width:calc(166 * var(--u));text-align:left;color:#111b20;font-size:calc(12.5 * var(--u));line-height:1.35;text-shadow:0 1px 3px rgba(255,255,255,.96);pointer-events:none;}
 .p3-year-point span strong{font-weight:700;}.p3-year-point span em{font-style:normal;color:#b3313c;font-weight:700;}.p3-year-point span b{display:block;padding-left:calc(8 * var(--u));font-weight:600;}
-.p3-typhoon-detail{position:fixed;top:0;left:max(calc((100vw - var(--sw)) / 2),0px);z-index:40;width:var(--sw);height:100svh;overflow-y:auto;padding:calc(18 * var(--u)) calc(13 * var(--u)) calc(35 * var(--u));background:rgba(247,248,245,.97) url("../assets/img/bg-smoke.webp") center/cover no-repeat;box-shadow:0 0 30px rgba(20,30,35,.2);overscroll-behavior:contain;animation:p3DetailIn .34s var(--e-out) both;}
+.p3-typhoon-detail{position:fixed;top:0;left:max(calc((100vw - var(--sw)) / 2),0px);z-index:40;width:var(--sw);height:var(--vh, 100vh);overflow-y:auto;padding:calc(18 * var(--u)) calc(13 * var(--u)) calc(35 * var(--u));background:rgba(247,248,245,.97) url("../assets/img/bg-smoke.webp") center/cover no-repeat;box-shadow:0 0 30px rgba(20,30,35,.2);overscroll-behavior:contain;animation:p3DetailIn .34s var(--e-out) both;}
 .p3-typhoon-detail[hidden]{display:none;}
 .p3-detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:calc(12 * var(--u));}
 .p3-detail-header p{font-size:calc(11 * var(--u));color:#69777c;}

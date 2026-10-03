@@ -27,9 +27,18 @@
   --f-hei:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;      /* 黑体：新闻、注释 */
   --f-song:"Songti SC",SimSun,"Noto Serif SC",serif;                      /* 宋体：正文 */
 
-  /* ---------- 3. 舞台与单位 ---------- */
-  --sw:min(100vw, calc(100svh * 448 / 960));   /* 舞台宽（锁 448:960） */
-  --sh:min(100svh, calc(100vw * 960 / 448));   /* 舞台高 */
+  /* ---------- 3. 舞台与单位 ----------
+     视口高度必须走三级兜底，否则老浏览器会整站塌掉：
+       ① 100vh  —— 任何浏览器都认
+       ② 100svh —— iOS 15.4+ / Chrome 108+ 才有；取"工具栏全展开时的最小高度"，
+                   拿它当一页高度，翻页时不会被地址栏啃掉一截
+       ③ JS 实测 —— main.js 会把真实 innerHeight 写成行内 --vh（px），优先级最高
+     坑：变量里含**不支持的单位**时，用到它的整条声明会在计算值阶段作废
+     （.sec{height:100svh} 会直接失效 → 三页塌成一页长文档 → 一路滑到底），
+     所以每一级都必须用 @supports 隔开，不能连写。 */
+  --vh:100vh;                                  /* ① 兜底级 */
+  --sw:calc(var(--vh) * 448 / 960);            /* 舞台宽（锁 448:960） */
+  --sh:var(--vh);                              /* 舞台高 */
   --u:calc(var(--sw) / 448);                   /* 1 舞台像素 */
 
   /* ---------- 4. 字号 / 行高（舞台像素） ---------- */
@@ -59,6 +68,16 @@
   --z-title:10;    /* 标题 */
   --z-ui:20;       /* 提示、侧栏圆点 */
   --z-progress:40; /* 顶部进度 */
+}
+@supports (height: 100svh){
+  :root{ --vh:100svh; }                        /* ② 支持 svh 就用它 */
+}
+@supports (width: min(1px, 2px)){
+  /* ③ 支持 min() 才敢写"锁 448:960"的取小逻辑；不支持就退化成只按高度算 */
+  :root{
+    --sw:min(100vw, calc(var(--vh) * 448 / 960));
+    --sh:min(var(--vh), calc(100vw * 960 / 448));
+  }
 }
 @media (prefers-reduced-motion: reduce){
   :root{ --d-fast:1ms; --d-mid:1ms; --d-slow:1ms; }

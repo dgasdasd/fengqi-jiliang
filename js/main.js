@@ -989,19 +989,58 @@ if (sec2 && 'IntersectionObserver' in window) {
   }, { threshold: [0.5] }).observe(sec2);
 } else { setTimeout(startEye, 1200); }
 
-function frame() {
-  var vh = window.innerHeight;
-
-  var mid = window.scrollY + vh * 0.5, k = 0;
+function currentIndex() {
+  var mid = window.scrollY + window.innerHeight * 0.5, k = 0;
   for (var i = secs.length - 1; i >= 0; i--) { if (mid >= secs[i].offsetTop) { k = i; break; } }
-  if (pager) pager.textContent = (k + 1) + '/' + secs.length;
+  return k;
+}
 
+function frame() {
+  if (pager) pager.textContent = (currentIndex() + 1) + '/' + secs.length;
   requestAnimationFrame(frame);
 }
 
 /* ============================================================
+   ⑤ 视口高度：把实测的可视高度写进 --vh
+   ------------------------------------------------------------
+   CSS 里已经有 vh / svh 两级兜底，但都不够，必须再用 JS 兜一道：
+   · svh 只有 iOS 15.4+ / Chrome 108+ 才认。安卓微信是 X5 内核（Chromium 77/86 级别），
+     部分国产浏览器也不认；一旦不认，.sec{height:100svh} 整条声明作废 →
+     三个页面塌成一篇长文档 → 手机上一路滑到底、完全没有翻页感。
+   · 就算认 svh，它按"工具栏全部展开时的最小高度"算，比真正看得见的区域矮一截，
+     一页装不满一屏，底部会露出下一页的一条边，看着依然不像"一页一页"。
+   用实测 innerHeight 覆盖掉它，两个问题一起解决。
+   只在数值真的变了才写，避免翻页过程中反复改高度造成抖动。 */
+var vhTimer = 0;
+
+function fixViewport() {
+  var h = window.innerHeight || 0;
+  if (window.visualViewport && visualViewport.height) h = Math.min(h, visualViewport.height);
+  if (!h) return;
+  var root = document.documentElement;
+  if (parseInt(root.style.getPropertyValue('--vh'), 10) === Math.round(h)) return;
+  var k = currentIndex();                                   // 先记住当时停在哪一页
+  root.style.setProperty('--vh', Math.round(h) + 'px');
+  var t = secs[Math.min(k, secs.length - 1)];
+  if (t) window.scrollTo(0, Math.round(t.offsetTop));        // 高度变了要重新对齐页边界
+}
+
+function queueViewport() {                                  // 地址栏收放会连续触发，去抖
+  clearTimeout(vhTimer);
+  vhTimer = setTimeout(fixViewport, 140);
+}
+
+window.addEventListener('resize', queueViewport, { passive: true });
+window.addEventListener('orientationchange', function () { setTimeout(fixViewport, 180); }, { passive: true });
+if (window.visualViewport && visualViewport.addEventListener) {
+  visualViewport.addEventListener('resize', queueViewport, { passive: true });
+}
+window.addEventListener('pageshow', fixViewport, { passive: true });
+
+/* ============================================================
    启动
    ============================================================ */
+fixViewport();     // 必须最先跑：后面所有 calc(N * var(--u)) 都依赖 --vh
 initCover();
 initP3();
 measureEye();
