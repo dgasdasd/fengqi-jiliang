@@ -13,7 +13,7 @@
 <link rel="preload" as="image" href="assets/img/person.webp">
 <link rel="preload" as="font" type="font/woff2" href="fonts/msz.subset.woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/style.css?v=20261003-after-orderfix1">
+<link rel="stylesheet" href="css/style.css?v=20261003-after-processfix1">
 </head>
 <body>
 
@@ -362,18 +362,22 @@
     <div class="p3-view p3-process" data-view="process" hidden>
       <button class="p3-subview-back" id="p3ProcessBack" type="button" aria-label="返回台风形成条件"><span aria-hidden="true">‹</span> 返回上一步</button>
       <div class="p3-panel-heading">台风形成的过程</div>
-      <div class="p3-process-art"><img src="assets/p3/derived/formation-cloud.jpg" alt="台风形成示意图"></div>
-      <div class="p3-process-list" id="p3ProcessList"></div>
+      <div class="p3-process-scrollbox" role="region" aria-label="台风形成过程文字，可上下滑动查看">
+        <div class="p3-process-list" id="p3ProcessList"></div>
+      </div>
       <button class="p3-more" type="button" data-next="evidence">台风形成的过程 <span>⌄</span></button>
     </div>
 
     <div class="p3-view p3-evidence" data-view="evidence" hidden>
+      <button class="p3-subview-back" id="p3EvidenceBack" type="button" aria-label="返回台风形成过程"><span aria-hidden="true">‹</span> 返回上一步</button>
       <div class="p3-panel-heading">台风形成的过程</div>
-      <div class="p3-evidence-grid">
-        <article><b>1</b><img src="assets/p3/derived/stage-1.jpg" alt="孕育阶段云图"><p>孕育阶段：热带有大量湿热上升空气形成强对流，在地转偏向力的影响下形成初步云团。</p></article>
-        <article><b>2</b><img src="assets/p3/derived/stage-2.jpg" alt="发展阶段云图"><p>发展阶段：低压中心不断吸收水汽，风力增强，升级为热带风暴、强热带风暴。</p></article>
-        <article><b>3</b><img src="assets/p3/derived/stage-3.jpg" alt="成熟阶段云图"><p>成熟阶段：中心附近风力高达 12 级并且有明显、规整的台风眼。</p></article>
-        <article><b>4</b><img src="assets/p3/derived/stage-4.jpg" alt="消亡阶段云图"><p>消亡阶段：台风登陆后因摩擦力迅速增大而逐渐消散。</p></article>
+      <div class="p3-evidence-scrollbox" role="region" aria-label="台风形成四个阶段文字，可上下滑动查看">
+        <div class="p3-evidence-grid">
+          <article><b>1</b><p><strong>孕育阶段</strong><br>热带有大量湿热上升空气形成强对流，在地转偏向力的影响下形成初步云团。</p></article>
+          <article><b>2</b><p><strong>发展阶段</strong><br>低压中心不断吸收水汽，风力增强，升级为热带风暴、强热带风暴。</p></article>
+          <article><b>3</b><p><strong>成熟阶段</strong><br>中心附近风力高达 12 级并且有明显、规整的台风眼。</p></article>
+          <article><b>4</b><p><strong>消亡阶段</strong><br>台风登陆后因摩擦力迅速增大而逐渐消散。</p></article>
+        </div>
       </div>
       <div class="p3-evidence-note">台风是怎么形成的？</div>
     </div>
@@ -538,6 +542,6 @@
 
 <div class="pager" id="pager">1/3</div>
 
-<script src="js/main.js?v=20261003-after-orderfix1"></script>
+<script src="js/main.js?v=20261003-after-processfix1"></script>
 </body>
 </html>

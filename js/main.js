@@ -259,7 +259,7 @@ function initP3() {
   var scroll = $('#p3Scroll'), origin = $('.p3-origin'), originScene = $('#p3OriginScene'), waveHit = $('#p3WaveHit'), study = $('#p3OriginStudy'), studyBack = $('#p3StudyBack'), thermoStage = $('#p3ThermoStage'), thermo = $('#p3Thermo'), mercury = $('#p3Mercury'), temp = $('#p3Temp'), thermoValue = $('#p3ThermoValue');
   var originRouteMap = $('#p3OriginRouteMap'), originRouteCopy = $('#p3OriginRouteCopy');
   var video = $('#p3OriginReveal .p3-origin-video video'), originReveal = $('#p3OriginReveal');
-  var copy = $('#p3OriginCopy'), list = $('#p3ProcessList'), originNext = $('.p3-origin-next'), processBack = $('#p3ProcessBack');
+  var copy = $('#p3OriginCopy'), list = $('#p3ProcessList'), originNext = $('.p3-origin-next'), processBack = $('#p3ProcessBack'), evidenceBack = $('#p3EvidenceBack');
   var flightLayer = $('#p3FlightLayer'), flightPathEl = $('#p3FlightPath'), flightIcon = $('#p3TyphoonFlight'), mapHit = $('#p3MapHit');
   var treeFlightPathEl = $('#p3TreeFlightPath'), treeFlightIcon = $('#p3TreeTyphoonFlight'), treeHit = $('#p3TreeHit'), impactScene = $('#p3ImpactScene');
   var greatWallFlightPathEl = $('#p3GreatWallFlightPath'), greatWallFlightIcon = $('#p3GreatWallTyphoonFlight'), greatWallHit = $('#p3GreatWallHit');
@@ -939,6 +939,9 @@ function initP3() {
   if (processBack) processBack.addEventListener('click', function () {
     show('origin');
     enterOriginStudy();
+  });
+  if (evidenceBack) evidenceBack.addEventListener('click', function () {
+    show('process');
   });
   $$('[data-after-next]').forEach(function (b) { b.addEventListener('click', function () {
     var target = document.getElementById('p3AfterCards');
