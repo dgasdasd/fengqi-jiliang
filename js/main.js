@@ -257,7 +257,7 @@ function initP3() {
     }, { threshold: [0.5] }).observe(root);
   }
   var scroll = $('#p3Scroll'), origin = $('.p3-origin'), originScene = $('#p3OriginScene'), waveHit = $('#p3WaveHit'), study = $('#p3OriginStudy'), studyBack = $('#p3StudyBack'), thermoStage = $('#p3ThermoStage'), thermo = $('#p3Thermo'), mercury = $('#p3Mercury'), temp = $('#p3Temp'), thermoValue = $('#p3ThermoValue');
-  var originRouteMap = $('#p3OriginRouteMap'), originRouteCopy = $('#p3OriginRouteCopy');
+  var originRoute = $('#p3OriginRoute'), originRouteMap = $('#p3OriginRouteMap'), originRouteCopy = $('#p3OriginRouteCopy');
   var video = $('#p3OriginReveal .p3-origin-video video'), originReveal = $('#p3OriginReveal');
   var copy = $('#p3OriginCopy'), list = $('#p3ProcessList'), originNext = $('.p3-origin-next'), processBack = $('#p3ProcessBack'), evidenceBack = $('#p3EvidenceBack');
   var flightLayer = $('#p3FlightLayer'), flightPathEl = $('#p3FlightPath'), flightIcon = $('#p3TyphoonFlight'), mapHit = $('#p3MapHit');
@@ -948,7 +948,13 @@ function initP3() {
     if (target) target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
   }); });
   var statsBack = $('#p3StatsBack');
-  if (statsBack) statsBack.addEventListener('click', function () { show('origin'); });
+  if (statsBack) statsBack.addEventListener('click', function () {
+    show('origin');
+    enterOriginStudy();
+    if (originRoute) window.setTimeout(function () {
+      originRoute.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    }, 40);
+  });
   var back = $('.p3-back');
   if (back) back.addEventListener('click', function () { glideTo(secs[1].offsetTop); });
   show('origin');

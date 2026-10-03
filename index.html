@@ -13,7 +13,7 @@
 <link rel="preload" as="image" href="assets/img/person.webp">
 <link rel="preload" as="font" type="font/woff2" href="fonts/msz.subset.woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/style.css?v=20261003-after-iconfix2">
+<link rel="stylesheet" href="css/style.css?v=20261003-after-sequencefix1">
 </head>
 <body>
 
@@ -152,7 +152,6 @@
           <p class="p3-origin-kicker">台风的形成</p>
           <div class="p3-origin-video"><video src="assets/p3/5.mp4" muted loop playsinline preload="metadata" aria-label="循环播放的台风形成动画"></video></div>
           <div class="p3-origin-copy" id="p3OriginCopy" aria-live="polite"></div>
-          <button class="p3-more p3-origin-next" type="button" data-next="process" hidden>台风形成的过程 <span>⌄</span></button>
         </div>
         <section class="p3-origin-route" id="p3OriginRoute" aria-label="台风路径类型">
           <div class="p3-origin-route-heading">台风的类型 <small>（按路径划分）</small></div>
@@ -163,8 +162,9 @@
           </div>
           <div class="route-stage"><img id="p3OriginRouteMap" src="assets/p3/derived/route-west.jpg" alt="西行路径示意图"></div>
           <p class="route-copy" id="p3OriginRouteCopy">在广东、海南、广西登陆，破坏力大。典型代表：2014年亚马逊。</p>
-          <button class="p3-more p3-origin-route-next" type="button" data-next="stats">继续查看统计 <span>⌄</span></button>
+          <button class="p3-more p3-origin-route-next" type="button" data-next="process">继续查看统计 <span>⌄</span></button>
         </section>
+        <button class="p3-more p3-origin-next" type="button" data-next="process" hidden>台风形成的过程 <span>⌄</span></button>
       </section>
     </div>
 
@@ -380,6 +380,7 @@
         </div>
       </div>
       <div class="p3-evidence-note">台风是怎么形成的？</div>
+      <button class="p3-more" type="button" data-next="stats">继续查看统计 <span>⌄</span></button>
     </div>
 
     <div class="p3-view p3-route" data-view="route" hidden>
@@ -542,6 +543,6 @@
 
 <div class="pager" id="pager">1/3</div>
 
-<script src="js/main.js?v=20261003-after-iconfix2"></script>
+<script src="js/main.js?v=20261003-after-sequencefix1"></script>
 </body>
 </html>
