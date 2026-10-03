@@ -13,7 +13,7 @@
 <link rel="preload" as="image" href="assets/img/person.webp">
 <link rel="preload" as="font" type="font/woff2" href="fonts/msz.subset.woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/style.css?v=20261003-after-routefix5">
+<link rel="stylesheet" href="css/style.css?v=20261003-after-statsfix1">
 </head>
 <body>
 
@@ -393,9 +393,44 @@
 
     <div class="p3-view p3-stats" data-view="stats" hidden>
       <div class="p3-panel-heading">2014-2024十年间西北太平洋<br>台风生成数量排名</div>
-      <img class="stat-chart-image" src="assets/p3/derived/stats-chart.jpg" alt="2014至2024年西北太平洋台风数量柱状图">
-      <div class="stat-pie-captions"><span>2014年-2024年登陆台风占比</span><span>三种不同路径在登陆台风的占比</span></div>
-      <img class="stat-pies-image" src="assets/p3/derived/stats-pies-summary.jpg" alt="登陆台风占比和三种路径占比图表">
+      <section class="stats-chart-stack" aria-label="2014至2024年台风统计图表">
+        <figure class="stats-chart-card stats-bars-card">
+          <figcaption>2014-2024年西北太平洋台风生成数量</figcaption>
+          <svg class="stats-bars-svg" viewBox="0 0 360 220" role="img" aria-label="2014年至2024年西北太平洋台风生成数量柱状图">
+            <g class="stats-grid-lines" aria-hidden="true">
+              <line x1="38" y1="176" x2="348" y2="176"></line><line x1="38" y1="128" x2="348" y2="128"></line><line x1="38" y1="80" x2="348" y2="80"></line><line x1="38" y1="32" x2="348" y2="32"></line>
+              <text x="28" y="179">0</text><text x="24" y="131">10</text><text x="24" y="83">20</text><text x="24" y="35">30</text>
+            </g>
+            <g class="stats-bars" aria-hidden="true">
+              <rect x="44" y="65.6" width="16" height="110.4"></rect><rect x="72" y="46.4" width="16" height="129.6"></rect><rect x="100" y="51.2" width="16" height="124.8"></rect><rect x="128" y="46.4" width="16" height="129.6"></rect><rect x="156" y="36.8" width="16" height="139.2"></rect><rect x="184" y="36.8" width="16" height="139.2"></rect><rect x="212" y="65.6" width="16" height="110.4"></rect><rect x="240" y="70.4" width="16" height="105.6"></rect><rect x="268" y="56" width="16" height="120"></rect><rect x="296" y="32" width="16" height="144"></rect><rect x="324" y="94.4" width="16" height="81.6"></rect>
+            </g>
+            <g class="stats-bar-labels" aria-hidden="true">
+              <text x="52" y="194">2014</text><text x="80" y="194">15</text><text x="108" y="194">16</text><text x="136" y="194">17</text><text x="164" y="194">18</text><text x="192" y="194">19</text><text x="220" y="194">20</text><text x="248" y="194">21</text><text x="276" y="194">22</text><text x="304" y="194">23</text><text x="332" y="194">24</text>
+            </g>
+          </svg>
+        </figure>
+
+        <div class="stats-pie-grid">
+          <figure class="stats-chart-card stats-pie-card">
+            <figcaption>2014年-2024年登陆台风占比</figcaption>
+            <div class="stats-pie stats-pie-landfall" role="img" aria-label="登陆我国台风占27.3%，未登陆台风占72.7%">
+              <span class="stats-pie-label stats-pie-label-main">登陆我国<br><b>27.3%</b></span>
+              <span class="stats-pie-label stats-pie-label-side">未登陆<br><b>72.7%</b></span>
+            </div>
+            <div class="stats-pie-legend"><span><i class="legend-landfall"></i>登陆我国 27.3%</span><span><i class="legend-no-landfall"></i>未登陆 72.7%</span></div>
+          </figure>
+
+          <figure class="stats-chart-card stats-pie-card">
+            <figcaption>三种不同路径在登陆台风的占比</figcaption>
+            <div class="stats-pie stats-pie-path" role="img" aria-label="西北路径38%，转向路径32%，西行路径25%，其他5%">
+              <span class="stats-pie-label stats-pie-path-nw">西北<br><b>38%</b></span>
+              <span class="stats-pie-label stats-pie-path-turn">转向<br><b>32%</b></span>
+              <span class="stats-pie-label stats-pie-path-west">西行<br><b>25%</b></span>
+            </div>
+            <div class="stats-pie-legend"><span><i class="legend-nw"></i>西北路径 38%</span><span><i class="legend-turn"></i>转向路径 32%</span><span><i class="legend-west"></i>西行路径 25%</span></div>
+          </figure>
+        </div>
+      </section>
       <p class="stat-summary">2014—2024年西北太平洋共生成台风278个（年均25.3个），其中76个登陆我国（27.3%）。路径格局以西北路径为主（38%），转向路径次之（32%），西行路径占25%。本质是副热带高压形态变化的直接投影。值得警惕的是，全球变暖致副高西伸增强，未来西行及北上概率或增加，华南及中高纬地区台风风险呈上升趋势。</p>
       <button class="p3-stats-back" id="p3StatsBack" type="button" aria-label="返回路径页面">↩ <span>返回</span></button>
     </div>
@@ -503,6 +538,6 @@
 
 <div class="pager" id="pager">1/3</div>
 
-<script src="js/main.js?v=20261003-after-routefix5"></script>
+<script src="js/main.js?v=20261003-after-statsfix1"></script>
 </body>
 </html>
