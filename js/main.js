@@ -276,11 +276,11 @@ function initP3() {
     ['消亡阶段', '台风登陆后因摩擦力迅速增大而逐渐消散。']
   ];
   var originFactors = [
-    ['温', '广阔且温暖的洋面', '温度超过26.5摄氏度，深度大于60米'],
-    ['↺', '地转偏向力', '地球自转形成的偏向力，是让气流旋转起来的关键'],
-    ['风', '低空风切变', '高低空风速差异小'],
-    ['水', '充沛的水汽供应', '热带洋面蒸发旺盛，为台风形成提供充足水汽'],
-    ['扰', '初始扰动', '大气中必须存在一个具备微弱气旋性环流的低压扰动或云团，将周围的水汽初步汇聚起来。']
+    ['assets/p3/707079f00a737da677eb798019e8a465.png', '广阔且温暖的洋面', '温度超过26.5摄氏度，深度大于60米'],
+    ['assets/p3/7a29fb60ed7ceb1b7f4a4e0ba88116a0.png', '地转偏向力', '地球自转形成的偏向力，是让气流旋转起来的关键'],
+    ['assets/p3/bf27c365e0684832c527596d57ee7b9b.png', '低空风切变', '高低空风速差异小'],
+    ['assets/p3/fbe4cfa605e0fab807689fc773301980.png', '充沛的水汽供应', '热带洋面蒸发旺盛，为台风形成提供充足水汽'],
+    ['assets/img/typhoon-ink.webp', '初始扰动', '大气中必须存在一个具备微弱气旋性环流的低压扰动或云团，将周围的水汽初步汇聚起来。']
   ];
   if (list) list.innerHTML = processText.map(function (x, i) {
     return '<p style="animation-delay:' + (i * 90) + 'ms"><strong>' + x[0] + '：</strong>' + x[1] + '</p>';
@@ -323,7 +323,7 @@ function initP3() {
           var row = document.createElement('article');
           row.className = 'p3-factor';
           row.style.setProperty('--factor-delay', (i * 70) + 'ms');
-          row.innerHTML = '<span class="p3-factor-icon" aria-hidden="true">' + factor[0] + '</span><p><strong>' + factor[1] + '：</strong>' + factor[2] + '</p>';
+          row.innerHTML = '<span class="p3-factor-icon" aria-hidden="true"><img src="' + factor[0] + '" alt=""></span><p><strong>' + factor[1] + '：</strong>' + factor[2] + '</p>';
           copy.appendChild(row);
           if (i === originFactors.length - 1 && originNext) originNext.hidden = false;
         }, 650 + i * 900));
