@@ -477,7 +477,7 @@ body{
 .p3-factor-icon img[src*="7a29fb60"]{filter:brightness(0) saturate(100%) invert(42%) sepia(12%) saturate(930%) hue-rotate(145deg) brightness(88%) contrast(86%);}
 .p3-factor p{margin:0;padding-top:calc(2 * var(--u));font-size:calc(13 * var(--u));line-height:1.65;color:#202d32;}
 .p3-factor strong{color:#b12e37;font-weight:700;}
-.p3-origin-next{margin-top:calc(22 * var(--u));}
+.p3-origin-next{margin:calc(4 * var(--u)) auto calc(16 * var(--u));}
 @keyframes p3StudyIn{from{opacity:0;transform:translateY(calc(12 * var(--u)))}to{opacity:1;transform:none}}
 @keyframes p3FactorIn{from{opacity:0;transform:translateY(calc(12 * var(--u)))}to{opacity:1;transform:none}}
 .p3-panel-heading{font-family:var(--f-cal);font-size:calc(24 * var(--u));text-align:center;margin:calc(8 * var(--u)) 0 calc(18 * var(--u));}.p3-panel-heading small{font-family:var(--f-hei);font-size:.55em;color:#777}
