@@ -458,6 +458,8 @@ body{
 .thermo-eye{position:absolute;bottom:calc(8 * var(--u));left:50%;width:calc(52 * var(--u));height:calc(52 * var(--u));transform:translateX(-50%);border:calc(4 * var(--u)) solid #4781bd;border-radius:50%;background:repeating-radial-gradient(ellipse at 50% 50%,transparent 0 calc(5 * var(--u)),#4781bd calc(6 * var(--u)) calc(8 * var(--u)));}
 .p3-thermo-value{margin-top:calc(13 * var(--u));color:#b62b3d;font-family:var(--f-cal);font-size:calc(16 * var(--u));}
 .p3-origin-route{width:100%;padding:calc(4 * var(--u)) 0 calc(28 * var(--u));}
+.p3-origin-reveal .p3-origin-next{margin-bottom:calc(14 * var(--u));}
+.p3-origin-route{padding-top:calc(12 * var(--u));}
 .p3-origin-route-heading{text-align:center;font-family:var(--f-cal);font-size:calc(23 * var(--u));color:#47565d;margin:0 0 calc(12 * var(--u));}.p3-origin-route-heading small{font-family:var(--f-hei);font-size:.52em;color:#777;}
 .p3-origin-route .route-controls{width:100%;max-width:calc(420 * var(--u));}
 .route-stage{width:min(94%,calc(420 * var(--u)));height:calc(230 * var(--u));margin:0 auto;display:grid;place-items:center;overflow:hidden;border:calc(3 * var(--u)) solid #fff;background:rgba(255,255,255,.54);box-shadow:0 4px 14px rgba(40,40,40,.12);}
