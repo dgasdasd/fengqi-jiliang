@@ -249,7 +249,30 @@
         <div class="p3-after-divider" aria-hidden="true"><i></i><b>✦</b><i></i></div>
         <p class="p3-after-end">风雨褪去，守望重生</p>
         <img class="p3-after-wall" src="assets/p3/after/great-wall.png" alt="金色长城剪影">
-        <button class="p3-after-scroll" type="button" data-after-next="cards">看看风雨中的他们 <span>⌄</span></button>
+        <button class="p3-after-scroll" type="button" data-after-next="games">加入互助小游戏 <span>⌄</span></button>
+      </section>
+
+      <section class="p3-after-games" id="p3AfterGames" aria-labelledby="p3AfterGamesTitle">
+        <p class="p3-after-section-kicker">TOGETHER · 守望相助</p>
+        <h3 id="p3AfterGamesTitle">基层的力量，和你一起</h3>
+        <div class="p3-games-intro" id="p3GamesIntro">
+          <img src="assets/p3/games/小台.png" alt="蓝色 Q 版气象助手">
+          <button class="p3-games-bubble" id="p3GamesBubble" type="button">
+            守望相助，共筑长城
+            <small>点击继续 ▸</small>
+          </button>
+        </div>
+        <p class="p3-games-lead">基层的力量是不可小觑的，让我们也来帮助受困人群吧</p>
+        <div class="p3-games-options" id="p3GamesOptions">
+          <button type="button" data-p3-game="river"><span>救援</span><small>穿过急流，送人回家</small></button>
+          <button type="button" data-p3-game="medic"><span>医护</span><small>跟上节拍，完成救治</small></button>
+          <button type="button" data-p3-game="neighbors"><span>邻里</span><small>一起把拖拉机拉出泥潭</small></button>
+        </div>
+        <div class="p3-game-stage" id="p3GameStage" hidden>
+          <div class="p3-game-stage-head"><strong id="p3GameTitle">互助小游戏</strong><button id="p3GameClose" type="button">‹ 返回选择</button></div>
+          <div class="p3-game-canvas" id="p3GameCanvas" aria-live="polite"></div>
+        </div>
+        <button class="p3-games-continue" type="button" data-after-next="cards">继续查看风雨中的他们 <span>⌄</span></button>
       </section>
 
       <section class="p3-after-cards" id="p3AfterCards" aria-labelledby="p3AfterCardsTitle">
@@ -543,5 +566,6 @@
 <div class="pager" id="pager">1/3</div>
 
 <script src="js/main.js?v=20261003-after-routeanim1"></script>
+<script src="js/p3-games.js?v=20261003-games1"></script>
 </body>
 </html>

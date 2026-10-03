@@ -944,7 +944,8 @@ function initP3() {
     show('process');
   });
   $$('[data-after-next]').forEach(function (b) { b.addEventListener('click', function () {
-    var target = document.getElementById('p3AfterCards');
+    var targetId = b.dataset.afterNext === 'games' ? 'p3AfterGames' : 'p3AfterCards';
+    var target = document.getElementById(targetId);
     if (target) target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
   }); });
   var statsBack = $('#p3StatsBack');
