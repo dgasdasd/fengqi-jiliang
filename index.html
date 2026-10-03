@@ -13,7 +13,7 @@
 <link rel="preload" as="image" href="assets/img/person.webp">
 <link rel="preload" as="font" type="font/woff2" href="fonts/msz.subset.woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20261003-after-routefix4">
 </head>
 <body>
 
@@ -102,16 +102,406 @@
   </div>
 </section>
 
-<!-- ═══════════ 第三页 · 占位 ═══════════ -->
-<section class="sec stub" id="p3" aria-label="第三页">
-  <p class="big">台风的一生</p>
-  <span class="small">第三页 · 制作中，敬请期待</span>
+<!-- ═══════════ 第三页 · 风从哪里来 ═══════════ -->
+<section class="sec p3" id="p3" aria-label="风从哪里来">
+  <div class="p3-scroll" id="p3Scroll">
+    <header class="p3-head">
+      <h2>风从哪里来</h2>
+      <div class="p3-track"><span>台风的形成</span><i></i></div>
+    </header>
+
+    <div class="p3-view p3-origin" data-view="origin">
+      <div class="p3-origin-scene" id="p3OriginScene">
+        <img class="p3-origin-hero" src="assets/p3/fb925be257179d04216f2837857a7aa6.jpg" alt="海浪、台风路径与中国地图">
+        <svg class="p3-flight-layer" id="p3FlightLayer" viewBox="0 0 448 960" preserveAspectRatio="none" aria-hidden="true">
+          <path class="p3-flight-path" id="p3FlightPath" d="M 70 198 C 88 225 104 251 126 269 C 151 289 174 319 196 329 C 220 340 243 309 266 282 C 291 294 326 320 350 336" />
+          <g class="p3-typhoon-flight" id="p3TyphoonFlight">
+            <image href="assets/img/typhoon-ink.webp" x="-22" y="-25" width="44" height="50" />
+          </g>
+          <path class="p3-tree-flight-path" id="p3TreeFlightPath" d="M 350 365 C 315 397 284 427 257 458 C 231 489 202 527 168 554 C 151 568 137 577 118 585" />
+          <g class="p3-tree-typhoon-flight" id="p3TreeTyphoonFlight">
+            <image href="assets/img/typhoon-ink.webp" x="-25" y="-28" width="50" height="56" />
+          </g>
+          <path class="p3-greatwall-flight-path" id="p3GreatWallFlightPath" d="M 118 585 C 132 630 145 686 160 731 C 178 778 222 824 286 866" />
+          <g class="p3-greatwall-typhoon-flight" id="p3GreatWallTyphoonFlight">
+            <image href="assets/img/typhoon-ink.webp" x="-25" y="-28" width="50" height="56" />
+          </g>
+        </svg>
+        <button class="p3-origin-wave-hit" id="p3WaveHit" type="button" aria-label="查看台风形成条件"></button>
+        <button class="p3-origin-map-hit" id="p3MapHit" type="button" aria-label="播放台风到达中国地图的路径动画"></button>
+        <button class="p3-origin-tree-hit" id="p3TreeHit" type="button" aria-label="播放台风吹向小树的动画"></button>
+        <button class="p3-origin-greatwall-hit" id="p3GreatWallHit" type="button" aria-label="播放台风到达长城的路径动画"></button>
+      </div>
+
+      <section class="p3-origin-study" id="p3OriginStudy" aria-label="台风形成条件" hidden>
+        <header class="p3-study-head">
+          <button class="p3-study-back" id="p3StudyBack" type="button" aria-label="返回海浪与地图">‹</button>
+          <h2>风从哪里来</h2>
+          <div class="p3-track"><span>台风的形成</span><i></i></div>
+        </header>
+        <div class="p3-thermo-stage" id="p3ThermoStage">
+          <p class="p3-thermo-prompt">调节海面温度</p>
+          <div class="p3-thermo" id="p3Thermo" role="slider" aria-label="海面温度" aria-valuemin="20" aria-valuemax="30" aria-valuenow="20" aria-valuetext="20.0摄氏度" tabindex="0">
+            <span class="thermo-c">°C</span><span class="thermo-f">°F</span>
+            <div class="thermo-scale"><i></i><b id="p3Mercury"></b><em id="p3Temp">20.0°C</em></div>
+            <div class="thermo-eye"></div>
+          </div>
+          <p class="p3-thermo-value" id="p3ThermoValue">摄氏度：20.0°</p>
+        </div>
+        <section class="p3-origin-route" id="p3OriginRoute" aria-label="台风路径类型">
+          <div class="p3-origin-route-heading">台风的类型 <small>（按路径划分）</small></div>
+          <div class="route-controls" role="tablist" aria-label="路径分类">
+            <button class="is-active" type="button" data-route="west">西行路径</button>
+            <button type="button" data-route="northwest">西北路径</button>
+            <button type="button" data-route="turn">转向路径</button>
+          </div>
+          <div class="route-stage"><img id="p3OriginRouteMap" src="assets/p3/derived/route-west.jpg" alt="西行路径示意图"></div>
+          <p class="route-copy" id="p3OriginRouteCopy">在广东、海南、广西登陆，破坏力大。典型代表：2014年亚马逊。</p>
+          <button class="p3-more p3-origin-route-next" type="button" data-next="stats">继续查看统计 <span>⌄</span></button>
+        </section>
+        <div class="p3-origin-reveal" id="p3OriginReveal" aria-live="polite" hidden>
+          <p class="p3-origin-kicker">台风的形成</p>
+          <div class="p3-origin-video"><video src="assets/p3/5.mp4" muted loop playsinline preload="metadata" aria-label="循环播放的台风形成动画"></video></div>
+          <div class="p3-origin-copy" id="p3OriginCopy" aria-live="polite"></div>
+          <button class="p3-more p3-origin-next" type="button" data-next="process" hidden>台风形成的过程 <span>⌄</span></button>
+        </div>
+      </section>
+    </div>
+
+    <div class="p3-view p3-impact" data-view="impact" hidden>
+      <div class="p3-impact-scene" id="p3ImpactScene" data-impact-step="question">
+        <button class="p3-impact-back" id="p3ImpactBack" type="button" aria-label="返回路线场景"><span aria-hidden="true">‹</span> 返回路线</button>
+        <h2>风带来了什么</h2>
+        <img class="p3-impact-person p3-impact-guide" src="assets/p3/tree/guide.png" alt="蓝色 Q 版气象助手">
+        <section class="p3-impact-dialog p3-impact-question" data-impact-dialog="question">
+          <button type="button" class="p3-impact-bubble" aria-label="查看台风影响">
+            大家谈起台风闻风色变，它到底带来了什么影响呢？
+          </button>
+        </section>
+        <img class="p3-impact-person p3-impact-fisher" data-impact-person="fisherman" src="assets/p3/tree/fisher.png" alt="渔民" hidden>
+        <section class="p3-impact-dialog p3-impact-fisher-dialog" data-impact-dialog="fisherman" hidden>
+          <button type="button" class="p3-impact-bubble" aria-label="查看城市影响">
+            上游的台风掀起巨浪，把我们的渔船都打翻了，多少渔民因为这场台风损失惨重哟
+          </button>
+        </section>
+        <img class="p3-impact-person p3-impact-city" data-impact-person="city" src="assets/p3/tree/city.png" alt="城市居民" hidden>
+        <section class="p3-impact-dialog p3-impact-city-dialog" data-impact-dialog="city" hidden>
+          <button type="button" class="p3-impact-bubble" aria-label="查看乡村影响">
+            中游的城市里被风刮倒的树木到处都是，成了严重积水，停水停电生活非常不便
+          </button>
+        </section>
+        <img class="p3-impact-person p3-impact-village" data-impact-person="village" src="assets/p3/tree/village.png" alt="乡村居民" hidden>
+        <section class="p3-impact-dialog p3-impact-village-dialog" data-impact-dialog="village" hidden>
+          <button type="button" class="p3-impact-bubble" aria-label="查看下游影响">
+            中游的村子也没好到哪里去，泥石流把我的房子冲垮了，农田也毁了
+          </button>
+        </section>
+        <img class="p3-impact-person p3-impact-firefighter" data-impact-person="downstream" src="assets/p3/tree/firefighter.png" alt="消防员" hidden>
+        <section class="p3-impact-dialog p3-impact-downstream-dialog" data-impact-dialog="downstream" hidden>
+          <button type="button" class="p3-impact-bubble" aria-label="查看灾害链">
+            下游人员伤亡惨重，城市内涝严重，疫病也频发，我们在争分夺秒的救人
+          </button>
+        </section>
+        <button class="p3-impact-chain-trigger" id="p3ImpactChainTrigger" type="button" aria-label="展开上游中游下游灾害链" hidden>
+          <img src="assets/p3/tree/typhoon.png" alt="台风图标">
+        </button>
+        <section class="p3-impact-chain" id="p3ImpactChain" aria-label="上游中游下游灾害链" hidden>
+          <div class="p3-impact-chain-lead">上游台风生成是灾害源头。中游物质伤害扩大。下游遭受综合冲击，民生受损。</div>
+          <div class="p3-impact-chain-list">
+            <article class="p3-impact-chain-row">
+              <div class="p3-impact-chain-node"><i></i><strong>上游</strong><small>海上生成</small></div>
+              <div class="p3-impact-chain-copy"><h4>强风、巨浪，摧毁船只；风暴潮抬升海平面</h4><p>2019年利奇马：七级风圈近海掀起 8—12 米巨浪，摧毁船只 1699 艘、沉船 263 艘。</p></div>
+            </article>
+            <article class="p3-impact-chain-row">
+              <div class="p3-impact-chain-node"><i></i><strong>中游</strong><small>城市影响</small></div>
+              <div class="p3-impact-chain-copy"><h4>狂风刮倒树木，高空坠物；强降雨造成内涝</h4><p>2023年杜苏芮：倒伏树木 11632 棵，积水路段 383 处，50 万户停电、550 余处停水。</p></div>
+            </article>
+            <article class="p3-impact-chain-row">
+              <div class="p3-impact-chain-node"><i></i><strong>中游</strong><small>乡村影响</small></div>
+              <div class="p3-impact-chain-copy"><h4>房屋倒塌、农作物损毁；山体滑坡、道路失联</h4><p>2019年利奇马：冲毁农村房屋 3.6 万间，18.5 万公顷农作物受损，326 处山体滑坡掩埋房屋。</p></div>
+            </article>
+            <article class="p3-impact-chain-row">
+              <div class="p3-impact-chain-node"><i></i><strong>下游</strong><small>综合冲击</small></div>
+              <div class="p3-impact-chain-copy"><h4>人员伤亡、停课停产停电；城市内涝、疫病频发</h4><p>2026年巴威：江苏、山东地区出现内涝、停电，企业停工，学校停课。</p></div>
+            </article>
+          </div>
+          <section class="p3-impact-statistics" aria-label="近十年典型台风统计">
+            <h3>近十年典型台风统计</h3>
+            <p class="p3-impact-stat-intro">台风对上、中、下游平均伤害数值可观察到，整条灾害链由强降雨到内涝，再到交通中断、生产停滞，最后导致民生恢复成本上升，层层叠加。</p>
+            <div class="p3-impact-chart-grid">
+              <figure class="p3-impact-chart p3-impact-bars"><figcaption>台风灾害链平均伤害指数</figcaption><div class="impact-bar-row"><span>上游</span><i><b style="--v:78%"></b></i><em>7.8</em></div><div class="impact-bar-row"><span>中游</span><i><b style="--v:86%"></b></i><em>8.6</em></div><div class="impact-bar-row"><span>下游</span><i><b style="--v:94%"></b></i><em>9.4</em></div></figure>
+              <figure class="p3-impact-chart p3-impact-circles"><figcaption>灾害损失构成</figcaption><div class="impact-circle-grid"><span><i>14.67%</i><b>人员</b></span><span><i>11.00%</i><b>房屋</b></span><span><i>8.56%</i><b>农业</b></span><span><i>34.22%</i><b>交通</b></span></div></figure>
+            </div>
+            <p class="p3-impact-stat-copy">据近十年典型台风统计，台风对上、中、下游的平均伤害呈现逐层叠加趋势，灾害影响从海上强风巨浪一路传导到城市和乡村。</p>
+            <p class="p3-impact-stat-copy">灾害损失不仅来自台风本身，也来自暴雨、内涝、交通中断、生产停滞等次生影响，最终推高民生恢复成本。</p>
+            <button class="p3-impact-return" id="p3ImpactReturn" type="button">回到路线场景 <span>↗</span></button>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <div class="p3-view p3-after" data-view="after" hidden>
+      <section class="p3-after-hero" aria-labelledby="p3AfterTitle">
+        <button class="p3-after-back" id="p3AfterBack" type="button" aria-label="返回长城路径场景"><span aria-hidden="true">‹</span> 返回路线</button>
+        <p class="p3-after-kicker">风停之后</p>
+        <h2 id="p3AfterTitle">脊梁筑安·风雨同舟</h2>
+        <p class="p3-after-red">希望我们共同守护家园</p>
+        <p class="p3-after-copy">狂风暴雨终会消散，但风雨里那些逆行的身影、普通人彼此守望的温暖被永远留下来；当风暴落幕，重建与希望就此开启。</p>
+        <div class="p3-after-divider" aria-hidden="true"><i></i><b>✦</b><i></i></div>
+        <p class="p3-after-end">风雨褪去，守望重生</p>
+        <img class="p3-after-wall" src="assets/p3/after/great-wall.png" alt="金色长城剪影">
+        <button class="p3-after-scroll" type="button" data-after-next="cards">看看风雨中的他们 <span>⌄</span></button>
+      </section>
+
+      <section class="p3-after-cards" id="p3AfterCards" aria-labelledby="p3AfterCardsTitle">
+        <p class="p3-after-section-kicker">DATA · 逆行者档案</p>
+        <h3 id="p3AfterCardsTitle">一个人背后，是千千万万个他们</h3>
+        <p class="p3-after-section-copy">每一张卡片，都记录着风雨中一个普通人的选择。点击卡片翻面，读完故事再继续向下。</p>
+        <div class="p3-story-grid">
+          <article class="p3-story-card" tabindex="0" role="button" aria-pressed="false">
+            <div class="p3-story-inner">
+              <div class="p3-story-front"><img src="assets/p3/after/hero-yang.jpg" alt="合川区云门街道工作人员转移群众"><span>合川 · 村支部</span></div>
+              <div class="p3-story-back"><strong>杨卫、李辉勇</strong><small>连续值守 42 小时</small><p>连续值守42小时，上门转移170余位高龄独居群众，把每一户都敲开、把每一个人都带到安全处。</p></div>
+            </div>
+          </article>
+          <article class="p3-story-card" tabindex="0" role="button" aria-pressed="false">
+            <div class="p3-story-inner">
+              <div class="p3-story-front"><img src="assets/p3/after/hero-lichuan.jpg" alt="湖北利川消防救援"><span>利川 · 消防救援</span></div>
+              <div class="p3-story-back"><strong>湖北利川消防救援部门</strong><small>20余次救援行动</small><p>参与20余次救援行动，成功营救、安全转移被困群众85人，用一盏灯、一条艇守住夜色里的安全线。</p></div>
+            </div>
+          </article>
+          <article class="p3-story-card" tabindex="0" role="button" aria-pressed="false">
+            <div class="p3-story-inner">
+              <div class="p3-story-front"><img src="assets/p3/after/hero-shenyang.jpg" alt="沈阳铁西区民兵巡堤"><span>沈阳 · 民兵巡堤</span></div>
+              <div class="p3-story-back"><strong>沈阳铁西区人武部民兵</strong><small>1.5 小时集结 150 余人</small><p>执行24公里堤坝巡逻，使用沙袋6000个，封堵45米险段，守住城市最需要的那道防线。</p></div>
+            </div>
+          </article>
+          <article class="p3-story-card" tabindex="0" role="button" aria-pressed="false">
+            <div class="p3-story-inner">
+              <div class="p3-story-front"><img src="assets/p3/after/hero-nanning.jpg" alt="南宁横州市夫妻为居民送餐"><span>南宁 · 邻里送餐</span></div>
+              <div class="p3-story-back"><strong>雷世军、赵曼</strong><small>最高一天 12000 份盒饭</small><p>夫妻俩每天免费送出饭菜，最高一天送出12000份盒饭，让受灾的人先吃上一口热饭。</p></div>
+            </div>
+          </article>
+          <article class="p3-story-card" tabindex="0" role="button" aria-pressed="false">
+            <div class="p3-story-inner">
+              <div class="p3-story-front"><img src="assets/p3/after/hero-zhuozhou.jpg" alt="涿州医生为群众接诊"><span>涿州 · 医护值守</span></div>
+              <div class="p3-story-back"><strong>刘艳光与医护人员</strong><small>24 小时轮班接诊</small><p>医护人员24小时轮班，累计接诊200余人次，在临时诊室里把药品、专业和安定感一起递出去。</p></div>
+            </div>
+          </article>
+        </div>
+        <p class="p3-after-quote">平凡铸就力量，微光抵御风雨，致敬每一位风雨中的逆行者。</p>
+      </section>
+
+      <section class="p3-prep" id="p3Prep" aria-labelledby="p3PrepTitle">
+        <p class="p3-after-section-kicker">NEXT · 防灾准备</p>
+        <h3 id="p3PrepTitle">风从海上来，但伤害不止于海岸线</h3>
+        <p class="p3-prep-lead">无论你居住于沿海或是内陆，这份档案卡里，都有你需要的答案。</p>
+        <div class="p3-prep-sentence">如何避险、如何准备、如何重建？<br><b>让每一次准备，都早台风一步。</b></div>
+        <div class="p3-region-switch" role="tablist" aria-label="选择居住区域">
+          <button class="is-active" type="button" data-prep-region="coastal" role="tab" aria-selected="true">沿海</button>
+          <button type="button" data-prep-region="inland" role="tab" aria-selected="false">内陆</button>
+        </div>
+        <p class="p3-prep-hint">点击区域，查看不同风险与准备方案</p>
+        <div class="p3-region-map-wrap">
+          <img src="assets/p3/after/region-map.png" alt="中国沿海与内陆区域示意图">
+          <span class="p3-map-pin p3-map-pin-coastal" aria-hidden="true">沿海</span>
+          <span class="p3-map-pin p3-map-pin-inland" aria-hidden="true">内陆</span>
+        </div>
+        <div class="p3-prep-panels">
+          <article class="p3-prep-panel is-active" data-prep-panel="coastal">
+            <header><strong>沿海档案卡</strong><small>风暴潮 · 海水倒灌 · 城市内涝 · 大风灾害</small></header>
+            <div class="p3-prep-images"><img src="assets/p3/after/rebuild-coastal.jpg" alt="沿海灾后恢复建设"><img src="assets/p3/after/prepare-coastal.jpg" alt="沿海城乡应急准备"><img src="assets/p3/after/avoid-coastal.jpg" alt="沿海避险清单"></div>
+          </article>
+          <article class="p3-prep-panel" data-prep-panel="inland" hidden>
+            <header><strong>内陆档案卡</strong><small>山洪 · 滑坡 · 泥石流 · 强降雨 · 交通阻断</small></header>
+            <div class="p3-prep-images"><img src="assets/p3/after/rebuild-inland.jpg" alt="内陆灾后恢复建设"><img src="assets/p3/after/prepare-coastal-alt.jpg" alt="内陆城乡应急准备"><img src="assets/p3/after/avoid-inland.jpg" alt="内陆避险清单"></div>
+          </article>
+        </div>
+        <div class="p3-archive-invite">
+          <img src="assets/p3/after/archive-envelope.png" alt="封存档案袋">
+          <p>拆开档案卡，制作你自己的专属档案吧</p>
+          <button id="p3ArchiveOpen" type="button">打开我的档案袋 <span>↗</span></button>
+        </div>
+      </section>
+
+      <section class="p3-profile" id="p3Profile" aria-labelledby="p3ProfileTitle" hidden>
+        <p class="p3-after-section-kicker">MY FILE · 个人防风准备卡</p>
+        <h3 id="p3ProfileTitle">生成我的防风准备卡</h3>
+        <fieldset class="p3-profile-fieldset p3-profile-region">
+          <legend>我所在的地区</legend>
+          <label><input type="radio" name="p3Region" value="coastal" checked><span>沿海</span></label>
+          <label><input type="radio" name="p3Region" value="inland"><span>内陆</span></label>
+        </fieldset>
+        <div class="p3-profile-risk" id="p3ProfileRisk"><strong>我最需要防范：</strong><span>风暴潮、海水倒灌、城市内涝、大风灾害</span></div>
+        <fieldset class="p3-profile-fieldset p3-profile-prep">
+          <legend>我需要准备 <small>（可多选）</small></legend>
+          <label><input type="checkbox" value="储水储存食物"><span>储水储存食物</span></label>
+          <label><input type="checkbox" value="电子设备充满电量，备好充电宝"><span>电子设备充满电量，备好充电宝</span></label>
+          <label><input type="checkbox" value="收回阳台窗外杂物，消除高空坠物风险"><span>收回阳台窗外杂物，消除高空坠物风险</span></label>
+          <label><input type="checkbox" value="持续关注官方台风预警信息"><span>持续关注官方台风预警信息</span></label>
+          <label><input type="checkbox" value="整理配齐家庭应急包（药品、手电、防水证件）"><span>整理配齐家庭应急包（药品、手电、防水证件）</span></label>
+        </fieldset>
+        <aside class="p3-reminder"><h4>待完善提醒区</h4><p>⚠️ 低洼住户提前备好防洪沙袋，熟悉疏散路线</p><p>⚠️ 山区住户远离陡坡沟谷，暴雨期间不前往河道区域</p><p>⚠️ 台风结束后不蹚未知积水，防范漏电与路面塌陷</p></aside>
+        <button class="p3-profile-seal" id="p3ArchiveSeal" type="button">封存我的档案 <span>✦</span></button>
+      </section>
+
+      <section class="p3-finale" id="p3Finale" aria-labelledby="p3FinaleTitle" hidden>
+        <div class="p3-star-field" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <img class="p3-finale-envelope" src="assets/p3/after/archive-envelope.png" alt="正在封存的档案袋" aria-hidden="true">
+        <img class="p3-finale-wall" src="assets/p3/after/great-wall.png" alt="星光汇聚成的长城">
+        <div class="p3-finale-copy" id="p3FinaleTitle">
+          <p>狂风过境，见证山河坚韧</p><p>风雨停歇，看见人间希望</p><p>台风是自然的节律</p><p>而防备，是人类永恒的底气</p><p>风会再来</p><p>但我们早已学会提前站立</p>
+          <b>风起山河&nbsp; 不负脊梁</b>
+          <p>让每一份平凡准备，都是抵御风雨的底气</p>
+          <small>——《风栖过的脊梁》防灾科普纪实</small>
+        </div>
+        <button class="p3-next-wind" type="button" id="p3NextWind">下一场风 <span>↗</span></button>
+      </section>
+    </div>
+
+    <div class="p3-view p3-process" data-view="process" hidden>
+      <div class="p3-panel-heading">台风形成的过程</div>
+      <div class="p3-process-art"><img src="assets/p3/derived/formation-cloud.jpg" alt="台风形成示意图"></div>
+      <div class="p3-process-list" id="p3ProcessList"></div>
+      <button class="p3-more" type="button" data-next="evidence">台风形成的过程 <span>⌄</span></button>
+    </div>
+
+    <div class="p3-view p3-evidence" data-view="evidence" hidden>
+      <div class="p3-panel-heading">台风形成的过程</div>
+      <div class="p3-evidence-grid">
+        <article><b>1</b><img src="assets/p3/derived/stage-1.jpg" alt="孕育阶段云图"><p>孕育阶段：热带有大量湿热上升空气形成强对流，在地转偏向力的影响下形成初步云团。</p></article>
+        <article><b>2</b><img src="assets/p3/derived/stage-2.jpg" alt="发展阶段云图"><p>发展阶段：低压中心不断吸收水汽，风力增强，升级为热带风暴、强热带风暴。</p></article>
+        <article><b>3</b><img src="assets/p3/derived/stage-3.jpg" alt="成熟阶段云图"><p>成熟阶段：中心附近风力高达 12 级并且有明显、规整的台风眼。</p></article>
+        <article><b>4</b><img src="assets/p3/derived/stage-4.jpg" alt="消亡阶段云图"><p>消亡阶段：台风登陆后因摩擦力迅速增大而逐渐消散。</p></article>
+      </div>
+      <div class="p3-evidence-note">台风是怎么形成的？</div>
+    </div>
+
+    <div class="p3-view p3-route" data-view="route" hidden>
+      <div class="p3-panel-heading">台风的类型 <small>（按路径划分）</small></div>
+      <div class="route-title" id="p3RouteTitle">西行路径</div>
+      <div class="route-controls" role="tablist" aria-label="路径分类">
+        <button class="is-active" type="button" data-route="west">西行路径</button>
+        <button type="button" data-route="northwest">西北路径</button>
+        <button type="button" data-route="turn">转向路径</button>
+      </div>
+      <img class="route-map" id="p3RouteMap" src="assets/p3/derived/route-west.jpg" alt="台风路径地图">
+      <p class="route-copy" id="p3RouteCopy">在广东、海南、广西登陆，破坏力大。典型代表：2014年亚马逊。</p>
+      <button class="p3-more" type="button" data-next="stats">继续查看统计 <span>⌄</span></button>
+    </div>
+
+    <div class="p3-view p3-stats" data-view="stats" hidden>
+      <div class="p3-panel-heading">2014-2024十年间西北太平洋<br>台风生成数量排名</div>
+      <img class="stat-chart-image" src="assets/p3/derived/stats-chart.jpg" alt="2014至2024年西北太平洋台风数量柱状图">
+      <div class="stat-pie-captions"><span>2014年-2024年登陆台风占比</span><span>三种不同路径在登陆台风的占比</span></div>
+      <img class="stat-pies-image" src="assets/p3/derived/stats-pies-summary.jpg" alt="登陆台风占比和三种路径占比图表">
+      <p class="stat-summary">2014—2024年西北太平洋共生成台风278个（年均25.3个），其中76个登陆我国（27.3%）。路径格局以西北路径为主（38%），转向路径次之（32%），西行路径占25%。本质是副热带高压形态变化的直接投影。值得警惕的是，全球变暖致副高西伸增强，未来西行及北上概率或增加，华南及中高纬地区台风风险呈上升趋势。</p>
+      <button class="p3-stats-back" id="p3StatsBack" type="button" aria-label="返回路径页面">↩ <span>返回</span></button>
+    </div>
+
+    <div class="p3-view p3-mapgame" data-view="mapgame" hidden>
+      <button class="p3-mapgame-back" id="p3MapgameBack" type="button" aria-label="返回路线场景"><span aria-hidden="true">‹</span> 返回路线</button>
+      <h2 class="p3-subtitle">近十年最具代表台风</h2>
+      <section class="p3-puzzle-panel" aria-labelledby="p3PuzzleTitle">
+        <div class="p3-puzzle-board" id="p3PuzzleBoard" role="group" aria-label="中国地图拼图" tabindex="0">
+          <img class="p3-puzzle-full" id="p3PuzzleFull" src="assets/p3/derived/impact-map.jpg" alt="近十年我国受台风影响较严重的省份分布图">
+          <div class="p3-puzzle-grid" id="p3PuzzleGrid" hidden></div>
+          <figure class="p3-puzzle-preview"><img src="assets/p3/derived/impact-map.jpg" alt="完整地图提示"><figcaption>参考图</figcaption></figure>
+          <div class="p3-puzzle-countdown" id="p3PuzzleCountdown" hidden aria-hidden="true"></div>
+        </div>
+        <div class="p3-puzzle-heading">
+          <div><h3 id="p3PuzzleTitle">地图拼图</h3><p id="p3PuzzleStatus" role="status" aria-live="polite">先观察完整地图，再开始拼图</p></div>
+        </div>
+        <button class="p3-puzzle-start" id="p3PuzzleStart" type="button">开始游戏</button>
+      </section>
+      <section class="p3-history p3-history-inline" id="p3HistoryBlock" hidden>
+      <div class="p3-history-scene" id="p3HistoryScene">
+        <h2 class="p3-subtitle">近十年最具代表台风</h2>
+        <p class="p3-history-hint">点击年份，查看台风路径与影响</p>
+        <div class="p3-timeline" aria-label="2015至2023年代表台风年份">
+          <svg class="p3-timeline-art" viewBox="0 0 448 780" preserveAspectRatio="none" aria-hidden="true">
+            <!-- The original video uses two loose spiral anchors, a dotted approach,
+                 one broad central sweep, then a narrow descending route. -->
+            <g class="p3-track-rings">
+              <circle cx="147" cy="27" r="31" />
+              <circle cx="149" cy="27" r="23" />
+              <circle cx="149" cy="27" r="15" />
+              <circle cx="201" cy="574" r="27" />
+              <circle cx="201" cy="574" r="20" />
+              <circle cx="201" cy="574" r="13" />
+              <circle cx="155" cy="162" r="9" />
+              <circle cx="293" cy="162" r="9" />
+              <circle cx="330" cy="233" r="9" />
+              <circle cx="85" cy="297" r="9" />
+              <circle cx="349" cy="360" r="9" />
+              <circle cx="142" cy="403" r="9" />
+              <circle cx="232" cy="496" r="9" />
+              <circle cx="287" cy="491" r="9" />
+              <circle cx="178" cy="650" r="9" />
+              <circle cx="270" cy="750" r="9" />
+              <circle cx="319" cy="758" r="9" />
+            </g>
+            <path class="p3-track-dots" d="M149 27 C174 24 195 34 204 51 C209 61 211 74 208 90" />
+            <path class="p3-track-dots" d="M145 31 C116 45 94 67 80 94 C65 123 60 160 65 198 C67 220 70 241 73 256" />
+            <path class="p3-track-main" pathLength="1" d="M42 238 C55 257 75 266 101 266 C145 266 183 251 220 235 C260 217 296 193 333 180 C368 168 401 169 417 183 C431 195 430 209 421 222 C412 236 400 249 386 261" />
+            <path class="p3-track-main p3-track-middle" pathLength="1" d="M375 264 C352 283 328 301 308 322 C291 338 270 350 248 362 C231 372 217 392 210 416 C202 442 201 465 198 484 C195 510 198 540 201 574" />
+            <path class="p3-track-dots p3-track-lower" d="M201 574 C210 598 226 620 239 644 C247 658 250 673 249 686 C251 703 260 719 269 733 C276 745 277 759 271 772" />
+            <path class="p3-track-origin" transform="translate(147 27) scale(.82) translate(-147 -27)" d="M147 27c-19-20-51-16-58 9-7 23 16 40 40 32 22-7 35-30 26-48-10-19-38-25-55-11-16 13-11 39 10 46 20 7 39-8 39-27 0-16-16-29-31-22-13 5-18 21-9 31 10 10 26 5 29-9 2-9-7-17-15-13-8 4-10 14-3 20" />
+            <path class="p3-track-origin p3-track-origin-lower" transform="translate(201 574) scale(.84) translate(-201 -574)" d="M201 574c-17-18-46-14-53 8-6 21 14 36 36 29 20-7 31-27 23-44-9-17-34-22-49-10-14 12-10 34 9 40 18 6 34-7 34-24 0-14-14-25-27-19-11 5-15 18-7 27 9 9 23 4 25-8 1-8-6-14-13-11" />
+          </svg>
+          <button class="p3-year-point" type="button" data-typhoon="rainbow" style="--x:46.4%;--y:11.5%;--lx:27;--ly:9;--delay:1.5s"><i></i><span><strong>2015年 台风 </strong><em>“彩虹”</em><b>编号：1522</b></span></button>
+          <button class="p3-year-point" type="button" data-typhoon="meranti" style="--x:14.7%;--y:16.3%;--lx:14;--ly:14;--delay:1.62s"><i></i><span><strong>2016年 台风 </strong><em>“莫兰蒂”</em><b>编号：1614</b></span></button>
+          <button class="p3-year-point" type="button" data-typhoon="hato" style="--x:16.3%;--y:32.8%;--lx:-52;--ly:16;--delay:1.74s"><i></i><span><strong>2017年 台风 </strong><em>“天鸽”</em><b>编号：1713</b></span></button>
+          <button class="p3-year-point" type="button" data-typhoon="mangkhut" style="--x:92.6%;--y:24.2%;--lx:-126;--ly:8;--delay:1.86s"><i></i><span><strong>2018年 台风 </strong><em>“山竹”</em><b>编号：1822</b></span></button>
+          <button class="p3-year-point" type="button" data-typhoon="lekima" style="--x:68.1%;--y:42.3%;--lx:17;--ly:-10;--delay:1.98s"><i></i><span><strong>2019年 台风 </strong><em>“利奇马”</em><b>编号：1909</b></span></button>
+          <button class="p3-year-point" type="button" data-typhoon="higos" style="--x:52.2%;--y:48.5%;--lx:-152;--ly:5;--delay:2.10s"><i></i><span><strong>2020年 台风 </strong><em>“黑格比”</em><b>编号：2004</b></span></button>
+          <button class="p3-year-point" type="button" data-typhoon="infa" style="--x:43.3%;--y:59.6%;--lx:28;--ly:-7;--delay:2.22s"><i></i><span><strong>2021年 台风 </strong><em>“烟花”</em><b>编号：2106</b></span></button>
+          <button class="p3-year-point" type="button" data-typhoon="muifa" style="--x:55.6%;--y:88%;--lx:-126;--ly:-11;--delay:2.34s"><i></i><span><strong>2022年 台风 </strong><em>“梅花”</em><b>编号：2212</b></span></button>
+          <button class="p3-year-point" type="button" data-typhoon="dusurui" style="--x:60.3%;--y:93.2%;--lx:16;--ly:2;--delay:2.46s"><i></i><span><strong>2023年 台风 </strong><em>“杜苏芮”</em><b>编号：2305</b></span></button>
+        </div>
+      </div>
+      <article class="p3-typhoon-detail" id="p3TyphoonDetail" role="dialog" aria-modal="true" aria-labelledby="p3DetailTitle" hidden tabindex="-1">
+        <header class="p3-detail-header">
+          <div><p id="p3DetailKicker"></p><h3 id="p3DetailTitle"></h3></div>
+          <button class="p3-detail-close" id="p3DetailClose" type="button" aria-label="关闭台风信息">×</button>
+        </header>
+        <div class="p3-detail-route">
+          <img id="p3DetailMap" src="assets/p3/derived/route-west.jpg" alt="台风路径示意图">
+          <div><h4>① 生成与登陆路径</h4><p id="p3DetailPath"></p></div>
+        </div>
+        <section class="p3-detail-section"><h4>② 影响圈</h4><p id="p3DetailImpact"></p><img src="assets/p3/bf27c365e0684832c527596d57ee7b9b.png" alt="" aria-hidden="true"></section>
+        <section class="p3-detail-section"><h4>③ 损失</h4><p id="p3DetailLoss"></p></section>
+        <div class="p3-detail-media" id="p3DetailMedia" aria-label="相关现场视频">
+          <figure class="p3-media-card"><div class="p3-media-frame"><video id="p3DetailMediaOne" controls muted playsinline preload="metadata" aria-label="台风影响现场视频"></video></div><figcaption id="p3DetailMediaOneCaption">现场画面</figcaption></figure>
+          <figure class="p3-media-card"><div class="p3-media-frame"><video id="p3DetailMediaTwo" controls muted playsinline preload="metadata" aria-label="台风新闻视频"></video></div><figcaption id="p3DetailMediaTwoCaption">新闻播报</figcaption></figure>
+        </div>
+        <p class="p3-detail-ticker" id="p3DetailTicker"></p>
+      </article>
+        <section class="p3-loss-report" aria-labelledby="p3LossReportTitle">
+          <h3 id="p3LossReportTitle">台风灾害损失与影响</h3>
+          <img src="assets/p3/typhoon-loss-impact.jpg" alt="台风灾害损失图表">
+          <p>台风灾害损失不仅取决于风力和风速，更取决于影响路径、影响范围、下垫面社会经济暴露度以及是否诱发次生灾害。</p>
+          <p>高强度台风如果避开经济核心区，其绝对损失未必最高。</p>
+          <p>台风环流与中纬度系统相互作用形成的“台风+暴雨+洪涝”复合灾害，影响范围横跨东南沿海至华北、东北，远超一般台风。</p>
+        </section>
+      </section>
+    </div>
+
+    <nav class="p3-rail" aria-label="第三页内容导航">
+      <button class="is-active" type="button" data-p3-view="origin" aria-label="风从哪里来">↗</button>
+      <button type="button" data-p3-view="process" aria-label="台风形成过程">✦</button>
+      <button type="button" data-p3-view="evidence" aria-label="台风阶段">◌</button>
+      <button type="button" data-p3-view="route" aria-label="台风路径">⌁</button>
+      <button type="button" data-p3-view="stats" aria-label="统计图表">▦</button>
+    </nav>
+    <button class="p3-back" type="button" aria-label="返回第二页">‹</button>
+  </div>
 </section>
 
 </main>
 
 <div class="pager" id="pager">1/3</div>
 
-<script src="js/main.js"></script>
+<script src="js/main.js?v=20261003-after-routefix4"></script>
 </body>
 </html>
