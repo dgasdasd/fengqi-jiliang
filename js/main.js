@@ -895,7 +895,7 @@ function initP3() {
   if (detail) detail.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.preventDefault(); closeTyphoon(); } });
 
   var route = {
-    west: { title: '西行路径', image: 'assets/p3/routes/route-west.webp', copy: '在广东、海南、广西登陆，破坏力大。典型代表：2014年亚马逊。' },
+    west: { title: '西行路径', image: 'assets/p3/routes/route-west.webp', copy: '在广东、海南、广西登陆，破坏力大。典型代表：2014年威马逊。' },
     northwest: { title: '西北路径', image: 'assets/p3/routes/route-northwest.webp', copy: '在台湾附近或浙江一带登陆，影响范围广。典型代表：2016年莫兰蒂。' },
     turn: { title: '转向路径', image: 'assets/p3/routes/route-turn.webp', copy: '在我国25N登陆而后转向东北。典型代表：2018年谭美。' }
   };
