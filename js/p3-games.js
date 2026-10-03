@@ -93,7 +93,7 @@
     }
     function loop() {
       if (over) return;
-      var now = Date.now(), dt = Math.min(42, now - last); last = now, v = dt * .15;
+      var now = Date.now(), dt = Math.min(42, now - last), v = dt * .15; last = now;
       if (dir.left) x -= v; if (dir.right) x += v; if (dir.up) y -= v; if (dir.down) y += v;
       x = Math.max(54, Math.min(266, x)); y = Math.max(62, Math.min(515, y));
       spawnAt += dt; if (spawnAt > 560) { spawnAt = 0; spawn(); }
@@ -105,7 +105,17 @@
       setRaft(); if (y <= 67) { finish(); return; }
       raf = requestAnimationFrame(loop);
     }
-    function press(ev) { ev.preventDefault(); ev.stopPropagation(); dir[ev.currentTarget.dataset.dir] = 1; }
+    function nudge(name) {
+      // 点击也要有反馈；按住时 loop 继续移动，松开后停止。
+      if (name === 'left') x -= 18;
+      if (name === 'right') x += 18;
+      if (name === 'up') y -= 22;
+      if (name === 'down') y += 22;
+      x = Math.max(54, Math.min(266, x));
+      y = Math.max(62, Math.min(515, y));
+      setRaft();
+    }
+    function press(ev) { ev.preventDefault(); ev.stopPropagation(); var name = ev.currentTarget.dataset.dir; nudge(name); dir[name] = 1; }
     function release(ev) { ev.preventDefault(); ev.stopPropagation(); dir[ev.currentTarget.dataset.dir] = 0; }
     $$('.p3-g-river-pad button', box).forEach(function (b) {
       b.addEventListener('pointerdown', press); b.addEventListener('pointerup', release); b.addEventListener('pointercancel', release); b.addEventListener('pointerleave', release);
@@ -132,14 +142,14 @@
       var now = Date.now(), dt = Math.min(42, now - last); last = now; acc += dt;
       while (left > 0 && notes.length < 1 && acc > 730) { acc = 0; spawn(); }
       var missed = false;
-      notes.forEach(function (o) { o.y += dt * .22; o.el.style.top = (o.y / 250 * 100) + '%'; o.el.classList.toggle('near', Math.abs(o.y - hitY) < 32); if (!o.done && o.y > hitY + 38) { o.done = true; missed = true; } });
+      notes.forEach(function (o) { o.y += dt * .16; o.el.style.top = (o.y / 250 * 100) + '%'; o.el.classList.toggle('near', Math.abs(o.y - hitY) < 58); if (!o.done && o.y > hitY + 62) { o.done = true; missed = true; } });
       notes = notes.filter(function (o) { if (o.done) { o.el.remove(); return false; } return true; });
       if (missed) { finish(false); return; }
       raf = requestAnimationFrame(loop);
     }
     function tap(lane) {
       if (over) return;
-      var best = null; notes.forEach(function (o) { if (o.lane === lane && !o.done && Math.abs(o.y - hitY) <= 38 && (!best || Math.abs(o.y - hitY) < Math.abs(best.y - hitY))) best = o; });
+      var best = null; notes.forEach(function (o) { if (o.lane === lane && !o.done && Math.abs(o.y - hitY) <= 62 && (!best || Math.abs(o.y - hitY) < Math.abs(best.y - hitY))) best = o; });
       lanes[lane].classList.add('is-flash'); setTimeout(function () { lanes[lane].classList.remove('is-flash'); }, 160);
       if (!best) return;
       best.done = true; best.el.remove(); notes = notes.filter(function (o) { return o !== best; }); hits++; left--; bar.style.width = Math.round(hits / 12 * 100) + '%'; if (hits >= 12) finish(true);

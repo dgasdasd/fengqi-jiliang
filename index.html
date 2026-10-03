@@ -12,10 +12,16 @@
 <link rel="preload" as="image" href="assets/img/bg-eye.webp" fetchpriority="high">
 <link rel="preload" as="image" href="assets/img/person.webp">
 <link rel="preload" as="font" type="font/woff2" href="fonts/msz.subset.woff2" crossorigin>
-<link rel="stylesheet" href="css/tokens.css?v=20261003-vh1">
-<link rel="stylesheet" href="css/style.css?v=20261003-vh1">
+<link rel="stylesheet" href="css/tokens.css?v=20261004-vh2">
+<link rel="stylesheet" href="css/style.css?v=20261004-games3">
 </head>
 <body>
+
+<!-- teshu 原版前三页：第一页、第二页和四图标导引页只在入口阶段显示。
+     图标点击后由 bridge 交给下面现有的第三页内容，其他页面结构保持原样。 -->
+<div id="teshuEntry" class="teshu-entry" aria-label="风栖过的脊梁导引页">
+  <iframe id="teshuEntryFrame" src="teshu/index.html" title="风栖过的脊梁导引页"></iframe>
+</div>
 
 <main class="frame" id="frame">
 
@@ -566,6 +572,7 @@
 <div class="pager" id="pager">1/3</div>
 
 <script src="js/main.js?v=20261003-typo1"></script>
-<script src="js/p3-games.js?v=20261003-games1"></script>
+<script src="js/p3-games.js?v=20261004-games3"></script>
+<script src="js/teshu-bridge.js?v=20261004-teshu5"></script>
 </body>
 </html>

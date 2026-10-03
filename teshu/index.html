@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>风起沧海 · 台风科普</title>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<!-- 舞台：整屏黑色底，手机画布在其中居中 -->
+<div id="stage" class="stage">
+  <!-- 手机画布：尺寸由 js/app.js 按视口计算（窄屏铺满整屏，宽屏居中的手机竖屏画布） -->
+  <div id="phone" class="phone">
+    <div id="deck" class="deck"></div>
+
+    <!-- 进度与导航（放在画布内，随画布对齐） -->
+    <div class="hud" id="hud">
+      <div class="page-no"><b id="curNo">1</b><span>/</span><i id="totNo">14</i></div>
+      <div class="progress"><i id="bar"></i></div>
+    </div>
+    <button class="arrow arrow-up" id="prevBtn" type="button" aria-label="上一页"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
+    <button class="arrow arrow-down" id="nextBtn" type="button" aria-label="下一页"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+
+    <!-- 音乐开关 -->
+    <button class="bgm-btn" id="bgmBtn" type="button" aria-label="音乐开关"><span class="bgm-ico"></span></button>
+
+    <!-- 弹窗层 -->
+    <div class="popup" id="popup" hidden>
+      <div class="popup-mask" id="popupMask"></div>
+      <div class="popup-body" id="popupBody"></div>
+      <button class="popup-close" id="popupClose" type="button" aria-label="关闭">&times;</button>
+    </div>
+  </div>
+</div>
+
+<audio id="bgm" src="assets/audio-bgm.mp3" loop preload="auto" autoplay></audio>
+<!-- 正文第一页（灾情播报）的背景播报音：在这一页循环播放 -->
+<audio id="news" src="assets/audio-news.mp3" loop preload="auto"></audio>
+
+<script src="js/content-data.js?v=20261004-entry"></script>
+<script src="js/app.js?v=20261004-entry"></script>
+</body>
+</html>

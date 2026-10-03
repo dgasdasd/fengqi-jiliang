@@ -1,0 +1,257 @@
+/* ============================================================
+   风起沧海 · 台风科普 H5 —— 复刻版
+   设计基准：320px 宽画布，等比缩放到视口；竖向翻页
+============================================================ */
+:root{
+  --ink:#000;
+  --red:#C3433C;        /* rgb(195,67,60) 主强调色 */
+  --red-2:#D33636;      /* rgb(211,54,54) */
+  --red-3:#E92B2B;      /* rgb(233,43,43) */
+  --red-deep:#680B06;   /* rgb(104,11,6) */
+  --blue:#2E598F;       /* rgb(46,89,143) 引用蓝 */
+  --near:#161414;       /* rgb(22,20,20) */
+  --white:#fff;
+  --font-kai:'KaiTi','STKaiti','楷体','LiSu','隶书',serif;
+  --font-song:'Songti SC','STSong','SimSun','宋体',serif;
+  --font-hei:'PingFang SC','Microsoft YaHei','微软雅黑',sans-serif;
+  /* 艺术字族：隶书优先，其次行楷 */
+  --font-art:'LiSu','隶书','STXingkai','华文行楷','KaiTi','STKaiti','楷体',serif;
+  /* 封面标题：醒图「清酒体」；本机没装该字体时退到隶书/行楷 */
+  --font-qingjiu:'QingJiuTi','清酒体','LiSu','隶书','STXingkai','华文行楷','KaiTi','楷体',serif;
+  --t:.65s;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#000}
+body{
+  font-family:var(--font-kai);color:var(--ink);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img{display:block;max-width:100%;border:0}
+button{font-family:inherit;border:0;background:none;cursor:pointer;color:inherit}
+
+/* ---------- 舞台：手机竖屏画布，居中铺满 ---------- */
+.stage{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:#000;overflow:hidden;
+}
+/* 手机画布：尺寸由 js/app.js 按视口算好
+   窄屏（手机）铺满整屏；宽屏（电脑）居中显示一台正常手机大小 */
+.phone{
+  position:relative;flex:0 0 auto;
+  width:100vw;height:100vh;         /* JS 未执行时的兜底尺寸，避免整页空白 */
+  overflow:hidden;background:#fff;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 10px 40px rgba(0,0,0,.55);
+}
+/* 设计稿：320 宽等比缩放；左上角对齐，缩放后视觉尺寸正好等于画布 */
+.deck{
+  position:absolute;left:0;top:0;
+  width:320px;height:486px;         /* 宽度为设计基准，高度由 JS 按屏幕设置 */
+  transform-origin:top left;
+  background:#fff;
+  overflow:hidden;
+}
+
+/* ---------- 单页 ---------- */
+.page{
+  position:absolute;inset:0;
+  overflow:hidden;
+  /* 所有页面统一用这张灰色雾霾背景图 */
+  background:#e8e5df url("../assets/img/p1-bg-haze.jpg") center center / cover no-repeat;
+  opacity:0;visibility:hidden;
+  transition:opacity var(--t) ease, transform var(--t) cubic-bezier(.22,.9,.3,1);
+  transform:translateY(28px);
+}
+.page.on{opacity:1;visibility:visible;transform:none;z-index:2}
+.page.out{opacity:0;transform:translateY(-28px)}
+.page-scroll{
+  position:absolute;inset:0;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.page-scroll::-webkit-scrollbar{display:none}
+/* 长页：内容高度撑开 */
+.long-inner{position:relative;width:320px}
+
+/* ---------- 元素基类 ---------- */
+.el{position:absolute}
+.el-img img{width:100%;height:100%;object-fit:contain}
+.el-img.cover img{object-fit:cover}
+.el-text{
+  white-space:pre-wrap;word-break:break-word;
+  line-height:1.5;
+}
+.el-text span{font-size:inherit}
+
+/* ---------- HUD ---------- */
+.hud{
+  position:absolute;top:0;left:0;right:0;z-index:40;
+  pointer-events:none;
+  padding:10px 12px 0;
+}
+.page-no{
+  font-size:11px;color:rgba(0,0,0,.42);letter-spacing:.06em;
+  display:flex;align-items:baseline;gap:2px;
+  text-shadow:0 1px 2px rgba(255,255,255,.6);
+}
+.page-no b{font-size:15px;font-weight:700}
+.page-no i{font-style:normal;opacity:.7}
+.progress{
+  margin-top:5px;height:2px;border-radius:2px;
+  background:rgba(0,0,0,.10);overflow:hidden;
+}
+.progress i{
+  display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--red-2),var(--red));
+  border-radius:2px;transition:width .45s ease;
+}
+/* 深色页时 HUD 反白 */
+body.dark .page-no{color:rgba(255,255,255,.62);text-shadow:0 1px 3px rgba(0,0,0,.5)}
+body.dark .progress{background:rgba(255,255,255,.16)}
+
+/* ---------- 翻页箭头 ---------- */
+.arrow{
+  position:absolute;left:50%;transform:translateX(-50%);z-index:40;
+  width:30px;height:30px;display:grid;place-items:center;
+  opacity:.5;transition:opacity .3s,transform .3s;
+}
+.arrow:hover{opacity:.95}
+.arrow:disabled{opacity:.12;pointer-events:none}
+.arrow svg{width:19px;height:19px;fill:none;stroke:#333;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.arrow-up{bottom:6px}
+.arrow-down{bottom:6px;display:none}
+body.dark .arrow svg{stroke:#fff}
+
+/* ---------- 音乐按钮 ---------- */
+.bgm-btn{
+  position:absolute;right:10px;top:10px;z-index:45;
+  width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.72);
+  box-shadow:0 1px 5px rgba(0,0,0,.16);
+  transition:opacity .3s;
+}
+.bgm-btn .bgm-ico{
+  width:11px;height:11px;border-radius:50%;
+  border:1.5px solid var(--red);
+  position:relative;
+}
+.bgm-btn .bgm-ico::after{
+  content:'';position:absolute;left:50%;top:50%;
+  width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:50%;
+  background:var(--red);
+}
+.bgm-btn.playing .bgm-ico{animation:bgmSpin 3.2s linear infinite}
+@keyframes bgmSpin{to{transform:rotate(360deg)}}
+.bgm-btn.muted{opacity:.45}
+.bgm-btn.muted .bgm-ico::after{background:transparent}
+body.dark .bgm-btn{background:rgba(0,0,0,.42)}
+
+/* ---------- 弹窗 ---------- */
+.popup{position:absolute;inset:0;z-index:80;display:grid;place-items:center}
+/* 关键：display:grid 会覆盖 hidden 属性，必须显式声明 */
+.popup[hidden]{display:none !important}
+.popup-mask{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(2px)}
+.popup-body{
+  position:relative;width:min(320px,calc(var(--phone-w,320px) * .92));aspect-ratio:320/486;
+  background:#fff;border-radius:6px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(0,0,0,.5);
+  animation:popIn .38s cubic-bezier(.2,1.1,.4,1) both;
+  transform-origin:center;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
+.popup-close{
+  position:absolute;right:12px;top:12px;z-index:5;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(0,0,0,.06);color:#666;font-size:17px;line-height:1;
+  display:grid;place-items:center;
+}
+.popup-close:hover{background:rgba(0,0,0,.13)}
+.popup-scaler{position:relative;width:320px;height:486px;transform-origin:top left}
+
+/* ---------- 入场动画 ---------- */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes zoomIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+@keyframes slideL{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:none}}
+@keyframes dropIn{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:none}}
+@keyframes typeIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+@keyframes pulseSoft{0%,100%{opacity:.75}50%{opacity:1}}
+@keyframes glitch{0%,100%{transform:none}20%{transform:translate(-1.5px,1px)}40%{transform:translate(1.5px,-1px)}60%{transform:translate(-1px,-1px)}80%{transform:translate(1px,1px)}}
+
+.a-fadeUp{animation:fadeUp .8s cubic-bezier(.22,.9,.3,1) both}
+.a-fadeIn{animation:fadeIn .9s ease both}
+.a-zoomIn{animation:zoomIn .8s cubic-bezier(.2,1.05,.4,1) both}
+.a-slideL{animation:slideL .8s cubic-bezier(.22,.9,.3,1) both}
+.a-slideR{animation:slideR .8s cubic-bezier(.22,.9,.3,1) both}
+.a-dropIn{animation:dropIn .8s cubic-bezier(.22,.9,.3,1) both}
+.a-typeIn{animation:typeIn .7s cubic-bezier(.22,.9,.3,1) both}
+.a-float{animation:floatY 3.4s ease-in-out infinite}
+.a-spin{animation:spinSlow 26s linear infinite}
+.a-pulse{animation:pulseSoft 3.2s ease-in-out infinite}
+
+/* 首屏开场：大字依次呈现 */
+.p1-char{
+  position:absolute;
+  font-family:var(--font-kai);
+  font-weight:700;
+  color:#111;
+  line-height:1;
+  animation:charIn .9s cubic-bezier(.2,1.05,.35,1) both, charFloat 4.2s ease-in-out infinite;
+}
+@keyframes charIn{
+  from{opacity:0;transform:translateY(-26px) scale(.82) rotate(-6deg);filter:blur(6px)}
+  to{opacity:1;transform:none;filter:blur(0)}
+}
+@keyframes charFloat{0%,100%{margin-top:0}50%{margin-top:-7px}}
+
+/* 点击提示 */
+.tap-hint{
+  position:absolute;left:0;right:0;bottom:26px;text-align:center;
+  font-size:12px;color:rgba(0,0,0,.5);letter-spacing:.04em;
+  animation:pulseSoft 2.4s ease-in-out infinite;
+}
+body.dark .tap-hint{color:rgba(255,255,255,.6)}
+.tap-arrow{
+  width:16px;height:16px;margin:4px auto 0;
+  border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;
+  transform:rotate(45deg);
+  animation:tapBounce 1.8s ease-in-out infinite;
+}
+@keyframes tapBounce{0%,100%{transform:rotate(45deg) translate(0,0)}50%{transform:rotate(45deg) translate(3px,3px)}}
+
+/* 可点击热区 */
+.hot{position:absolute;cursor:pointer;z-index:6}
+.hot::after{
+  content:'';position:absolute;inset:-2px;border-radius:8px;
+  border:1.5px dashed rgba(195,67,60,.55);
+  animation:pulseSoft 2.6s ease-in-out infinite;
+  pointer-events:none;
+}
+.hot:hover::after{border-color:rgba(195,67,60,.95)}
+
+/* 视频 */
+.el-video{position:absolute;background:#000;overflow:hidden}
+.el-video video{width:100%;height:100%;object-fit:cover;display:block}
+.video-mask{
+  position:absolute;inset:0;display:grid;place-items:center;
+  background:rgba(0,0,0,.32);transition:opacity .35s;
+}
+.video-mask.hide{opacity:0;pointer-events:none}
+.play-btn{
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.92);
+  display:grid;place-items:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  transition:transform .3s;
+}
+.play-btn:hover{transform:scale(1.08)}
+.play-btn::after{
+  content:'';margin-left:3px;
+  border-left:13px solid var(--red);
+  border-top:8px solid transparent;border-bottom:8px solid transparent;
+}
