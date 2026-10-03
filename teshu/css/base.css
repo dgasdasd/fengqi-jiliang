@@ -106,6 +106,8 @@ button{font-family:inherit;border:0;background:none;cursor:pointer;color:inherit
   background:linear-gradient(90deg,var(--red-2),var(--red));
   border-radius:2px;transition:width .45s ease;
 }
+/* Hide the page count and progress strip on the opening pages. */
+#hud{display:none!important}
 /* 深色页时 HUD 反白 */
 body.dark .page-no{color:rgba(255,255,255,.62);text-shadow:0 1px 3px rgba(0,0,0,.5)}
 body.dark .progress{background:rgba(255,255,255,.16)}
