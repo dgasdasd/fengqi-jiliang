@@ -13,7 +13,7 @@
 <link rel="preload" as="image" href="assets/img/person.webp">
 <link rel="preload" as="font" type="font/woff2" href="fonts/msz.subset.woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/style.css?v=20261003-after-statsfix1">
+<link rel="stylesheet" href="css/style.css?v=20261003-after-orderfix1">
 </head>
 <body>
 
@@ -148,6 +148,12 @@
           </div>
           <p class="p3-thermo-value" id="p3ThermoValue">摄氏度：20.0°</p>
         </div>
+        <div class="p3-origin-reveal" id="p3OriginReveal" aria-live="polite" hidden>
+          <p class="p3-origin-kicker">台风的形成</p>
+          <div class="p3-origin-video"><video src="assets/p3/5.mp4" muted loop playsinline preload="metadata" aria-label="循环播放的台风形成动画"></video></div>
+          <div class="p3-origin-copy" id="p3OriginCopy" aria-live="polite"></div>
+          <button class="p3-more p3-origin-next" type="button" data-next="process" hidden>台风形成的过程 <span>⌄</span></button>
+        </div>
         <section class="p3-origin-route" id="p3OriginRoute" aria-label="台风路径类型">
           <div class="p3-origin-route-heading">台风的类型 <small>（按路径划分）</small></div>
           <div class="route-controls" role="tablist" aria-label="路径分类">
@@ -159,12 +165,6 @@
           <p class="route-copy" id="p3OriginRouteCopy">在广东、海南、广西登陆，破坏力大。典型代表：2014年亚马逊。</p>
           <button class="p3-more p3-origin-route-next" type="button" data-next="stats">继续查看统计 <span>⌄</span></button>
         </section>
-        <div class="p3-origin-reveal" id="p3OriginReveal" aria-live="polite" hidden>
-          <p class="p3-origin-kicker">台风的形成</p>
-          <div class="p3-origin-video"><video src="assets/p3/5.mp4" muted loop playsinline preload="metadata" aria-label="循环播放的台风形成动画"></video></div>
-          <div class="p3-origin-copy" id="p3OriginCopy" aria-live="polite"></div>
-          <button class="p3-more p3-origin-next" type="button" data-next="process" hidden>台风形成的过程 <span>⌄</span></button>
-        </div>
       </section>
     </div>
 
@@ -538,6 +538,6 @@
 
 <div class="pager" id="pager">1/3</div>
 
-<script src="js/main.js?v=20261003-after-statsfix1"></script>
+<script src="js/main.js?v=20261003-after-orderfix1"></script>
 </body>
 </html>
