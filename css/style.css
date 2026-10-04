@@ -614,6 +614,7 @@ body{
 .p3-loss-analysis p{margin:0;}
 .p3-detail-status{margin-top:calc(14 * var(--u));padding:calc(8 * var(--u));background:rgba(34,83,103,.08);font-size:calc(10 * var(--u));line-height:1.5;color:#58666b;}
 .p3:has(.p3-mapgame:not([hidden])) .p3-rail,.p3:has(.p3-history:not([hidden])) .p3-rail{display:none}
+.p3:has(.p3-mapgame:not([hidden])) .p3-head .p3-track{display:none}
 .p3:has(.p3-stats:not([hidden])) .p3-back{display:none}
 .p3:has(.p3-mapgame:not([hidden])) .p3-back,.p3:has(.p3-history:not([hidden])) .p3-back{opacity:1;pointer-events:auto;}
 .p3:has(.p3-origin-study:not([hidden])) .p3-rail,.p3:has(.p3-origin-study:not([hidden])) .p3-back{display:none}
