@@ -243,11 +243,12 @@ body{
 .p3{ background:var(--paper); align-items:start; overflow:hidden; }
 .p3-scroll{
   position:relative; width:100%; height:100%; overflow-y:auto; overflow-x:hidden;
-  scrollbar-width:none; background:var(--paper) url("../assets/img/bg-smoke.webp") center/cover no-repeat;
+  scrollbar-width:none;
+  background:linear-gradient(rgba(248,248,246,.22),rgba(248,248,246,.22)),url("../assets/img/bg-smoke.webp") center/cover no-repeat;
+  background-color:var(--paper);
   color:var(--ink); padding:calc(28 * var(--u)) calc(16 * var(--u)) calc(70 * var(--u));
 }
 .p3-scroll::-webkit-scrollbar{display:none}
-.p3-scroll::before{content:"";position:absolute;inset:0;background:rgba(244,241,232,.50);pointer-events:none}
 .p3-head,.p3-view,.p3-rail,.p3-back{position:relative;z-index:1}
 .p3-head{display:flex;align-items:flex-end;justify-content:space-between;padding:0 calc(8 * var(--u)) calc(16 * var(--u));}
 .p3-head h2{font-family:var(--f-cal);font-size:calc(34 * var(--u));font-weight:700;line-height:1.05;letter-spacing:.02em;}
@@ -287,8 +288,7 @@ body{
 .p3:has(.p3-impact:not([hidden])) .p3-scroll{padding:0}
 .p3:has(.p3-impact:not([hidden])) .p3-rail,.p3:has(.p3-impact:not([hidden])) .p3-back{display:none}
 .p3-impact{min-height:var(--sh);height:auto;padding:0;}
-.p3-impact-scene{position:relative;width:100%;height:auto;min-height:var(--sh);overflow:visible;padding-bottom:calc(70 * var(--u));background:rgba(243,243,241,.72) url("../assets/img/bg-smoke.webp") center/cover no-repeat;color:#111;}
-.p3-impact-scene::before{content:"";position:absolute;inset:0;background:rgba(246,246,244,.24);pointer-events:none;}
+.p3-impact-scene{position:relative;width:100%;height:auto;min-height:var(--sh);overflow:visible;padding-bottom:calc(70 * var(--u));background:transparent;color:#111;}
 .p3-impact-back{position:absolute;z-index:6;top:calc(18 * var(--u));right:calc(18 * var(--u));display:inline-flex;align-items:center;gap:calc(4 * var(--u));border:1px solid rgba(64,79,83,.2);border-radius:999px;background:rgba(255,255,255,.82);padding:calc(6 * var(--u)) calc(12 * var(--u)) calc(6 * var(--u)) calc(8 * var(--u));font-family:var(--f-cal);font-size:calc(13 * var(--u));color:#39484c;box-shadow:0 2px 8px rgba(38,47,51,.1);cursor:pointer;}
 .p3-impact-back span{font-family:Arial,sans-serif;font-size:calc(22 * var(--u));line-height:.7;}
 .p3-impact-back:focus-visible{outline:2px solid #b4333c;outline-offset:3px;}
@@ -346,9 +346,10 @@ body{
 .impact-circle-grid b{font-weight:600;}
 @keyframes p3ChainPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 
-/* 风停之后：从场景底部长城落入重建与守望。 */
-.p3-after{min-height:calc(1680 * var(--u));padding:0;background:var(--paper) url("../assets/img/bg-smoke.webp") center/cover no-repeat;}
-.p3-after-hero{position:relative;min-height:calc(770 * var(--u));overflow:hidden;padding:calc(34 * var(--u)) calc(24 * var(--u)) calc(115 * var(--u));text-align:center;background:rgba(244,242,235,.54);}
+/* 风停之后：整段共用滚动层的雾底，避免章节接缝与左右纸边。 */
+.p3:has(.p3-after:not([hidden])) .p3-scroll{padding:0;}
+.p3-after{min-height:calc(1680 * var(--u));padding:0;background:transparent;}
+.p3-after-hero{position:relative;min-height:calc(770 * var(--u));overflow:hidden;padding:calc(34 * var(--u)) calc(24 * var(--u)) calc(115 * var(--u));text-align:center;background:transparent;}
 .p3-after-back{position:absolute;z-index:4;top:calc(18 * var(--u));right:calc(18 * var(--u));display:inline-flex;align-items:center;gap:calc(4 * var(--u));border:1px solid rgba(64,79,83,.2);border-radius:999px;background:rgba(255,255,255,.78);padding:calc(6 * var(--u)) calc(12 * var(--u)) calc(6 * var(--u)) calc(8 * var(--u));font-family:var(--f-cal);font-size:calc(13 * var(--u));color:#39484c;box-shadow:0 2px 8px rgba(38,47,51,.1);cursor:pointer;}
 .p3-after-back span{font-family:Arial,sans-serif;font-size:calc(22 * var(--u));line-height:.7;}
 .p3-after-back:focus-visible{outline:2px solid #b4333c;outline-offset:3px;}
@@ -364,7 +365,7 @@ body{
 .p3-after-scroll{position:absolute;z-index:3;bottom:calc(16 * var(--u));left:50%;transform:translateX(-50%);border:0;border-radius:999px;background:rgba(255,255,255,.88);padding:calc(7 * var(--u)) calc(19 * var(--u));font-family:var(--f-cal);font-size:calc(14 * var(--u));color:#39464b;box-shadow:0 3px 11px rgba(38,47,51,.13);cursor:pointer;}
 .p3-after-scroll span{display:inline-block;margin-left:calc(5 * var(--u));animation:p3AfterArrow 1.5s ease-in-out infinite;}
 @keyframes p3AfterArrow{50%{transform:translateY(calc(3 * var(--u)));}}
-.p3-after-cards{padding:calc(28 * var(--u)) calc(14 * var(--u)) calc(70 * var(--u));background:rgba(245,243,237,.72);}
+.p3-after-cards{padding:calc(28 * var(--u)) calc(14 * var(--u)) calc(70 * var(--u));background:transparent;}
 .p3-after-section-kicker{margin:0;text-align:center;font-size:calc(10 * var(--u));letter-spacing:.16em;color:#aa3841;}
 .p3-after-cards h3{margin:calc(8 * var(--u)) 0 calc(7 * var(--u));font-family:var(--f-cal);font-size:calc(25 * var(--u));line-height:1.25;text-align:center;color:#182227;}
 .p3-after-section-copy{margin:0 auto calc(18 * var(--u));max-width:calc(368 * var(--u));font-size:calc(12 * var(--u));line-height:1.7;text-align:center;color:#47575d;}
@@ -384,7 +385,7 @@ body{
 .p3-story-back small{margin-top:calc(7 * var(--u));font-size:calc(11 * var(--u));color:#b3313b;letter-spacing:.04em;}
 .p3-story-back p{margin-top:calc(13 * var(--u));font-size:calc(12.5 * var(--u));line-height:1.7;color:#2b383d;}
 .p3-after-quote{margin:calc(28 * var(--u)) calc(6 * var(--u)) 0;padding:calc(15 * var(--u)) calc(13 * var(--u));border-top:1px solid rgba(169,49,57,.28);border-bottom:1px solid rgba(169,49,57,.18);font-family:var(--f-cal);font-size:calc(18 * var(--u));line-height:1.55;text-align:center;color:#ad333c;}
-.p3-prep{padding:calc(42 * var(--u)) calc(14 * var(--u)) calc(38 * var(--u));background:rgba(245,243,237,.8);}
+.p3-prep{padding:calc(42 * var(--u)) calc(14 * var(--u)) calc(38 * var(--u));background:transparent;}
 .p3-prep h3,.p3-profile h3{margin:calc(8 * var(--u)) 0 calc(8 * var(--u));font-family:var(--f-cal);font-size:calc(24 * var(--u));line-height:1.3;text-align:center;color:#182227;}
 .p3-prep-lead{margin:0 auto;max-width:calc(370 * var(--u));font-size:calc(13 * var(--u));line-height:1.7;text-align:center;color:#3e4f55;}
 .p3-prep-sentence{margin:calc(18 * var(--u)) auto 0;padding:calc(13 * var(--u)) calc(12 * var(--u));border-top:1px solid rgba(75,106,113,.18);border-bottom:1px solid rgba(75,106,113,.18);font-family:var(--f-cal);font-size:calc(17 * var(--u));line-height:1.6;text-align:center;color:#2c424a;}
@@ -416,10 +417,10 @@ body{
 .p3-archive-invite{display:flex;flex-direction:column;align-items:center;margin-top:calc(31 * var(--u));text-align:center;}
 .p3-archive-invite img{display:block;width:calc(126 * var(--u));height:calc(158 * var(--u));object-fit:contain;filter:drop-shadow(0 4px 7px rgba(83,60,32,.22));transition:transform .32s var(--e-out);}
 .p3-archive-invite img:hover{transform:translateY(calc(-3 * var(--u))) rotate(-2deg);}
-.p3-archive-invite p{margin:calc(8 * var(--u)) 0 calc(11 * var(--u));font-family:var(--f-cal);font-size:calc(16 * var(--u));color:#47565d;}
+.p3-archive-invite p{margin:calc(8 * var(--u)) 0 calc(11 * var(--u));font-family:var(--f-cal);font-size:calc(16 * var(--u));color:#26353b;}
 .p3-archive-invite button,.p3-profile-seal{border:0;border-radius:999px;background:#2d6375;color:#fff;padding:calc(9 * var(--u)) calc(22 * var(--u));font-family:var(--f-cal);font-size:calc(15 * var(--u));box-shadow:0 3px 10px rgba(36,83,96,.2);cursor:pointer;}
 .p3-archive-invite button span,.p3-profile-seal span{margin-left:calc(5 * var(--u));}
-.p3-profile{padding:calc(32 * var(--u)) calc(19 * var(--u)) calc(52 * var(--u));background:rgba(244,242,235,.9) url("../assets/img/bg-smoke.webp") center/cover no-repeat;}
+.p3-profile{padding:calc(32 * var(--u)) calc(19 * var(--u)) calc(52 * var(--u));background:transparent;}
 .p3-profile[hidden],.p3-finale[hidden]{display:none;}
 .p3-profile-fieldset{margin:calc(17 * var(--u)) 0 0;padding:calc(12 * var(--u));border:1px solid rgba(57,94,104,.2);border-radius:calc(9 * var(--u));background:rgba(255,255,255,.79);}
 .p3-profile-fieldset legend{padding:0 calc(6 * var(--u));font-family:var(--f-cal);font-size:calc(17 * var(--u));color:#28576b;}
@@ -451,7 +452,7 @@ body{
 @keyframes p3StarGather{0%{opacity:0;transform:translateY(calc(28 * var(--u))) scale(.55)}35%{opacity:1}100%{opacity:.85;transform:translate(0,calc(74 * var(--u))) scale(1)}}
 .p3-next-wind{position:absolute;z-index:5;left:50%;bottom:calc(14 * var(--u));transform:translateX(-50%);border:1px solid rgba(46,82,91,.25);border-radius:999px;background:rgba(255,255,255,.8);padding:calc(8 * var(--u)) calc(22 * var(--u));font-family:var(--f-cal);font-size:calc(15 * var(--u));color:#315967;cursor:pointer;}
 .p3:has(.p3-after:not([hidden])) .p3-head,.p3:has(.p3-after:not([hidden])) .p3-rail,.p3:has(.p3-after:not([hidden])) .p3-back{display:none;}
-.p3-origin-study{min-height:100%;padding:calc(18 * var(--u)) calc(14 * var(--u)) calc(72 * var(--u));background:rgba(244,242,235,.82) url("../assets/img/bg-smoke.webp") center/cover no-repeat;}
+.p3-origin-study{min-height:100%;padding:calc(18 * var(--u)) calc(14 * var(--u)) calc(72 * var(--u));background:transparent;}
 .p3-study-head{display:flex;align-items:center;gap:calc(8 * var(--u));margin-bottom:calc(12 * var(--u));}
 .p3-study-head h2{flex:1;margin:0;font-family:var(--f-cal);font-size:calc(31 * var(--u));line-height:1.05;}
 .p3-study-back{width:calc(34 * var(--u));height:calc(34 * var(--u));border:0;border-radius:50%;background:rgba(255,255,255,.86);font-size:calc(27 * var(--u));line-height:1;color:#687479;cursor:pointer;}
@@ -559,7 +560,7 @@ body{
 .p3-puzzle-start:focus-visible,.p3-detail-close:focus-visible,.p3-year-point:focus-visible{outline:2px solid #1875a5;outline-offset:2px;}
 .p3-puzzle-countdown{position:absolute;inset:0;z-index:6;display:grid;place-items:center;background:rgba(18,37,43,.18);color:#fff;font-family:var(--f-cal);font-size:calc(72 * var(--u));font-weight:700;text-shadow:0 2px 12px rgba(0,0,0,.42);pointer-events:none;}
 .p3-history{position:relative;min-height:100%;padding:0;overflow:visible;}
-.p3-history-scene{position:relative;min-height:0;padding:calc(18 * var(--u)) calc(10 * var(--u)) calc(72 * var(--u));background:var(--paper) url("../assets/img/bg-smoke.webp") center/cover no-repeat;}
+.p3-history-scene{position:relative;min-height:0;padding:calc(18 * var(--u)) calc(10 * var(--u)) calc(72 * var(--u));background:transparent;}
 .p3-history-hint{margin:calc(5 * var(--u)) 0 calc(4 * var(--u));text-align:center;color:#4b5a60;font-size:calc(12 * var(--u));}
 .p3-timeline{position:relative;width:min(100%,calc(448 * var(--u)));height:calc(780 * var(--u));margin:0 auto;overflow:visible;}
 .p3-timeline-art{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
@@ -637,7 +638,7 @@ body{
 @keyframes p3DetailIn{from{opacity:0;transform:translateY(calc(18 * var(--u)))}to{opacity:1;transform:none}}
 
 /* 风停之后：长城翻页图下的守望相助小游戏 */
-.p3-after-games{padding:calc(32 * var(--u)) calc(14 * var(--u)) calc(62 * var(--u));background:rgba(242,244,239,.9);}
+.p3-after-games{padding:calc(32 * var(--u)) calc(14 * var(--u)) calc(62 * var(--u));background:transparent;}
 .p3-after-games h3{margin:calc(8 * var(--u)) 0 calc(12 * var(--u));font-family:var(--f-cal);font-size:calc(25 * var(--u));line-height:1.25;text-align:center;color:#182227;}
 .p3-games-intro{display:flex;align-items:center;justify-content:center;gap:calc(10 * var(--u));min-height:calc(126 * var(--u));}
 .p3-games-intro>img{display:block;width:calc(92 * var(--u));height:calc(118 * var(--u));object-fit:contain;filter:drop-shadow(0 3px 4px rgba(35,65,72,.16));}
