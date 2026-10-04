@@ -666,7 +666,7 @@ function initP3() {
   });
   setPrepRegion('coastal');
 
-  var profile = $('#p3Profile'), prep = $('#p3Prep'), archiveOpen = $('#p3ArchiveOpen'), archiveSeal = $('#p3ArchiveSeal'), finale = $('#p3Finale');
+  var profile = $('#p3Profile'), archiveOpen = $('#p3ArchiveOpen'), archiveSeal = $('#p3ArchiveSeal'), finale = $('#p3Finale');
   var profileRisk = $('#p3ProfileRisk');
   function setProfileRegion(region) {
     if (!profileRisk) return;
@@ -677,13 +677,13 @@ function initP3() {
     radio.addEventListener('change', function () { if (radio.checked) setProfileRegion(radio.value); });
   });
   if (archiveOpen) archiveOpen.addEventListener('click', function () {
-    if (prep) prep.hidden = true;
+    if (finale) finale.hidden = true;
     if (profile) {
       profile.hidden = false;
-      profile.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-      var first = profile.querySelector('input[name="p3Region"]');
-      if (first) first.focus({ preventScroll: true });
     }
+    show('archive');
+    var first = profile && profile.querySelector('input[name="p3Region"]');
+    if (first) first.focus({ preventScroll: true });
   });
   if (archiveSeal) archiveSeal.addEventListener('click', function () {
     var checked = $$('.p3-profile-prep input[type="checkbox"]:checked').map(function (input) { return input.value; });
@@ -697,8 +697,8 @@ function initP3() {
       finale.classList.remove('is-opening');
       void finale.offsetWidth;
       finale.classList.add('is-opening');
-      finale.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
     }
+    if (scroll) scroll.scrollTop = 0;
   });
   var afterBack = $('#p3AfterBack');
   if (afterBack) afterBack.addEventListener('click', function () {
@@ -709,9 +709,9 @@ function initP3() {
   var nextWind = $('#p3NextWind');
   if (nextWind) nextWind.addEventListener('click', function () {
     if (finale) finale.hidden = true;
-    if (prep) prep.hidden = false;
     if (profile) profile.hidden = true;
-    if (scroll) scroll.scrollTop = 0;
+    show('origin');
+    root.dispatchEvent(new CustomEvent('p3-return-menu'));
   });
 
   var puzzleMode = 'ready';
@@ -744,7 +744,10 @@ function initP3() {
       historyScene.classList.add('is-entering');
     }
     if (puzzleStatus) puzzleStatus.textContent = '线路已展开。点击年份节点查看台风详情。';
-    window.setTimeout(function () { historyBlock.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); }, 40);
+    window.setTimeout(function () {
+      if (window.P3Pages) window.P3Pages.goTo(historyBlock.querySelector('.chapter-page'), true);
+      else historyBlock.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    }, 40);
   }
   function tileLabel(piece, slot) {
     return '地图第' + (piece + 1) + '块，当前位置第' + (slot + 1) + '格。使用方向键移动';
@@ -896,15 +899,15 @@ function initP3() {
   });
 
   var typhoonInfo = {
-    rainbow: { year: '2015年', name: '彩虹', number: '1522', map: 'assets/p3/derived/route-rainbow.jpg', path: '生成于菲律宾吕宋岛附近海面，穿过吕宋岛进入南海后加强；10月4日14时10分前后在广东湛江市坡头区登陆。路径：菲律宾吕宋岛→南海北部→广东湛江→广西。', impact: '登陆时七级风圈半径约300公里，十级风圈约80公里。主要风雨影响：广东中西部、海南北部、广西东部、贵州南部。', loss: '广东、广西、海南等地受灾，死亡失踪约23人，紧急转移安置约20万人，直接经济损失约270亿元。湛江、茂名等地房屋倒塌、农田绝收，交通和电力一度中断。', media: ['assets/p3/source/news-5.mp4','assets/p3/source/news-0.mp4'], mediaCaption: ['现场视频','新闻视频'], ticker: '彩虹登陆湛江后，粤西多地出现强风、暴雨与风暴潮。' },
-    meranti: { year: '2016年', name: '莫兰蒂', number: '1614', map: 'assets/p3/derived/route-northwest.jpg', path: '生成于西北太平洋关岛附近；9月15日3时05分在福建厦门翔安区登陆。路径：关岛附近→巴士海峡→台湾海峡→福建厦门→江西→安徽→江苏入海。', impact: '七级风圈半径约300—400公里，十级风圈约120—180公里。影响台湾、福建、浙江、江西、安徽、江苏等地。', loss: '福建、浙江、江西等受灾，死亡失踪约49人，紧急转移安置约50万人，直接经济损失约300亿元。厦门、泉州等地房屋倒塌、树木大面积倒伏、交通瘫痪。', media: ['assets/p3/source/news-5.mp4','assets/p3/source/news-14.mp4'], mediaCaption: ['风雨现场','新闻视频'], ticker: '莫兰蒂登陆闽南后，强风暴雨影响东南沿海与内陆多省。' },
-    hato: { year: '2017年', name: '天鸽', number: '1713', map: 'assets/p3/derived/route-hato.jpg', path: '生成于菲律宾以东洋面；8月23日12时50分在广东珠海金湾区登陆。路径：菲律宾以东→南海北部→广东珠海→广西。', impact: '七级风圈半径约250公里，十级风圈约80公里。主要影响广东、香港、澳门、广西、贵州、云南。', loss: '死亡失踪约26人，紧急转移安置约27万人，直接经济损失约280亿元。珠海、澳门、中山等地房屋受损严重，停水停电、交通中断。', media: ['assets/p3/source/news-14.mp4','assets/p3/source/news-0.mp4'], mediaCaption: ['台风播报','现场视频'], ticker: '天鸽重创珠海、澳门，沿海城市进入全面防风状态。' },
-    mangkhut: { year: '2018年', name: '山竹', number: '1822', map: 'assets/p3/derived/route-west.jpg', path: '生成于西北太平洋关岛附近；9月16日17时在广东江门台山市登陆。路径：关岛附近→菲律宾吕宋岛→南海→广东台山→广西→贵州。', impact: '七级风圈半径500公里以上，十级风圈约200公里，属于风圈极大的台风。影响广东、香港、澳门、海南、广西、贵州、湖南、云南等地。', loss: '中国境内死亡失踪约5人，紧急转移安置约300万人，直接经济损失约300亿元。粤港澳等地树木倒伏、房屋损坏、交通大面积停运。', media: ['assets/p3/source/news-0.mp4','assets/p3/source/news-14.mp4'], mediaCaption: ['新闻视频','现场视频'], ticker: '山竹登陆华南，超大风圈与风暴潮造成广泛影响。' },
-    lekima: { year: '2019年', name: '利奇马', number: '1909', map: 'assets/p3/derived/route-northwest.jpg', path: '生成于菲律宾以东洋面；8月10日1时45分在浙江温岭市城南镇登陆。路径：菲律宾以东→台湾以东→浙江温岭→江苏→山东→渤海。', impact: '七级风圈半径约400—500公里，十级风圈约100—150公里。影响浙江、上海、江苏、山东、安徽、福建、辽宁等地。', loss: '死亡失踪约70人，紧急转移安置约140万人，直接经济损失约537亿元。浙江、山东等地农田受淹、房屋倒塌、交通中断，山东寿光蔬菜基地严重受灾。', media: ['assets/p3/source/news-5.mp4','assets/p3/source/news-0.mp4'], mediaCaption: ['积水现场','新闻视频'], ticker: '利奇马北上影响华东，多地启动防汛与地质灾害应急响应。' },
-    higos: { year: '2020年', name: '黑格比', number: '2004', map: 'assets/p3/derived/route-northwest.jpg', path: '生成于菲律宾以东洋面；8月4日3时30分在浙江乐清市沿海登陆。路径：菲律宾以东→东海→浙江乐清→江苏→黄海。', impact: '七级风圈半径约200—300公里，十级风圈约50—80公里。主要影响浙江、上海、江苏、安徽。', loss: '死亡失踪约7人，紧急转移安置约20万人，直接经济损失约80亿元。浙江温州、台州等地房屋受损、农田被淹、交通短时中断。', media: ['assets/p3/source/news-14.mp4','assets/p3/source/news-5.mp4'], mediaCaption: ['沿海现场','新闻视频'], ticker: '黑格比登陆浙江后，华东沿海出现强风、暴雨和大浪。' },
-    infa: { year: '2021年', name: '烟花', number: '2106', map: 'assets/p3/derived/route-northwest.jpg', path: '生成于西北太平洋；7月25日12时30分在浙江舟山普陀区登陆，7月26日9时50分在浙江嘉兴平湖市再次登陆。路径：西北太平洋→浙江舟山→嘉兴→江苏→安徽→河南→山东。', impact: '七级风圈半径约300—400公里，十级风圈约100公里。影响浙江、上海、江苏、安徽、河南、山东等地；外围水汽还参与河南“7·20”极端暴雨。', loss: '死亡失踪约2人，紧急转移安置约50万人，直接经济损失约100亿元。浙江、上海、江苏等地城市内涝、农田受淹、交通停运。', media: ['assets/p3/source/news-0.mp4','assets/p3/source/news-5.mp4'], mediaCaption: ['城市积水','现场视频'], ticker: '烟花移动缓慢，持续风雨给长三角防汛带来压力。' },
-    muifa: { year: '2022年', name: '梅花', number: '2212', map: 'assets/p3/derived/route-northwest.jpg', path: '生成于西北太平洋；9月14日20时30分在浙江舟山普陀区登陆，15日0时30分在上海奉贤区再次登陆，16日0时在山东青岛第三次登陆，16日12时40分在辽宁大连第四次登陆。路径：西北太平洋→东海→浙江→上海→山东→辽宁。', impact: '七级风圈半径约300公里，十级风圈约80—120公里。影响浙江、上海、江苏、山东、辽宁、吉林等地。', loss: '死亡失踪较少，紧急转移安置约40万人，直接经济损失约100亿元。浙江、上海、山东、辽宁等地农田受淹、房屋损坏、港口和交通受影响。', media: ['assets/p3/source/news-14.mp4','assets/p3/source/news-0.mp4'], mediaCaption: ['海面现场','新闻视频'], ticker: '梅花多次登陆，影响范围跨越长三角、山东和辽宁。' },
-    dusurui: { year: '2023年', name: '杜苏芮', number: '2305', map: 'assets/p3/derived/route-turn.jpg', path: '生成于西北太平洋；7月28日9时55分在福建晋江市沿海登陆。路径：西北太平洋→巴士海峡→南海东北部→福建晋江→江西→安徽→华北→东北。', impact: '七级风圈半径约400公里，十级风圈约120—180公里。影响台湾、福建、浙江、江西、安徽、河南、河北、北京、天津、吉林、黑龙江等地；残余环流诱发华北极端暴雨。', loss: '死亡失踪约107人，紧急转移安置约120万人，直接经济损失约1100亿元（含华北暴雨影响）。福建、京津冀、东北等地洪涝严重，农田、房屋、交通大面积损毁。', media: ['assets/p3/source/news-5.mp4','assets/p3/source/news-14.mp4'], mediaCaption: ['暴雨现场','新闻视频'], ticker: '杜苏芮登陆后与中纬度系统相互作用，华北出现极端暴雨。' }
+    rainbow: { year: '2015年', name: '彩虹', number: '1522', map: 'assets/p3/paths/rainbow.jpg', path: '生成于菲律宾吕宋岛附近海面，穿过吕宋岛进入南海后加强；10月4日14时10分前后在广东湛江市坡头区登陆。路径：菲律宾吕宋岛→南海北部→广东湛江→广西。', impact: '登陆时七级风圈半径约300公里，十级风圈约80公里。主要风雨影响：广东中西部、海南北部、广西东部、贵州南部。', loss: '广东、广西、海南等地受灾，死亡失踪约23人，紧急转移安置约20万人，直接经济损失约270亿元。湛江、茂名等地房屋倒塌、农田绝收，交通和电力一度中断。', media: ['assets/p3/source/news-5.mp4','assets/p3/source/news-0.mp4'], mediaCaption: ['现场视频','新闻视频'], ticker: '彩虹登陆湛江后，粤西多地出现强风、暴雨与风暴潮。' },
+    meranti: { year: '2016年', name: '莫兰蒂', number: '1614', map: 'assets/p3/paths/meranti.jpg', path: '生成于西北太平洋关岛附近；9月15日3时05分在福建厦门翔安区登陆。路径：关岛附近→巴士海峡→台湾海峡→福建厦门→江西→安徽→江苏入海。', impact: '七级风圈半径约300—400公里，十级风圈约120—180公里。影响台湾、福建、浙江、江西、安徽、江苏等地。', loss: '福建、浙江、江西等受灾，死亡失踪约49人，紧急转移安置约50万人，直接经济损失约300亿元。厦门、泉州等地房屋倒塌、树木大面积倒伏、交通瘫痪。', media: ['assets/p3/source/news-5.mp4','assets/p3/source/news-14.mp4'], mediaCaption: ['风雨现场','新闻视频'], ticker: '莫兰蒂登陆闽南后，强风暴雨影响东南沿海与内陆多省。' },
+    hato: { year: '2017年', name: '天鸽', number: '1713', map: 'assets/p3/paths/hato.jpg', path: '生成于菲律宾以东洋面；8月23日12时50分在广东珠海金湾区登陆。路径：菲律宾以东→南海北部→广东珠海→广西。', impact: '七级风圈半径约250公里，十级风圈约80公里。主要影响广东、香港、澳门、广西、贵州、云南。', loss: '死亡失踪约26人，紧急转移安置约27万人，直接经济损失约280亿元。珠海、澳门、中山等地房屋受损严重，停水停电、交通中断。', media: ['assets/p3/source/news-14.mp4','assets/p3/source/news-0.mp4'], mediaCaption: ['台风播报','现场视频'], ticker: '天鸽重创珠海、澳门，沿海城市进入全面防风状态。' },
+    mangkhut: { year: '2018年', name: '山竹', number: '1822', map: 'assets/p3/paths/mangkhut.jpg', path: '生成于西北太平洋关岛附近；9月16日17时在广东江门台山市登陆。路径：关岛附近→菲律宾吕宋岛→南海→广东台山→广西→贵州。', impact: '七级风圈半径500公里以上，十级风圈约200公里，属于风圈极大的台风。影响广东、香港、澳门、海南、广西、贵州、湖南、云南等地。', loss: '中国境内死亡失踪约5人，紧急转移安置约300万人，直接经济损失约300亿元。粤港澳等地树木倒伏、房屋损坏、交通大面积停运。', media: ['assets/p3/source/news-0.mp4','assets/p3/source/news-14.mp4'], mediaCaption: ['新闻视频','现场视频'], ticker: '山竹登陆华南，超大风圈与风暴潮造成广泛影响。' },
+    lekima: { year: '2019年', name: '利奇马', number: '1909', map: 'assets/p3/paths/lekima.jpg', path: '生成于菲律宾以东洋面；8月10日1时45分在浙江温岭市城南镇登陆。路径：菲律宾以东→台湾以东→浙江温岭→江苏→山东→渤海。', impact: '七级风圈半径约400—500公里，十级风圈约100—150公里。影响浙江、上海、江苏、山东、安徽、福建、辽宁等地。', loss: '死亡失踪约70人，紧急转移安置约140万人，直接经济损失约537亿元。浙江、山东等地农田受淹、房屋倒塌、交通中断，山东寿光蔬菜基地严重受灾。', media: ['assets/p3/source/news-5.mp4','assets/p3/source/news-0.mp4'], mediaCaption: ['积水现场','新闻视频'], ticker: '利奇马北上影响华东，多地启动防汛与地质灾害应急响应。' },
+    higos: { year: '2020年', name: '黑格比', number: '2004', map: 'assets/p3/paths/higos.jpg', path: '生成于菲律宾以东洋面；8月4日3时30分在浙江乐清市沿海登陆。路径：菲律宾以东→东海→浙江乐清→江苏→黄海。', impact: '七级风圈半径约200—300公里，十级风圈约50—80公里。主要影响浙江、上海、江苏、安徽。', loss: '死亡失踪约7人，紧急转移安置约20万人，直接经济损失约80亿元。浙江温州、台州等地房屋受损、农田被淹、交通短时中断。', media: ['assets/p3/source/news-14.mp4','assets/p3/source/news-5.mp4'], mediaCaption: ['沿海现场','新闻视频'], ticker: '黑格比登陆浙江后，华东沿海出现强风、暴雨和大浪。' },
+    infa: { year: '2021年', name: '烟花', number: '2106', map: 'assets/p3/paths/infa.jpg', path: '生成于西北太平洋；7月25日12时30分在浙江舟山普陀区登陆，7月26日9时50分在浙江嘉兴平湖市再次登陆。路径：西北太平洋→浙江舟山→嘉兴→江苏→安徽→河南→山东。', impact: '七级风圈半径约300—400公里，十级风圈约100公里。影响浙江、上海、江苏、安徽、河南、山东等地；外围水汽还参与河南“7·20”极端暴雨。', loss: '死亡失踪约2人，紧急转移安置约50万人，直接经济损失约100亿元。浙江、上海、江苏等地城市内涝、农田受淹、交通停运。', media: ['assets/p3/source/news-0.mp4','assets/p3/source/news-5.mp4'], mediaCaption: ['城市积水','现场视频'], ticker: '烟花移动缓慢，持续风雨给长三角防汛带来压力。' },
+    muifa: { year: '2022年', name: '梅花', number: '2212', map: 'assets/p3/paths/muifa.jpg', path: '生成于西北太平洋；9月14日20时30分在浙江舟山普陀区登陆，15日0时30分在上海奉贤区再次登陆，16日0时在山东青岛第三次登陆，16日12时40分在辽宁大连第四次登陆。路径：西北太平洋→东海→浙江→上海→山东→辽宁。', impact: '七级风圈半径约300公里，十级风圈约80—120公里。影响浙江、上海、江苏、山东、辽宁、吉林等地。', loss: '死亡失踪较少，紧急转移安置约40万人，直接经济损失约100亿元。浙江、上海、山东、辽宁等地农田受淹、房屋损坏、港口和交通受影响。', media: ['assets/p3/source/news-14.mp4','assets/p3/source/news-0.mp4'], mediaCaption: ['海面现场','新闻视频'], ticker: '梅花多次登陆，影响范围跨越长三角、山东和辽宁。' },
+    dusurui: { year: '2023年', name: '杜苏芮', number: '2305', map: 'assets/p3/paths/dusurui.jpg', path: '生成于西北太平洋；7月28日9时55分在福建晋江市沿海登陆。路径：西北太平洋→巴士海峡→南海东北部→福建晋江→江西→安徽→华北→东北。', impact: '七级风圈半径约400公里，十级风圈约120—180公里。影响台湾、福建、浙江、江西、安徽、河南、河北、北京、天津、吉林、黑龙江等地；残余环流诱发华北极端暴雨。', loss: '死亡失踪约107人，紧急转移安置约120万人，直接经济损失约1100亿元（含华北暴雨影响）。福建、京津冀、东北等地洪涝严重，农田、房屋、交通大面积损毁。', media: ['assets/p3/source/news-5.mp4','assets/p3/source/news-14.mp4'], mediaCaption: ['暴雨现场','新闻视频'], ticker: '杜苏芮登陆后与中纬度系统相互作用，华北出现极端暴雨。' }
   };
   var detailTrigger = null;
   var bodyOverflow = '';
@@ -921,6 +924,7 @@ function initP3() {
     $('#p3DetailKicker').textContent = item.year + '  台风编号 ' + item.number;
     $('#p3DetailTitle').textContent = '台风“' + item.name + '”';
     $('#p3DetailMap').src = item.map;
+    $('#p3DetailMap').alt = item.name + '台风路径图';
     $('#p3DetailPath').textContent = item.path;
     $('#p3DetailImpact').textContent = item.impact;
     $('#p3DetailLoss').textContent = item.loss;

@@ -14,13 +14,14 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/msz.subset.woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css?v=20261004-fonts1">
 <link rel="stylesheet" href="css/style.css?v=20261004-smokebg2">
+<link rel="stylesheet" href="css/chapter-pages.css?v=20261004-archive3">
 </head>
 <body>
 
 <!-- teshu 原版前三页：第一页、第二页和四图标导引页只在入口阶段显示。
      图标点击后由 bridge 交给下面现有的第三页内容，其他页面结构保持原样。 -->
 <div id="teshuEntry" class="teshu-entry" aria-label="风栖过的脊梁导引页">
-  <iframe id="teshuEntryFrame" src="teshu/index.html?v=20261004-bgm-entry1" title="风栖过的脊梁导引页" allow="autoplay"></iframe>
+  <iframe id="teshuEntryFrame" src="teshu/index.html?v=20261004-paged1" title="风栖过的脊梁导引页" allow="autoplay"></iframe>
 </div>
 
 <main class="frame" id="frame">
@@ -352,6 +353,9 @@
         </div>
       </section>
 
+    </div>
+
+    <div class="p3-view p3-archive" data-view="archive" hidden>
       <section class="p3-profile" id="p3Profile" aria-labelledby="p3ProfileTitle" hidden>
         <p class="p3-after-section-kicker">MY FILE · 个人防风准备卡</p>
         <h3 id="p3ProfileTitle">生成我的防风准备卡</h3>
@@ -535,7 +539,7 @@
           <button class="p3-detail-close" id="p3DetailClose" type="button" aria-label="关闭台风信息">×</button>
         </header>
         <div class="p3-detail-route">
-          <img id="p3DetailMap" src="assets/p3/derived/route-west.jpg" alt="台风路径示意图">
+          <img id="p3DetailMap" src="assets/p3/paths/rainbow.jpg" alt="台风路径图">
           <div><h4>① 生成与登陆路径</h4><p id="p3DetailPath"></p></div>
         </div>
         <section class="p3-detail-section"><h4>② 影响圈</h4><p id="p3DetailImpact"></p><img src="assets/p3/bf27c365e0684832c527596d57ee7b9b.png" alt="" aria-hidden="true"></section>
@@ -578,8 +582,9 @@
 
 <div class="pager" id="pager">1/3</div>
 
-<script src="js/main.js?v=20261004-carousel1"></script>
+<script src="js/main.js?v=20261004-archive1"></script>
 <script src="js/p3-games.js?v=20261004-games3"></script>
+<script src="js/chapter-pages.js?v=20261004-archive1"></script>
 <script src="js/teshu-bridge.js?v=20261004-carousel1"></script>
 </body>
 </html>

@@ -1,0 +1,277 @@
+/* One viewport per reading step. The original art and interactions stay in place. */
+.p3.is-paged .p3-scroll {
+  padding: 0 !important;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: auto;
+  overscroll-behavior-y: contain;
+}
+.p3.is-paged .p3-head,
+.p3.is-paged .p3-rail,
+.p3.is-paged .p3-back { display: none !important; }
+.p3.is-paged .p3-view { height: auto; min-height: 0; padding: 0 !important; }
+.p3.is-paged .p3-origin { height: auto !important; min-height: 0 !important; }
+.p3.is-paged .p3-origin-scene { height: var(--vh); min-height: var(--vh); }
+.p3.is-paged .p3-origin-study,
+.p3.is-paged .p3-mapgame,
+.p3.is-paged .p3-history,
+.p3.is-paged .p3-history-scene,
+.p3.is-paged .p3-loss-report,
+.p3.is-paged .p3-impact,
+.p3.is-paged .p3-impact-chain,
+.p3.is-paged .p3-impact-statistics,
+.p3.is-paged .p3-after,
+.p3.is-paged .p3-after-games,
+.p3.is-paged .p3-after-cards,
+.p3.is-paged .p3-prep,
+.p3.is-paged .p3-profile {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  background: transparent;
+}
+.p3.is-paged [hidden] { display: none !important; }
+.p3.is-paged .chapter-page {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: var(--vh);
+  min-height: var(--vh);
+  max-height: var(--vh);
+  margin: 0;
+  overflow: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background: transparent;
+}
+.p3.is-paged .chapter-page[hidden] { display: none !important; }
+.p3.is-paged .chapter-content {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: auto;
+  scrollbar-width: thin;
+  padding: clamp(68px, calc(94 * var(--u)), 86px) clamp(18px, calc(23 * var(--u)), 28px) clamp(74px, calc(100 * var(--u)), 95px);
+}
+.p3.is-paged .chapter-heading,
+.p3.is-paged .chapter-content > h2,
+.p3.is-paged .chapter-content > h3,
+.p3.is-paged .chapter-content > .p3-panel-heading {
+  margin: 0 0 18px;
+  font-family: var(--f-cal);
+  font-size: clamp(24px, calc(30 * var(--u)), 32px);
+  line-height: 1.28;
+  text-align: center;
+  color: #203b47;
+}
+.p3.is-paged .chapter-copy { margin: 16px 0 0; font: 400 clamp(16px, calc(19 * var(--u)), 20px)/1.65 var(--f-fang); color: #263940; }
+.p3.is-paged .chapter-toolbar,
+.p3.is-paged .chapter-pager {
+  position: absolute;
+  left: 0;
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  pointer-events: none;
+  color: #25424d;
+}
+.p3.is-paged .chapter-toolbar { top: 0; justify-content: space-between; min-height: 56px; padding: 8px 16px; background: linear-gradient(rgba(238,243,241,.92), rgba(238,243,241,0)); }
+.p3.is-paged .chapter-toolbar span { font: 700 clamp(15px, calc(17 * var(--u)), 19px)/1.2 var(--f-cal); text-align: right; max-width: 57%; }
+.p3.is-paged .chapter-pager { bottom: 0; justify-content: center; gap: 16px; min-height: 56px; padding: 6px 12px 8px; background: linear-gradient(transparent, rgba(238,243,241,.92)); }
+.p3.is-paged .chapter-pager span { font: 600 14px/1.2 var(--f-hei); white-space: nowrap; }
+.p3.is-paged .chapter-toolbar button,
+.p3.is-paged .chapter-pager button,
+.detail-pager button {
+  min-width: 44px;
+  min-height: 42px;
+  border: 1px solid rgba(45,84,94,.26);
+  border-radius: 999px;
+  background: rgba(255,255,255,.88);
+  color: #254b5a;
+  font: 700 18px/1 var(--f-cal);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.p3.is-paged .chapter-toolbar button { padding: 0 14px; font-size: 16px; }
+.p3.is-paged .chapter-pager button:disabled { opacity: .36; cursor: default; }
+.p3.is-paged .chapter-toolbar button:focus-visible,
+.p3.is-paged .chapter-pager button:focus-visible { outline: 2px solid #b4333c; outline-offset: 2px; }
+.p3.is-paged:has(.p3-typhoon-detail:not([hidden])) .chapter-toolbar,
+.p3.is-paged:has(.p3-typhoon-detail:not([hidden])) .chapter-pager { display: none; }
+
+/* The temperature interaction is the only visible item before 26.5°C. */
+.p3.is-paged .chapter-thermo .p3-study-head { margin: 0 0 10px; }
+.p3.is-paged .chapter-thermo .p3-study-head h2 { font-size: clamp(27px, calc(34 * var(--u)), 36px); }
+.p3.is-paged .chapter-thermo .p3-study-back { display: none; }
+.p3.is-paged .chapter-thermo .p3-thermo-stage { min-height: 0; padding-top: 10px; }
+.p3.is-paged .chapter-thermo .p3-thermo-prompt,
+.p3.is-paged .chapter-thermo .p3-thermo-value { font-size: clamp(17px, calc(20 * var(--u)), 21px); }
+.p3.is-paged .chapter-thermo .p3-thermo-stage.is-hidden { display: none; }
+.p3.is-paged .chapter-formation-video .p3-origin-reveal { padding: 0; }
+.p3.is-paged .chapter-formation-video .p3-origin-kicker { font-size: clamp(24px, calc(30 * var(--u)), 32px); }
+.p3.is-paged .chapter-formation-video .p3-origin-video { width: 100%; margin: 14px auto; }
+.p3.is-paged .chapter-factors .p3-origin-copy { gap: 15px; margin: 0; }
+.p3.is-paged .chapter-factors .p3-factor { grid-template-columns: 44px 1fr; gap: 10px; }
+.p3.is-paged .chapter-factors .p3-factor p { font-size: clamp(16px, calc(18 * var(--u)), 19px); line-height: 1.45; }
+.p3.is-paged .chapter-factors .p3-factor-icon { width: 42px; height: 42px; }
+.p3.is-paged .chapter-routes .p3-origin-route { padding: 0; }
+.p3.is-paged .chapter-routes .p3-origin-route-heading { font-size: clamp(26px, calc(30 * var(--u)), 32px); }
+.p3.is-paged .route-controls button { min-height: 44px; font-size: clamp(15px, calc(17 * var(--u)), 18px); }
+.p3.is-paged .route-copy { margin: 16px 0; font-size: clamp(17px, calc(19 * var(--u)), 20px); line-height: 1.55; }
+.p3.is-paged .chapter-routes .route-stage img { max-height: 43vh; object-fit: contain; }
+.p3.is-paged .p3-origin-next { font-size: 17px; }
+.p3.is-paged .chapter-process .p3-subview-back,
+.p3.is-paged .chapter-evidence .p3-subview-back { display: none; }
+.p3.is-paged .p3-process-scrollbox,
+.p3.is-paged .p3-evidence-scrollbox { max-height: min(64vh, 520px); padding: 10px; }
+.p3.is-paged .p3-process-list p,
+.p3.is-paged .p3-evidence-scrollbox .p3-evidence-grid p { font-size: clamp(16px, calc(18 * var(--u)), 19px); line-height: 1.55; }
+.p3.is-paged .p3-process-scrollbox::after,
+.p3.is-paged .p3-evidence-scrollbox::after { font-size: 14px; }
+.p3.is-paged .chapter-chart .stats-chart-card { width: 100%; max-width: none; padding: 10px; }
+.p3.is-paged .chapter-chart .stats-chart-card figcaption { font-size: clamp(17px, calc(19 * var(--u)), 20px); }
+.p3.is-paged .chapter-chart .stats-pie-card { min-height: 0; }
+.p3.is-paged .chapter-chart .stats-pie { width: min(56vw, 240px); }
+.p3.is-paged .chapter-chart .stats-pie-label { font-size: 14px; }
+.p3.is-paged .chapter-chart .stats-pie-label b { font-size: 17px; }
+.p3.is-paged .chapter-chart .stats-pie-legend { font-size: 15px; gap: 8px; }
+.p3.is-paged .chapter-chart .p3-stats-back { position: static; display: block; width: fit-content; margin: 16px auto; }
+
+/* Puzzle, original winding route, and loss charts. */
+.p3.is-paged .p3-mapgame-back { display: none; }
+.p3.is-paged .chapter-puzzle .p3-puzzle-panel { gap: 9px; }
+.p3.is-paged .chapter-puzzle .p3-puzzle-board { width: 100%; max-width: 440px; }
+.p3.is-paged .chapter-puzzle .p3-puzzle-heading h3 { font-size: 22px; }
+.p3.is-paged .chapter-puzzle .p3-puzzle-heading p { font-size: 16px; }
+.p3.is-paged .chapter-puzzle .p3-puzzle-start { min-height: 46px; font-size: 20px; }
+.p3.is-paged .chapter-puzzle .p3-puzzle-preview figcaption { font-size: 14px; }
+.p3.is-paged .chapter-years .chapter-timeline { width: 100%; height: auto; max-height: 57vh; overflow: visible; }
+.p3.is-paged .chapter-years .p3-timeline-art { overflow: hidden; }
+.p3.is-paged .chapter-years .p3-year-point { width: 42px; height: 42px; }
+.p3.is-paged .chapter-years .p3-year-point span { display: none; }
+.p3.is-paged .chapter-years .p3-year-point i { width: 23px; height: 23px; background: #b3313c; }
+.p3.is-paged .chapter-years .p3-year-point::after { content: attr(data-marker); position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font: 700 14px/1 var(--f-hei); color: #fff; pointer-events: none; }
+.p3.is-paged .chapter-year-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin-top: 14px; }
+.p3.is-paged .chapter-year-link { min-height: 55px; padding: 7px 9px; border: 1px solid rgba(60,93,102,.25); border-left: 4px solid #b3313c; border-radius: 5px; background: rgba(255,255,255,.78); color: #233943; text-align: left; cursor: pointer; }
+.p3.is-paged .chapter-year-link b { display: block; font: 700 clamp(16px, calc(18 * var(--u)), 19px)/1.2 var(--f-cal); }
+.p3.is-paged .chapter-year-link small { display: block; margin-top: 3px; font: 400 14px/1.2 var(--f-fang); }
+.p3.is-paged .chapter-loss .p3-loss-intro,
+.p3.is-paged .chapter-loss p { font-size: clamp(17px, calc(19 * var(--u)), 20px); line-height: 1.55; }
+.p3.is-paged .chapter-loss .p3-loss-chart { max-width: 100%; margin: 12px 0; }
+.p3.is-paged .chapter-loss .p3-loss-chart img { max-height: 40vh; object-fit: contain; }
+
+/* Tree dialogue remains fixed against its original scene coordinates. */
+.p3.is-paged .chapter-dialogue .chapter-content { padding: 0; overflow: hidden; }
+.p3.is-paged .chapter-dialogue .p3-impact-scene { width: 100%; height: var(--vh); min-height: 0; padding: 0; overflow: hidden; }
+.p3.is-paged .chapter-dialogue .p3-impact-back { display: none; }
+.p3.is-paged .chapter-dialogue .p3-impact-scene h2 { display: none; }
+.p3.is-paged .chapter-dialogue .p3-impact-bubble { font-size: clamp(16px, calc(18 * var(--u)), 19px); line-height: 1.45; }
+.p3.is-paged .p3-impact-chain { animation: none; }
+.p3.is-paged .chapter-chain .p3-impact-chain-lead,
+.p3.is-paged .chapter-chain .p3-impact-chain-copy p,
+.p3.is-paged .chapter-impact-chart .p3-impact-stat-intro,
+.p3.is-paged .chapter-impact-chart .p3-impact-stat-copy { font-size: clamp(16px, calc(18 * var(--u)), 19px); line-height: 1.5; }
+.p3.is-paged .chapter-chain .p3-impact-chain-lead { padding: 0; }
+.p3.is-paged .chapter-chain .p3-impact-chain-copy h4 { font-size: clamp(17px, calc(19 * var(--u)), 20px); }
+.p3.is-paged .chapter-chain .p3-impact-chain-node strong { font-size: 17px; }
+.p3.is-paged .chapter-chain .p3-impact-chain-node small { font-size: 14px; }
+.p3.is-paged .chapter-impact-chart .p3-impact-chart { width: 100%; }
+.p3.is-paged .chapter-impact-chart .p3-impact-chart figcaption { font-size: 19px; }
+.p3.is-paged .chapter-impact-chart .impact-bar-row,
+.p3.is-paged .chapter-impact-chart .impact-bar-row em,
+.p3.is-paged .chapter-impact-chart .impact-circle-grid span { font-size: 16px; }
+.p3.is-paged .chapter-impact-chart .impact-circle-grid i { width: 72px; height: 72px; font-size: 15px; }
+
+/* Great Wall: one scene, game, story, or preparation step at a time. */
+.p3.is-paged .chapter-wall-hero { padding: clamp(76px, calc(110 * var(--u)), 108px) 22px 74px; }
+.p3.is-paged .chapter-wall-hero .p3-after-back { display: none; }
+.p3.is-paged .chapter-wall-hero .p3-after-copy { font-size: clamp(17px, calc(19 * var(--u)), 20px); }
+.p3.is-paged .chapter-wall-hero .p3-after-wall { bottom: 62px; max-height: 28vh; }
+.p3.is-paged .chapter-wall-hero .p3-after-scroll { bottom: 58px; font-size: 17px; }
+.p3.is-paged .chapter-game-menu .p3-games-bubble,
+.p3.is-paged .chapter-game-menu .p3-games-lead,
+.p3.is-paged .chapter-game-menu .p3-games-options button small { font-size: clamp(16px, calc(18 * var(--u)), 19px); }
+.p3.is-paged .chapter-game-menu .p3-games-options { grid-template-columns: 1fr; gap: 8px; }
+.p3.is-paged .chapter-game-menu .p3-games-options button { display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 6px 16px; }
+.p3.is-paged .chapter-game-menu .p3-games-options button span { font-size: 21px; }
+.p3.is-paged .chapter-game-menu .p3-games-intro { min-height: 0; }
+.p3.is-paged .chapter-game-menu .p3-games-intro > img { width: 70px; height: 88px; }
+.p3.is-paged .chapter-game-menu .p3-games-continue { margin-top: 12px; font-size: 17px; }
+.p3.is-paged .chapter-game .p3-game-stage { width: 100%; max-width: 100%; margin: 0; padding: 6px; }
+.p3.is-paged .chapter-game .p3-game-canvas { width: min(100%, 32.53vh); height: min(61vh, 560px); aspect-ratio: 320 / 600; margin: auto; }
+.p3.is-paged .chapter-game .p3-game-stage-head strong { font-size: 21px; }
+.p3.is-paged .chapter-game .p3-game-stage-head button { font-size: 16px; }
+.p3.is-paged .chapter-game .p3-g-river-hint,
+.p3.is-paged .chapter-game .p3-g-med-hint,
+.p3.is-paged .chapter-game .p3-g-neighbor-hint { font-size: 16px; }
+.p3.is-paged .chapter-stories .p3-after-section-copy { font-size: 16px; }
+.p3.is-paged .chapter-story-carousel { display: flex; width: 100%; gap: 0; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.p3.is-paged .chapter-story-carousel .p3-story-card { flex: 0 0 100%; min-height: min(34vh, 290px); scroll-snap-align: start; }
+.p3.is-paged .chapter-story-carousel .p3-story-inner { min-height: min(34vh, 290px); }
+.p3.is-paged .chapter-stories .p3-story-back p { font-size: clamp(16px, calc(18 * var(--u)), 19px); }
+.p3.is-paged .chapter-carousel-controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 10px; font: 600 17px/1 var(--f-cal); }
+.p3.is-paged .chapter-carousel-controls button { width: 42px; height: 42px; border: 1px solid #9fb6ba; border-radius: 50%; background: rgba(255,255,255,.86); font-size: 25px; color: #315967; }
+.p3.is-paged .chapter-stories .p3-after-quote { margin: 12px 0 0; font-size: clamp(17px, calc(20 * var(--u)), 21px); }
+.p3.is-paged .chapter-prep-region .p3-prep-lead,
+.p3.is-paged .chapter-prep-cards .p3-prep-panel header small,
+.p3.is-paged .chapter-prep-invite p,
+.p3.is-paged .chapter-profile label,
+.p3.is-paged .chapter-profile .p3-profile-risk,
+.p3.is-paged .chapter-profile-reminder p { font-size: clamp(16px, calc(18 * var(--u)), 19px); line-height: 1.5; }
+.p3.is-paged .chapter-prep-region .p3-region-map-wrap { width: 100%; height: min(37vh, 260px); }
+.p3.is-paged .chapter-prep-cards .p3-prep-images img { max-height: 48vh; object-fit: contain; }
+.p3.is-paged .chapter-prep-cards .p3-prep-panel header strong { font-size: 22px; }
+.p3.is-paged .chapter-prep-cards .p3-prep-caption { font-size: 16px; }
+.p3.is-paged .p3-after-section-kicker,
+.p3.is-paged .p3-prep-hint,
+.p3.is-paged .p3-map-pin { font-size: 14px; }
+.p3.is-paged .p3-archive-invite button,
+.p3.is-paged .p3-profile-seal { min-height: 44px; font-size: 17px; }
+.p3.is-paged .chapter-profile .p3-profile-fieldset legend { font-size: 20px; }
+.p3.is-paged .chapter-profile .p3-profile-fieldset input { width: 20px; height: 20px; }
+.p3.is-paged .chapter-profile-reminder h4 { font-size: 20px; }
+.p3.is-paged .chapter-finale { display: flex; padding: 70px 16px 75px; }
+.p3.is-paged .chapter-finale .p3-finale-copy { font-size: clamp(20px, calc(25 * var(--u)), 27px); line-height: 1.5; }
+.p3.is-paged .chapter-finale .p3-finale-copy b { font-size: clamp(28px, calc(36 * var(--u)), 38px); }
+.p3.is-paged:has(.p3-finale:not([hidden])) .chapter-pager { display: none; }
+
+/* Typhoon details use three full-height sheets with the close button always visible. */
+.p3.is-paged .p3-typhoon-detail { overflow: hidden; padding: 0; background: #f3f4f1 url("../assets/img/bg-smoke.webp") center/cover no-repeat; animation-duration: .16s; }
+.p3.is-paged .p3-detail-header { position: absolute; z-index: 2; top: 0; left: 0; right: 0; min-height: 68px; margin: 0; padding: 10px 16px; background: linear-gradient(rgba(240,245,243,.98),rgba(240,245,243,.86)); }
+.p3.is-paged .p3-detail-header p { font-size: 15px; }
+.p3.is-paged .p3-detail-header h3 { font-size: 25px; }
+.p3.is-paged .detail-pages { width: 100%; height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; }
+.p3.is-paged .detail-sheet { box-sizing: border-box; width: 100%; height: 100%; min-height: 100%; padding: 88px 18px 72px; overflow-y: auto; scroll-snap-align: start; }
+.p3.is-paged .p3-detail-route { display: flex; flex-direction: column; gap: 16px; }
+.p3.is-paged .p3-detail-route img { width: 100%; height: auto; max-height: min(38vh, 310px); object-fit: contain; }
+.p3.is-paged .p3-detail-route h4,
+.p3.is-paged .p3-detail-section h4 { font-size: 22px; }
+.p3.is-paged .p3-detail-route p,
+.p3.is-paged .p3-detail-section p { max-width: none; padding: 0; font-size: clamp(17px, calc(19 * var(--u)), 20px); line-height: 1.55; }
+.p3.is-paged .p3-detail-section { margin: 0 0 18px; }
+.p3.is-paged .p3-detail-section img { display: none; }
+.p3.is-paged .p3-detail-media { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; }
+.p3.is-paged .p3-media-frame { width: 100%; aspect-ratio: 16 / 9; }
+.p3.is-paged .p3-media-card figcaption { font-size: 16px; }
+.p3.is-paged .p3-detail-ticker { margin: 12px 0; font-size: 17px; }
+.p3.is-paged .detail-pager { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; gap: 14px; min-height: 58px; background: linear-gradient(transparent, rgba(238,243,241,.96)); }
+.p3.is-paged .detail-pager span { font: 600 14px/1 var(--f-hei); }
+
+@media (max-height: 700px) {
+  .p3.is-paged .chapter-content { padding-top: 63px; padding-bottom: 60px; }
+  .p3.is-paged .chapter-wall-hero { padding-top: 66px; }
+  .p3.is-paged .chapter-game-menu .p3-games-intro > img { width: 56px; height: 68px; }
+  .p3.is-paged .chapter-game-menu .p3-games-lead { margin: 3px auto 8px; }
+  .p3.is-paged .chapter-game-menu .p3-games-options button { min-height: 45px; }
+  .p3.is-paged .chapter-game-menu .p3-games-continue { margin-top: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .p3.is-paged .p3-scroll { scroll-behavior: auto; }
+}
+.p3-route-open #pager { display: none; }

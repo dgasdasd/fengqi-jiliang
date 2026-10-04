@@ -1005,6 +1005,16 @@
   animation:pulseSoft 2s ease-in-out infinite;
 }
 
+/* Larger reading text on the three entry screens and four-icon guide. */
+.p2-frag i{font-size:13px}
+.p2-dlg{font-size:15px;line-height:1.5}
+.p2-dlg-hint{font-size:13px}
+.menu-sub{font-size:13px;letter-spacing:.08em}
+.menu-num{font-size:12px}
+.menu-cap{font-size:16px;letter-spacing:.03em}
+.menu-sub2{font-size:12px;letter-spacing:0;text-align:center}
+.menu-hint{font-size:14px;letter-spacing:.08em}
+
 /* ============================================================
    真正的收尾覆盖（必须在文件最末）：
    中段还有一套旧的 .p3-* 规则，会盖住前面新加的同名声明，

@@ -35,6 +35,7 @@
     gameStage.hidden = true;
     options.hidden = false;
     options.classList.remove('is-dim');
+    if (window.P3Pages) window.P3Pages.goTo(options, true);
   }
   function openGame(type) {
     stopCurrent();
@@ -45,7 +46,8 @@
     if (type === 'river') startRiver(gameCanvas);
     if (type === 'medic') startMedic(gameCanvas);
     if (type === 'neighbors') startNeighbors(gameCanvas);
-    gameStage.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    if (window.P3Pages) window.P3Pages.goTo(gameStage, true);
+    else gameStage.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
   }
 
   bubble.addEventListener('click', function () {

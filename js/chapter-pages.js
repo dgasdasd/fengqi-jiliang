@@ -1,0 +1,338 @@
+(function () {
+  'use strict';
+  var root = document.getElementById('p3');
+  var scroller = document.getElementById('p3Scroll');
+  if (!root || !scroller) return;
+  var $ = function (selector, scope) { return (scope || root).querySelector(selector); };
+  var $$ = function (selector, scope) { return Array.prototype.slice.call((scope || root).querySelectorAll(selector)); };
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var gates = [], current = null, scrollTimer = 0, wheelLock = 0, refreshing = false;
+  root.classList.add('is-paged');
+
+  function heading(value) {
+    var el = document.createElement('h2');
+    el.className = 'chapter-heading';
+    el.textContent = value;
+    return el;
+  }
+  function text(value) {
+    var el = document.createElement('p');
+    el.className = 'chapter-copy';
+    el.textContent = value;
+    return el;
+  }
+  function children(el) { return el ? Array.prototype.slice.call(el.children) : []; }
+  function page(parent, title, nodes, extra) {
+    var section = document.createElement('section');
+    section.className = 'chapter-page ' + (extra || '');
+    section.dataset.pageTitle = title;
+    section.setAttribute('aria-label', title);
+    var content = document.createElement('div');
+    content.className = 'chapter-content';
+    (nodes || []).filter(Boolean).forEach(function (node) { content.appendChild(node); });
+    section.appendChild(content);
+    parent.appendChild(section);
+    return section;
+  }
+  function adopt(el, title, extra) {
+    if (!el) return null;
+    el.classList.add('chapter-page');
+    if (extra) el.classList.add(extra);
+    el.dataset.pageTitle = title;
+    return el;
+  }
+  function gate(section, test) { gates.push({ page: section, test: test }); }
+
+  // 海浪：先调温度，再看动画和形成条件，最后看路径。
+  var study = $('#p3OriginStudy'), reveal = $('#p3OriginReveal');
+  if (study && reveal) {
+    var thermoPage = page(study, '海面温度', [$('.p3-study-head', study), $('#p3ThermoStage')], 'chapter-thermo');
+    gate(thermoPage, function () { return reveal.hidden; });
+    var videoPage = page(study, '台风形成动画', [reveal], 'chapter-formation-video');
+    var factorsPage = page(study, '台风形成的条件', [heading('台风形成的条件'), $('#p3OriginCopy')], 'chapter-factors');
+    var routePage = page(study, '台风的类型', [$('#p3OriginRoute')], 'chapter-routes');
+    [videoPage, factorsPage, routePage].forEach(function (p) { gate(p, function () { return !reveal.hidden; }); });
+  }
+  var process = $('.p3-view[data-view="process"]');
+  var evidence = $('.p3-view[data-view="evidence"]');
+  if (process) page(process, '台风形成的过程', children(process), 'chapter-process');
+  if (evidence) page(evidence, '台风形成的四个阶段', children(evidence), 'chapter-evidence');
+  var routeView = $('.p3-view[data-view="route"]');
+  if (routeView) page(routeView, '台风的类型', children(routeView), 'chapter-route-extra');
+  var stats = $('.p3-view[data-view="stats"]');
+  if (stats) {
+    var cards = $$('.stats-chart-card', stats), summary = $('.stat-summary', stats);
+    var sentences = (summary.textContent.match(/[^。]+。?/g) || []).map(function (s) { return s.trim(); });
+    page(stats, '西北太平洋台风生成数量', [$('.p3-panel-heading', stats), cards[0], text(sentences[0] || '')], 'chapter-chart');
+    page(stats, '登陆我国的台风占比', [heading('登陆我国的台风占比'), cards[1], text(sentences[1] || '')], 'chapter-chart');
+    page(stats, '三种台风路径占比', [heading('三种台风路径占比'), cards[2], text(sentences.slice(2).join('')),
+      $('#p3StatsBack')], 'chapter-chart');
+    summary.remove();
+    var stack = $('.stats-chart-stack', stats), pies = $('.stats-pie-grid', stats);
+    if (pies) pies.remove();
+    if (stack) stack.remove();
+  }
+
+  // 地图：拼图独占一屏，原年份曲线分段展示，损失图表各占一屏。
+  var map = $('.p3-mapgame'), history = $('#p3HistoryBlock'), scene = $('#p3HistoryScene');
+  if (map && history && scene) {
+    var puzzlePage = page(map, '中国地图拼图', [$('.p3-mapgame > .p3-subtitle'), $('.p3-puzzle-panel', map)], 'chapter-puzzle');
+    map.insertBefore(puzzlePage, history);
+    var timeline = $('.p3-timeline', scene), art = $('.p3-timeline-art', timeline);
+    var points = $$('.p3-year-point', timeline).map(function (point) {
+      return { element: point, y: parseFloat(point.style.getPropertyValue('--y')) / 100 * 780 };
+    });
+    var oldTitle = $('.p3-subtitle', scene), oldHint = $('.p3-history-hint', scene);
+    var eras = [
+      { start: 0, height: 270, title: '代表台风 · 2015—2018' },
+      { start: 270, height: 250, title: '代表台风 · 2019—2021' },
+      { start: 520, height: 260, title: '代表台风 · 2022—2023' }
+    ];
+    eras.forEach(function (era, eraIndex) {
+      var start = era.start, height = era.height;
+      var line = document.createElement('div');
+      line.className = 'p3-timeline chapter-timeline';
+      line.style.aspectRatio = '448 / ' + height;
+      var svg = art.cloneNode(true);
+      svg.setAttribute('viewBox', '0 ' + start + ' 448 ' + height);
+      svg.setAttribute('preserveAspectRatio', 'none');
+      line.appendChild(svg);
+      var list = document.createElement('div');
+      list.className = 'chapter-year-list';
+      points.filter(function (entry) { return entry.y >= start && entry.y < start + height; }).forEach(function (entry, index) {
+        entry.element.style.setProperty('--y', ((entry.y - start) / height * 100) + '%');
+        entry.element.dataset.marker = String(index + 1);
+        line.appendChild(entry.element);
+        var label = document.createElement('button');
+        label.type = 'button';
+        label.className = 'chapter-year-link';
+        label.innerHTML = '<b>' + entry.element.querySelector('strong').textContent.trim() + entry.element.querySelector('em').textContent.trim() + '</b>' +
+          '<small>' + entry.element.querySelector('b').textContent.trim() + '</small>';
+        label.addEventListener('click', function () { entry.element.click(); });
+        list.appendChild(label);
+      });
+      page(scene, era.title, [eraIndex ? heading(era.title) : oldTitle,
+        eraIndex ? text('点击年份，查看台风路径与影响') : oldHint, line, list], 'chapter-years');
+    });
+    timeline.remove();
+    var report = $('.p3-loss-report', map), charts = $$('.p3-loss-chart', report);
+    var analysis = $('.p3-loss-analysis', report), lines = children(analysis);
+    page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0]], 'chapter-loss');
+    page(report, '复合灾害的影响', [heading('复合灾害的影响'), lines[1], charts[1]], 'chapter-loss');
+    analysis.remove();
+  }
+
+  // 树木：人物对话独占一屏，灾害链和图表逐屏呈现。
+  var impact = $('.p3-impact'), impactScene = $('#p3ImpactScene'), chain = $('#p3ImpactChain');
+  if (impact && impactScene && chain) {
+    impact.appendChild(chain);
+    page(impact, '风带来了什么', [impactScene], 'chapter-dialogue');
+    impact.appendChild(chain);
+    var lead = $('.p3-impact-chain-lead', chain), rows = $$('.p3-impact-chain-row', chain);
+    var oldList = $('.p3-impact-chain-list', chain);
+    [0, 1].forEach(function (half) {
+      var group = document.createElement('div');
+      group.className = 'p3-impact-chain-list';
+      rows.slice(half * 2, half * 2 + 2).forEach(function (row) { group.appendChild(row); });
+      page(chain, half ? '灾害链 · 乡村与下游' : '灾害链 · 海上与城市',
+        [heading(half ? '灾害链 · 乡村与下游' : '灾害链 · 海上与城市'), half ? null : lead, group], 'chapter-chain');
+    });
+    oldList.remove();
+    var impactStats = $('.p3-impact-statistics', chain), impactCharts = $$('.p3-impact-chart', impactStats);
+    var impactCopies = $$('.p3-impact-stat-copy', impactStats);
+    page(impactStats, '台风灾害链平均伤害', [$('.p3-impact-statistics h3'), $('.p3-impact-stat-intro'), impactCharts[0], impactCopies[0]], 'chapter-impact-chart');
+    page(impactStats, '灾害损失构成', [heading('灾害损失构成'), impactCharts[1], impactCopies[1], $('#p3ImpactReturn')], 'chapter-impact-chart');
+    var chartGrid = $('.p3-impact-chart-grid', impactStats);
+    if (chartGrid) chartGrid.remove();
+    chain.appendChild(impactStats);
+  }
+
+  // 长城：小游戏仍使用原来的脚本，人物卡片保持点击翻面。
+  var after = $('.p3-after');
+  if (after) {
+    adopt($('.p3-after-hero', after), '风停之后', 'chapter-wall-hero');
+    var games = $('#p3AfterGames'), stage = $('#p3GameStage');
+    var gamePage = page(after, '互助小游戏', [stage], 'chapter-game');
+    after.insertBefore(gamePage, games.nextSibling);
+    gate(gamePage, function () { return !stage.hidden; });
+    page(games, '基层的力量，和你一起', children(games), 'chapter-game-menu');
+    var story = $('#p3AfterCards'), storyGrid = $('.p3-story-grid', story);
+    var storyCards = $$('.p3-story-card', storyGrid);
+    storyGrid.classList.add('chapter-story-carousel');
+    storyGrid.setAttribute('aria-label', '逆行者故事，左右滑动切换，点击卡片翻面');
+    var carousel = document.createElement('div');
+    carousel.className = 'chapter-carousel-controls';
+    carousel.innerHTML = '<button type="button" aria-label="上一个人物">‹</button><span>1 / ' + storyCards.length + '</span><button type="button" aria-label="下一个人物">›</button>';
+    storyGrid.after(carousel);
+    var storyIndex = 0;
+    function storyGo(index) {
+      storyIndex = (index + storyCards.length) % storyCards.length;
+      storyGrid.scrollTo({ left: storyIndex * storyGrid.clientWidth, behavior: reduced ? 'auto' : 'smooth' });
+      carousel.querySelector('span').textContent = (storyIndex + 1) + ' / ' + storyCards.length;
+    }
+    carousel.querySelectorAll('button')[0].addEventListener('click', function () { storyGo(storyIndex - 1); });
+    carousel.querySelectorAll('button')[1].addEventListener('click', function () { storyGo(storyIndex + 1); });
+    storyGrid.addEventListener('scroll', function () {
+      storyIndex = Math.round(storyGrid.scrollLeft / Math.max(1, storyGrid.clientWidth));
+      carousel.querySelector('span').textContent = (storyIndex + 1) + ' / ' + storyCards.length;
+    }, { passive: true });
+    page(story, '风雨中的他们', children(story), 'chapter-stories');
+    var prep = $('#p3Prep'), panels = $('.p3-prep-panels', prep), invite = $('.p3-archive-invite', prep);
+    page(prep, '沿海与内陆的风险', children(prep).filter(function (el) { return el !== panels && el !== invite; }), 'chapter-prep-region');
+    page(prep, '防灾准备档案', [heading('防灾准备档案'), panels], 'chapter-prep-cards');
+    page(prep, '制作我的防风准备卡', [invite], 'chapter-prep-invite');
+  }
+
+  // 档案袋打开后进入独立章节，避免继续从英雄与区域卡片向下滑到个人档案。
+  var archive = $('.p3-archive');
+  if (archive) {
+    var profile = $('#p3Profile'), reminder = $('.p3-reminder', profile), seal = $('#p3ArchiveSeal');
+    page(profile, '我的防风准备卡', children(profile).filter(function (el) { return el !== reminder && el !== seal; }), 'chapter-profile');
+    page(profile, '封存我的准备', [heading('让准备早台风一步'), reminder, seal], 'chapter-profile-reminder');
+    adopt($('#p3Finale'), '风起山河，不负脊梁', 'chapter-finale');
+  }
+
+  var toolbar = document.createElement('div');
+  toolbar.className = 'chapter-toolbar';
+  toolbar.innerHTML = '<button id="p3ChapterReturn" type="button">‹ 返回导引</button><span id="p3ChapterName"></span>';
+  var pager = document.createElement('nav');
+  pager.className = 'chapter-pager';
+  pager.setAttribute('aria-label', '章节翻页');
+  pager.innerHTML = '<button type="button" aria-label="上一屏">↑</button><span aria-live="polite"></span><button type="button" aria-label="下一屏">↓</button>';
+  root.appendChild(toolbar);
+  root.appendChild(pager);
+
+  function activeView() { return $('.p3-view:not([hidden])'); }
+  function visiblePages() {
+    var view = activeView();
+    if (!view) return [];
+    return $$('.chapter-page', view).filter(function (p) { return !p.closest('[hidden]') && p.getClientRects().length > 0; });
+  }
+  function topOf(p) { return p.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop; }
+  function update() {
+    var pages = visiblePages();
+    if (!pages.length) { pager.hidden = true; return; }
+    pager.hidden = false;
+    current = pages.reduce(function (a, b) {
+      return Math.abs(topOf(a) - scroller.scrollTop) <= Math.abs(topOf(b) - scroller.scrollTop) ? a : b;
+    });
+    var index = pages.indexOf(current);
+    pager.querySelector('span').textContent = (index + 1) + ' / ' + pages.length + ' · 上滑翻页';
+    pager.querySelectorAll('button')[0].disabled = index === 0 && !previousView();
+    pager.querySelectorAll('button')[1].disabled = index === pages.length - 1 && !nextView();
+    toolbar.querySelector('span').textContent = current.dataset.pageTitle || '';
+  }
+  function refresh() {
+    if (refreshing) return;
+    refreshing = true;
+    gates.forEach(function (entry) {
+      var hide = !entry.test();
+      if (entry.page.hidden !== hide) entry.page.hidden = hide;
+    });
+    refreshing = false;
+    update();
+  }
+  function goTo(target, instant) {
+    refresh();
+    var p = target && (target.classList.contains('chapter-page') ? target : target.closest('.chapter-page') || $('.chapter-page', target));
+    if (!p || p.closest('[hidden]')) return;
+    scroller.scrollTo({ top: topOf(p), behavior: instant || reduced ? 'auto' : 'smooth' });
+    current = p;
+    update();
+  }
+  function nextView() {
+    var view = activeView();
+    var name = view && view.dataset.view;
+    if (name === 'origin' && reveal && reveal.hidden) return null;
+    return { origin: 'process', process: 'evidence', evidence: 'stats' }[name];
+  }
+  function previousView() {
+    var view = activeView();
+    return { process: 'origin', evidence: 'process', stats: 'evidence' }[view && view.dataset.view];
+  }
+  function turn(direction) {
+    refresh();
+    var pages = visiblePages(), index = pages.indexOf(current);
+    if (index < 0) return;
+    if (direction > 0 && index === pages.length - 1 && nextView()) {
+      var next = $('[data-next="' + nextView() + '"]', activeView());
+      if (next) next.click();
+      else $('.p3-rail [data-p3-view="' + nextView() + '"]').click();
+      requestAnimationFrame(function () { goTo(visiblePages()[0], true); });
+      return;
+    }
+    if (direction < 0 && index === 0 && previousView()) {
+      var previous = previousView();
+      var back = previous === 'origin' ? $('#p3ProcessBack') : previous === 'process' ? $('#p3EvidenceBack') : $('.p3-rail [data-p3-view="evidence"]');
+      if (back) back.click();
+      requestAnimationFrame(function () {
+        var priorPages = visiblePages();
+        goTo(priorPages[priorPages.length - 1], true);
+      });
+      return;
+    }
+    goTo(pages[Math.max(0, Math.min(pages.length - 1, index + direction))]);
+  }
+  pager.querySelectorAll('button')[0].addEventListener('click', function () { turn(-1); });
+  pager.querySelectorAll('button')[1].addEventListener('click', function () { turn(1); });
+  toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
+  scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
+  scroller.addEventListener('wheel', function (event) {
+    if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-thermo, .p3-typhoon-detail, .p3-prep-images')) return;
+    event.preventDefault();
+    if (Math.abs(event.deltaY) < 8 || Date.now() < wheelLock) return;
+    wheelLock = Date.now() + 560;
+    turn(event.deltaY > 0 ? 1 : -1);
+  }, { passive: false });
+  root.addEventListener('keydown', function (event) {
+    if (event.target.closest('button, input, [role="slider"], .p3-puzzle-board, .p3-game-canvas, .p3-typhoon-detail')) return;
+    if (event.key === 'PageDown' || event.key === 'PageUp') { event.preventDefault(); turn(event.key === 'PageDown' ? 1 : -1); }
+  });
+  var observer = new MutationObserver(function () { requestAnimationFrame(refresh); });
+  observer.observe(scroller, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
+  window.addEventListener('resize', function () { if (current) goTo(current, true); });
+  root.addEventListener('p3-entry-route', function () {
+    requestAnimationFrame(function () { goTo(visiblePages()[0], true); });
+  });
+  if (reveal) new MutationObserver(function () {
+    if (!reveal.hidden) requestAnimationFrame(function () { goTo($('.chapter-formation-video'), true); });
+  }).observe(reveal, { attributes: true, attributeFilter: ['hidden'] });
+  var chainTrigger = $('#p3ImpactChainTrigger');
+  if (chainTrigger) chainTrigger.addEventListener('click', function () {
+    requestAnimationFrame(function () { goTo($('.chapter-chain', chain), true); });
+  });
+  window.P3Pages = { goTo: goTo, refresh: refresh };
+  refresh();
+
+  // 台风弹窗也按生成路径、影响损失、现场视频分屏。
+  var detail = $('#p3TyphoonDetail');
+  if (detail) {
+    var sheets = document.createElement('div');
+    sheets.className = 'detail-pages';
+    function sheet(nodes) {
+      var el = document.createElement('section');
+      el.className = 'detail-sheet';
+      nodes.filter(Boolean).forEach(function (node) { el.appendChild(node); });
+      sheets.appendChild(el);
+    }
+    sheet([$('.p3-detail-route', detail)]);
+    sheet($$('.p3-detail-section', detail));
+    sheet([$('.p3-detail-media', detail), $('#p3DetailTicker')]);
+    detail.appendChild(sheets);
+    var detailPager = document.createElement('nav');
+    detailPager.className = 'detail-pager';
+    detailPager.innerHTML = '<button type="button" aria-label="台风信息上一屏">↑</button><span>1 / 3</span><button type="button" aria-label="台风信息下一屏">↓</button>';
+    detail.appendChild(detailPager);
+    function detailTurn(direction) {
+      var index = Math.round(sheets.scrollTop / sheets.clientHeight);
+      sheets.scrollTo({ top: Math.max(0, Math.min(2, index + direction)) * sheets.clientHeight, behavior: reduced ? 'auto' : 'smooth' });
+    }
+    detailPager.querySelectorAll('button')[0].addEventListener('click', function () { detailTurn(-1); });
+    detailPager.querySelectorAll('button')[1].addEventListener('click', function () { detailTurn(1); });
+    sheets.addEventListener('scroll', function () {
+      detailPager.querySelector('span').textContent = (Math.round(sheets.scrollTop / Math.max(1, sheets.clientHeight)) + 1) + ' / 3 · 上滑翻页';
+    }, { passive: true });
+    new MutationObserver(function () { if (!detail.hidden) { sheets.scrollTop = 0; detailPager.querySelector('span').textContent = '1 / 3 · 上滑翻页'; } })
+      .observe(detail, { attributes: true, attributeFilter: ['hidden'] });
+  }
+})();

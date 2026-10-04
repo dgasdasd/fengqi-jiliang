@@ -49,6 +49,8 @@
     p3.dispatchEvent(routeEvent);
   }
 
+  p3.addEventListener('p3-return-menu', showMenu);
+
   window.addEventListener('message', function (event) {
     var data = event && event.data;
     if (!data || data.type !== 'teshu-route') return;
