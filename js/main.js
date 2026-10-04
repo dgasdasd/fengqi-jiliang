@@ -269,6 +269,14 @@ function initP3() {
   var puzzleCountdown = $('#p3PuzzleCountdown'), puzzleStart = $('#p3PuzzleStart'), puzzleStatus = $('#p3PuzzleStatus');
   var detail = $('#p3TyphoonDetail'), detailClose = $('#p3DetailClose'), historyScene = $('#p3HistoryScene'), historyBlock = $('#p3HistoryBlock');
   var views = $$('.p3-view'), rail = $$('.p3-rail [data-p3-view]');
+  // 飞行层独立于四个内容页，目标页切换后仍能显示过渡动画。
+  if (flightLayer && flightLayer.parentNode === originScene) root.appendChild(flightLayer);
+  function hideFlightLayer() {
+    if (!flightLayer) return;
+    flightLayer.classList.remove('is-playing', 'is-arrived', 'is-tree-playing', 'is-tree-arrived', 'is-greatwall-playing', 'is-greatwall-arrived');
+    flightLayer.style.visibility = 'hidden';
+  }
+  hideFlightLayer();
   var processText = [
     ['孕育阶段', '热带有大量湿热上升空气形成弱对流，在地转偏向力影响下形成初步云团。'],
     ['发展阶段', '低压中心不断吸收水汽，风力增强，升级为热带风暴、强热带风暴。'],
@@ -380,6 +388,7 @@ function initP3() {
     var length = flightPathEl.getTotalLength();
     var duration = reduced ? 1 : 1100;
     if (flightLayer) {
+      flightLayer.style.visibility = 'visible';
       flightLayer.classList.remove('is-arrived');
       flightLayer.classList.add('is-playing');
     }
@@ -425,6 +434,7 @@ function initP3() {
     var length = treeFlightPathEl.getTotalLength();
     var duration = reduced ? 1 : 1700;
     if (flightLayer) {
+      flightLayer.style.visibility = 'visible';
       flightLayer.classList.remove('is-tree-arrived');
       flightLayer.classList.add('is-tree-playing');
     }
@@ -473,6 +483,7 @@ function initP3() {
     var length = greatWallFlightPathEl.getTotalLength();
     var duration = reduced ? 1 : 1900;
     if (flightLayer) {
+      flightLayer.style.visibility = 'visible';
       flightLayer.classList.remove('is-tree-playing', 'is-tree-arrived', 'is-arrived');
       flightLayer.classList.remove('is-greatwall-arrived');
       flightLayer.classList.add('is-greatwall-playing');
@@ -935,6 +946,7 @@ function initP3() {
   function show(name) {
     // 任意页面切换都使旧的路径动画失效，避免返回后旧回调把页面切回去。
     routeToken++;
+    hideFlightLayer();
     if (name !== 'mapgame' && puzzleMode === 'memory') {
       clearInterval(puzzleTimer);
       puzzleTimer = null;
