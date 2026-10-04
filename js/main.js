@@ -967,6 +967,17 @@ function initP3() {
     rail.forEach(function (b) { b.classList.toggle('is-active', b.dataset.p3View === name); });
     if (scroll) scroll.scrollTop = 0;
   }
+  root.addEventListener('p3-entry-route', function (event) {
+    var key = event.detail && event.detail.route;
+    var target = { wave: 'origin', map: 'mapgame', tree: 'impact', wall: 'after' }[key];
+    if (!target) return;
+    if (study) study.hidden = true;
+    if (originScene) originScene.hidden = false;
+    resetOriginStudy();
+    if (key === 'tree') setImpactStep('question');
+    show(target);
+    if (key === 'wave') enterOriginStudy();
+  });
   rail.forEach(function (b) { b.addEventListener('click', function () { if (b.dataset.p3View === 'route') setRoute('west', false); show(b.dataset.p3View); }); });
   $$('[data-route]').forEach(function (b) { b.addEventListener('click', function () { setRoute(b.dataset.route, false); }); });
   $$('[data-next]').forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.next); }); });

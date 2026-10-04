@@ -946,21 +946,22 @@
         }
         return;
       }
-      if (idx > 0) {
-        // 四图标入口由宿主页面直接切换到对应内容，避免先停留在目录卡片上。
-        if (window.parent !== window && window.parent.postMessage) {
-          window.parent.postMessage({ type: 'teshu-route', route: cards[idx].key }, '*');
-        } else {
-          go(cards[idx].to);
-        }
-        return;
-      }
       busy = true;
       var a = centers[idx - 1], b = centers[idx];
       var cx = CTRL[idx - 1][0], cy = CTRL[idx - 1][1];
       var t0 = Date.now(), dur = 900;
+      // 显示前先定位起点，避免重播时短暂出现在上一次的终点。
+      typh.style.left = a.x + 'px';
+      typh.style.top = a.y + 'px';
+      typh.style.transform = 'translate(-50%,-50%) scale(.94)';
       typh.classList.add('on');
       function frame() {
+        // 动画中返回上一页时取消跳转，不让旧回调突然打开内容页。
+        if (!page.classList.contains('on')) {
+          typh.classList.remove('on');
+          busy = false;
+          return;
+        }
         var p = (Date.now() - t0) / dur;
         if (p > 1) p = 1;
         var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;   // easeInOutQuad
@@ -972,14 +973,13 @@
           (0.94 + 0.16 * Math.sin(Math.PI * p)).toFixed(3) + ')';
         if (p < 1) { requestAnimationFrame(frame); return; }
         typh.classList.remove('on');                 // 刮到目标图标后消失
-        setTimeout(function () {
-          busy = false;
-          if (window.parent !== window && window.parent.postMessage) {
-            window.parent.postMessage({ type: 'teshu-route', route: cards[idx].key }, '*');
-          } else {
-            go(cards[idx].to);
-          }
-        }, 160);
+        busy = false;
+        // 导引页已完成沿线动画，宿主直接打开对应内容，不再播放第二个台风。
+        if (window.parent !== window && window.parent.postMessage) {
+          window.parent.postMessage({ type: 'teshu-route', route: cards[idx].key }, '*');
+        } else {
+          go(cards[idx].to);
+        }
       }
       requestAnimationFrame(frame);
     }

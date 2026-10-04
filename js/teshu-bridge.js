@@ -40,17 +40,11 @@
     entry.style.pointerEvents = 'none';
     entry.setAttribute('aria-hidden', 'true');
     window.scrollTo(0, p3.offsetTop);
-    // 地图入口切换时先清掉可能还停留在上一次的形成页，避免旧温度计
-    // 在飞行动画开始前短暂闪现。下一帧触发原入口按钮即可，不再额外等待。
-    if (route === 'map') {
-      var oldStudy = document.getElementById('p3OriginStudy');
-      var originScene = document.getElementById('p3OriginScene');
-      if (oldStudy) oldStudy.hidden = true;
-      if (originScene) originScene.hidden = false;
-    }
-    window.requestAnimationFrame(function () {
-      button.click();
-    });
+    // teshu 导引页已经沿虚线播放完动画，立即切换到目标内容。
+    // 不再点击旧导引页热区，避免重复动画及上一章节短暂闪现。
+    var routeEvent = document.createEvent('CustomEvent');
+    routeEvent.initCustomEvent('p3-entry-route', false, false, { route: route });
+    p3.dispatchEvent(routeEvent);
   }
 
   window.addEventListener('message', function (event) {
