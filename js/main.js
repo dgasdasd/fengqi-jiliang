@@ -368,9 +368,14 @@ function initP3() {
   var flightRun = 0;
   function playFlight() {
     if (!flightPathEl || !flightIcon || (mapHit && mapHit.classList.contains('is-playing'))) return;
+    // 从海浪形成页切到地图时，先清掉上一页的内容，避免路径动画期间
+    // 露出旧的温度计/形成条件画面。
+    if (study) study.hidden = true;
+    if (originScene) originScene.hidden = false;
+    resetOriginStudy();
     var run = ++flightRun;
     var length = flightPathEl.getTotalLength();
-    var duration = reduced ? 1 : 1850;
+    var duration = reduced ? 1 : 1100;
     if (flightLayer) {
       flightLayer.classList.remove('is-arrived');
       flightLayer.classList.add('is-playing');
