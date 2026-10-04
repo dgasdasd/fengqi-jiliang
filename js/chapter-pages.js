@@ -43,15 +43,13 @@
   }
   function gate(section, test) { gates.push({ page: section, test: test }); }
 
-  // 海浪：先调温度，再看动画和形成条件，最后看路径。
+  // 海浪：温度、动画、形成条件共用一页；达到 26.5°C 后在原位展开。
   var study = $('#p3OriginStudy'), reveal = $('#p3OriginReveal');
   if (study && reveal) {
-    var thermoPage = page(study, '海面温度', [$('.p3-study-head', study), $('#p3ThermoStage')], 'chapter-thermo');
-    gate(thermoPage, function () { return reveal.hidden; });
-    var videoPage = page(study, '台风形成动画', [reveal], 'chapter-formation-video');
-    var factorsPage = page(study, '台风形成的条件', [heading('台风形成的条件'), $('#p3OriginCopy')], 'chapter-factors');
+    reveal.insertBefore(heading('台风形成的条件'), $('#p3OriginCopy'));
+    page(study, '海面温度与台风形成', [$('.p3-study-head', study), $('#p3ThermoStage'), reveal], 'chapter-formation');
     var routePage = page(study, '台风的类型', [$('#p3OriginRoute')], 'chapter-routes');
-    [videoPage, factorsPage, routePage].forEach(function (p) { gate(p, function () { return !reveal.hidden; }); });
+    gate(routePage, function () { return !reveal.hidden; });
   }
   var process = $('.p3-view[data-view="process"]');
   var evidence = $('.p3-view[data-view="evidence"]');
@@ -261,7 +259,7 @@
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
   scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
   scroller.addEventListener('wheel', function (event) {
-    if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-thermo, .p3-typhoon-detail, .p3-prep-images')) return;
+    if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-thermo, .p3-typhoon-detail, .p3-prep-images')) return;
     event.preventDefault();
     if (Math.abs(event.deltaY) < 8 || Date.now() < wheelLock) return;
     wheelLock = Date.now() + 560;
@@ -278,7 +276,11 @@
     requestAnimationFrame(function () { goTo(visiblePages()[0], true); });
   });
   if (reveal) new MutationObserver(function () {
-    if (!reveal.hidden) requestAnimationFrame(function () { goTo($('.chapter-formation-video'), true); });
+    if (!reveal.hidden) requestAnimationFrame(function () {
+      var content = $('.chapter-formation .chapter-content');
+      if (content) content.scrollTop = 0;
+      refresh();
+    });
   }).observe(reveal, { attributes: true, attributeFilter: ['hidden'] });
   var chainTrigger = $('#p3ImpactChainTrigger');
   if (chainTrigger) chainTrigger.addEventListener('click', function () {
