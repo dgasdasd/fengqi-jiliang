@@ -68,8 +68,8 @@
     page(scene, '近十年最具代表台风', [oldTitle, oldHint, timeline], 'chapter-years chapter-years-original');
     var report = $('.p3-loss-report', map), charts = $$('.p3-loss-chart', report);
     var analysis = $('.p3-loss-analysis', report), lines = children(analysis);
-    page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0]], 'chapter-loss');
-    page(report, '复合灾害的影响', [heading('复合灾害的影响'), lines[1], charts[1]], 'chapter-loss');
+    page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0],
+      heading('复合灾害的影响'), lines[1], charts[1]], 'chapter-loss chapter-loss-combined');
     analysis.remove();
   }
 
@@ -160,7 +160,8 @@
     current = pages.reduce(function (a, b) {
       return Math.abs(topOf(a) - scroller.scrollTop) <= Math.abs(topOf(b) - scroller.scrollTop) ? a : b;
     });
-    root.classList.toggle('is-reading-page', current.classList.contains('chapter-chart-overview') || current.classList.contains('chapter-prep-cards'));
+    root.classList.toggle('is-reading-page', current.classList.contains('chapter-chart-overview') ||
+      current.classList.contains('chapter-loss-combined') || current.classList.contains('chapter-prep-cards'));
     toolbar.querySelector('span').textContent = current.dataset.pageTitle || '';
   }
   function refresh() {
@@ -217,7 +218,7 @@
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
   scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
   scroller.addEventListener('wheel', function (event) {
-    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-prep-cards .chapter-content');
+    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-prep-cards .chapter-content');
     if (readingContent && ((event.deltaY > 0 && readingContent.scrollTop < readingContent.scrollHeight - readingContent.clientHeight - 1) ||
       (event.deltaY < 0 && readingContent.scrollTop > 1))) return;
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-thermo, .p3-typhoon-detail, .p3-prep-images')) return;

@@ -175,6 +175,11 @@
 .p3.is-paged .chapter-loss p { font-size:clamp(19px, calc(21 * var(--u)), 22px); line-height: 1.55; }
 .p3.is-paged .chapter-loss .p3-loss-chart { max-width: 100%; margin: 12px 0; }
 .p3.is-paged .chapter-loss .p3-loss-chart img { max-height: 40vh; object-fit: contain; }
+.p3.is-paged .chapter-loss-combined .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; padding-bottom: 28px; }
+.p3.is-paged .chapter-loss-combined .chapter-heading { margin: 24px 0 12px; }
+.p3.is-paged .chapter-loss-combined .p3-loss-intro,
+.p3.is-paged .chapter-loss-combined p { margin: 0; text-align: center; }
+.p3.is-paged .chapter-loss-combined .p3-loss-chart { margin: 12px auto 16px; }
 
 /* Tree dialogue remains fixed against its original scene coordinates. */
 .p3.is-paged .chapter-dialogue .chapter-content { padding: 0; overflow: hidden; }
