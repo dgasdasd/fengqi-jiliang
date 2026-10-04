@@ -18,6 +18,9 @@
   var ENDP = pages[23] ? [pages[24]] : [];
 
   var deck, stage, wrap, cur = 0, els = [];
+  // 入口流程只允许浏览前三页：封面、播报和四图标导引。
+  // 第三页的四个入口由宿主页面接管，继续下滑不再进入原 teshu 的后续页面。
+  var ENTRY_LAST = 2;
   var bgm, bgmBtn, audioUnlocked = false;
   var news, p2Page = null, p2Frags = null;   // 正文第一页（灾情播报）的场景与播报音
   var p3Page = null, p3Inner = null, p3StageBox = null, p3Rows = null;   // 正文第二页（风从哪里来）
@@ -1661,7 +1664,7 @@
     // 正文第一页（灾情播报）响起播报音，离开则停
     if (i === 1) playNews(); else stopNews();
   }
-  function next() { if (cur < els.length - 1) go(cur + 1); }
+  function next() { if (cur < ENTRY_LAST) go(cur + 1); }
   function prev() { if (cur > 0) go(cur - 1); }
 
   // 主项目返回目录时复用同一个 teshu 页面，避免重新加载图片和动画。
