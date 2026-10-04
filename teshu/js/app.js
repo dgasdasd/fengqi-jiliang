@@ -200,7 +200,7 @@
     return page;
   }
 
-  /* ---------- 首页特殊处理：雾霾山景 → 台风水墨 → 人物+大字 ---------- */
+  /* ---------- 首页特殊处理：台风水墨 → 雾霾山景 → 人物+大字 ---------- */
   function decorateP1(page) {
     var pg = MAIN[0];
     var inner = page._inner;
@@ -259,8 +259,8 @@
       n.textContent = c.t;
       //「脊梁」两个字用红色
       if (c.t === '脊' || c.t === '梁') n.classList.add('is-red');
-      // 与最下方人物背影同时出现（2.35s），逐字依次落位
-      n.style.animation = 'charIn .85s cubic-bezier(.2,1.05,.35,1) ' + (2.35 + i * 0.1) + 's both, charFloat 4.6s ease-in-out ' + (3.4 + i * 0.1) + 's infinite';
+      // 山川出现后与人物背影同时起笔（2.75s），逐字依次落位
+      n.style.animation = 'charIn .85s cubic-bezier(.2,1.05,.35,1) ' + (2.75 + i * 0.1) + 's both, charFloat 4.6s ease-in-out ' + (3.8 + i * 0.1) + 's infinite';
     });
     page.classList.add('p1');
   }
