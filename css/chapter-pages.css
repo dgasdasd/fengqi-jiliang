@@ -250,20 +250,20 @@
 .p3.is-paged .chapter-finale { display: flex; padding: 70px 16px 75px; }
 .p3.is-paged .chapter-finale .p3-finale-copy { font-size:clamp(22px, calc(27 * var(--u)), 29px); line-height: 1.5; }
 .p3.is-paged .chapter-finale .p3-finale-copy b { font-size:clamp(30px, calc(38 * var(--u)), 40px); }
-/* A selected typhoon is one continuous reading view. */
-.p3.is-paged .p3-typhoon-detail { overflow-y: auto; padding: 0 16px 28px; background: #f3f4f1 url("../assets/img/bg-smoke.webp") center/cover no-repeat; animation: none; }
-.p3.is-paged .p3-detail-header { position: sticky; z-index: 2; top: 0; min-height: 68px; margin: 0 -16px 14px; padding: 10px 16px; background: linear-gradient(rgba(240,245,243,.98),rgba(240,245,243,.88)); }
-.p3.is-paged .p3-detail-header p { font-size:17px; }
-.p3.is-paged .p3-detail-header h3 { font-size:27px; }
-.p3.is-paged .p3-detail-route { display: flex; flex-direction: column; gap: 16px; }
-.p3.is-paged .p3-detail-route img { width: 100%; height: auto; max-height: min(38vh, 310px); object-fit: contain; }
+/* Each typhoon keeps the three numbered facts in one compact view; videos follow below. */
+.p3.is-paged .p3-typhoon-detail { overflow-y: auto; padding: 0 16px 20px; background: #f3f4f1 url("../assets/img/bg-smoke.webp") center/cover no-repeat; animation: none; }
+.p3.is-paged .p3-detail-header { position: sticky; z-index: 2; top: 0; min-height: 60px; margin: 0 -16px 8px; padding: 6px 16px; background: linear-gradient(rgba(240,245,243,.98),rgba(240,245,243,.9)); }
+.p3.is-paged .p3-detail-header p { font-size:15px; }
+.p3.is-paged .p3-detail-header h3 { font-size:25px; }
+.p3.is-paged .p3-detail-route { display: flex; flex-direction: column; gap: 7px; }
+.p3.is-paged .p3-detail-route img { width: 100%; height: auto; max-height: min(20vh, 140px); object-fit: contain; }
 .p3.is-paged .p3-detail-route h4,
-.p3.is-paged .p3-detail-section h4 { font-size:24px; }
+.p3.is-paged .p3-detail-section h4 { margin-bottom: 4px; font-size:21px; }
 .p3.is-paged .p3-detail-route p,
-.p3.is-paged .p3-detail-section p { max-width: none; padding: 0; font-size:clamp(19px, calc(21 * var(--u)), 22px); line-height: 1.55; }
-.p3.is-paged .p3-detail-section { margin: 0 0 18px; }
+.p3.is-paged .p3-detail-section p { max-width: none; padding: 0; font-size:17px; line-height: 1.4; }
+.p3.is-paged .p3-detail-section { margin: 8px 0 0; padding-top: 6px; }
 .p3.is-paged .p3-detail-section img { display: none; }
-.p3.is-paged .p3-detail-media { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 14px 0 0; padding: 0; }
+.p3.is-paged .p3-detail-media { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 12px 0 0; padding: 0; }
 .p3.is-paged .p3-media-frame { width: 100%; aspect-ratio: 16 / 9; }
 .p3.is-paged .p3-media-card figcaption { font-size:18px; }
 .p3.is-paged .p3-detail-ticker { margin: 12px 0; font-size:19px; }
