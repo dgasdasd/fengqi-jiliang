@@ -8,6 +8,21 @@
      --fs-* 字号   --lh-* 行高   --s-* 间距   --d-* 时长   --e-* 曲线   --z-* 层级
      --u    1 舞台像素（= 舞台宽度 / 448），所有舞台内尺寸都写成 calc(N * var(--u))
    ============================================================ */
+@font-face{
+  font-family:"FandolKai";
+  src:url("../fonts/fandol-kai.subset.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"FandolFang";
+  src:url("../fonts/fandol-fang.subset.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"MSZ";
+  src:url("../fonts/msz.subset.woff2") format("woff2");
+  font-display:swap;
+}
 :root{
   /* ---------- 1. 色板 ---------- */
   --paper:#f3f3f1;          /* 宣纸：第一页底 */
@@ -23,9 +38,11 @@
   --rev:#f7f7f5;            /* 深底上的文字 */
 
   /* ---------- 2. 字体 ---------- */
-  --f-cal:"MSZ","Kaiti SC","STKaiti","KaiTi",serif;                       /* 行书：标题 */
+  --f-li:"LiSu","隶书","MSZ","FandolKai",serif;                           /* 隶书：主标题 */
+  --f-cal:"KaiTi","STKaiti","楷体","FandolKai",serif;                    /* 楷体：小标题 */
   --f-hei:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;      /* 黑体：新闻、注释 */
-  --f-song:"Songti SC",SimSun,"Noto Serif SC",serif;                      /* 宋体：正文 */
+  --f-fang:"FangSong","仿宋","FandolFang",serif;                         /* 仿宋：正文 */
+  --f-song:var(--f-fang);
 
   /* ---------- 3. 舞台与单位 ----------
      视口高度必须走三级兜底，否则老浏览器会整站塌掉：

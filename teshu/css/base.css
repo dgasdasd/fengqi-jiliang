@@ -2,6 +2,21 @@
    风起沧海 · 台风科普 H5 —— 复刻版
    设计基准：320px 宽画布，等比缩放到视口；竖向翻页
 ============================================================ */
+@font-face{
+  font-family:"FandolKai";
+  src:url("../../fonts/fandol-kai.subset.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"FandolFang";
+  src:url("../../fonts/fandol-fang.subset.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"MSZ";
+  src:url("../../fonts/msz.subset.woff2") format("woff2");
+  font-display:swap;
+}
 :root{
   --ink:#000;
   --red:#C3433C;        /* rgb(195,67,60) 主强调色 */
@@ -11,19 +26,18 @@
   --blue:#2E598F;       /* rgb(46,89,143) 引用蓝 */
   --near:#161414;       /* rgb(22,20,20) */
   --white:#fff;
-  --font-kai:'KaiTi','STKaiti','楷体','LiSu','隶书',serif;
-  --font-song:'Songti SC','STSong','SimSun','宋体',serif;
+  --font-kai:'KaiTi','STKaiti','楷体','FandolKai',serif;
+  --font-fang:'FangSong','仿宋','FandolFang',serif;
+  --font-song:var(--font-fang);
   --font-hei:'PingFang SC','Microsoft YaHei','微软雅黑',sans-serif;
-  /* 艺术字族：隶书优先，其次行楷 */
-  --font-art:'LiSu','隶书','STXingkai','华文行楷','KaiTi','STKaiti','楷体',serif;
-  /* 封面标题：醒图「清酒体」；本机没装该字体时退到隶书/行楷 */
-  --font-qingjiu:'QingJiuTi','清酒体','LiSu','隶书','STXingkai','华文行楷','KaiTi','楷体',serif;
+  --font-art:var(--font-kai);
+  --font-lishu:'LiSu','隶书','MSZ','FandolKai',serif;
   --t:.65s;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:#000}
 body{
-  font-family:var(--font-kai);color:var(--ink);
+  font-family:var(--font-fang);color:var(--ink);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
 img{display:block;max-width:100%;border:0}

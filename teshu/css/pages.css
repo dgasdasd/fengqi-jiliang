@@ -114,7 +114,7 @@
   will-change:transform,opacity;
 }
 .p2-title-in{
-  font-family:var(--font-song);font-weight:700;text-align:center;
+  font-family:var(--font-kai);font-weight:700;text-align:center;
   font-size:46px;line-height:1.24;letter-spacing:.1em;color:#f4f2ee;
   text-shadow:0 4px 22px rgba(0,0,0,.82),0 2px 6px rgba(0,0,0,.6);
   animation:p2TitleIn 1.1s cubic-bezier(.2,1,.3,1) 1.1s both;
@@ -587,7 +587,7 @@
 /* 艺术字标题：行楷/隶书 + 渐变描金效果（不支持则退回纯色） */
 .menu-title{
   position:absolute;left:50%;top:12px;transform:translateX(-50%);
-  font-family:var(--font-art);
+  font-family:var(--font-lishu);
   font-size:34px;font-weight:700;letter-spacing:.08em;white-space:nowrap;
   color:#25231f;
   text-shadow:0 1px 0 rgba(255,255,255,.9),0 6px 16px rgba(30,45,65,.28);
@@ -614,7 +614,7 @@
 }
 .menu-sub{
   position:absolute;left:0;right:0;top:74px;text-align:center;
-  font-family:var(--font-kai);
+  font-family:var(--font-fang);
   font-size:10.5px;letter-spacing:.16em;color:#3d4b59;
   text-shadow:0 1px 8px rgba(255,255,255,.9);
 }
@@ -665,7 +665,7 @@
   color:#1f2b38;text-shadow:0 1px 8px rgba(255,255,255,.9);
 }
 .menu-sub2{
-  flex:0 0 auto;margin-top:1px;font-family:var(--font-kai);
+  flex:0 0 auto;margin-top:1px;font-family:var(--font-fang);
   font-size:9.5px;color:#4d5d6e;letter-spacing:.04em;
 }
 .menu-hint{
@@ -1032,8 +1032,8 @@
 /* ============================================================
    最后一轮：封面清酒体、条件置顶、视频遮罩收紧、台风类型三按钮
 ============================================================ */
-/* 封面标题：清酒体（装了即生效，没装退隶书/行楷） */
-.p1-char{font-family:var(--font-qingjiu)}
+/* 封面主标题采用加粗隶书。 */
+.p1-char{font-family:var(--font-lishu);font-weight:700}
 /* 五条条件置顶：在视频/图片之上 */
 .p3-cond2{position:relative;z-index:6}
 .p3-stagebox{z-index:0}

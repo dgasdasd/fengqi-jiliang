@@ -1651,6 +1651,7 @@
       });
       next.classList.add('on');
       if (next._scroll) next._scroll.scrollTop = 0;
+      if (deck) deck.scrollTop = 0;
       document.body.classList.toggle('dark', next.classList.contains('dark-page'));
     }
     // HUD
