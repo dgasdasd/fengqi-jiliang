@@ -365,7 +365,7 @@ function initP3() {
   }
   setTemp(value);
 
-  var flightRun = 0;
+  var flightRun = 0, routeToken = 0;
   function playFlight() {
     if (!flightPathEl || !flightIcon || (mapHit && mapHit.classList.contains('is-playing'))) return;
     // 从海浪形成页切到地图时，先清掉上一页的内容，避免路径动画期间
@@ -373,9 +373,12 @@ function initP3() {
     if (study) study.hidden = true;
     if (originScene) originScene.hidden = false;
     resetOriginStudy();
+    // 目标页立即切入，路径动画只负责播放过渡，不再阻塞页面切换。
+    show('mapgame');
+    var viewToken = routeToken;
     var run = ++flightRun;
     var length = flightPathEl.getTotalLength();
-    var duration = reduced ? 1 : 360;
+    var duration = reduced ? 1 : 1100;
     if (flightLayer) {
       flightLayer.classList.remove('is-arrived');
       flightLayer.classList.add('is-playing');
@@ -386,7 +389,7 @@ function initP3() {
     }
     var t0 = performance.now();
     function step(now) {
-      if (run !== flightRun) return;
+      if (run !== flightRun || viewToken !== routeToken) return;
       var p = clamp((now - t0) / duration, 0, 1);
       var eased = easeInOutQ(p);
       var point = flightPathEl.getPointAtLength(length * eased);
@@ -402,7 +405,7 @@ function initP3() {
           mapHit.classList.remove('is-playing');
           mapHit.removeAttribute('aria-busy');
         }
-        show('mapgame');
+        if (viewToken === routeToken) show('mapgame');
       }
     }
     requestAnimationFrame(step);
@@ -412,6 +415,12 @@ function initP3() {
   var treeFlightRun = 0;
   function playTreeFlight() {
     if (!treeFlightPathEl || !treeFlightIcon || (treeHit && treeHit.classList.contains('is-playing'))) return;
+    if (study) study.hidden = true;
+    if (originScene) originScene.hidden = false;
+    resetOriginStudy();
+    setImpactStep('question');
+    show('impact');
+    var viewToken = routeToken;
     var run = ++treeFlightRun;
     var length = treeFlightPathEl.getTotalLength();
     var duration = reduced ? 1 : 1700;
@@ -425,7 +434,7 @@ function initP3() {
     }
     var t0 = performance.now();
     function step(now) {
-      if (run !== treeFlightRun) return;
+      if (run !== treeFlightRun || viewToken !== routeToken) return;
       var p = clamp((now - t0) / duration, 0, 1);
       var eased = easeInOutQ(p);
       var point = treeFlightPathEl.getPointAtLength(length * eased);
@@ -442,6 +451,7 @@ function initP3() {
           treeHit.removeAttribute('aria-busy');
         }
         window.setTimeout(function () {
+          if (viewToken !== routeToken) return;
           setImpactStep('question');
           show('impact');
         }, reduced ? 0 : 160);
@@ -454,6 +464,11 @@ function initP3() {
   var greatWallFlightRun = 0;
   function playGreatWallFlight() {
     if (!greatWallFlightPathEl || !greatWallFlightIcon || (greatWallHit && greatWallHit.classList.contains('is-playing'))) return;
+    if (study) study.hidden = true;
+    if (originScene) originScene.hidden = false;
+    resetOriginStudy();
+    show('after');
+    var viewToken = routeToken;
     var run = ++greatWallFlightRun;
     var length = greatWallFlightPathEl.getTotalLength();
     var duration = reduced ? 1 : 1900;
@@ -468,7 +483,7 @@ function initP3() {
     }
     var t0 = performance.now();
     function step(now) {
-      if (run !== greatWallFlightRun) return;
+      if (run !== greatWallFlightRun || viewToken !== routeToken) return;
       var p = clamp((now - t0) / duration, 0, 1);
       var eased = easeInOutQ(p);
       var point = greatWallFlightPathEl.getPointAtLength(length * eased);
@@ -484,7 +499,9 @@ function initP3() {
           greatWallHit.classList.remove('is-playing');
           greatWallHit.removeAttribute('aria-busy');
         }
-        window.setTimeout(function () { show('after'); }, reduced ? 0 : 220);
+        window.setTimeout(function () {
+          if (viewToken === routeToken) show('after');
+        }, reduced ? 0 : 220);
       }
     }
     requestAnimationFrame(step);
@@ -916,6 +933,8 @@ function initP3() {
     if (navigate !== false) show('route');
   }
   function show(name) {
+    // 任意页面切换都使旧的路径动画失效，避免返回后旧回调把页面切回去。
+    routeToken++;
     if (name !== 'mapgame' && puzzleMode === 'memory') {
       clearInterval(puzzleTimer);
       puzzleTimer = null;
