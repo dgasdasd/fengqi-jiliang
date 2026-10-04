@@ -959,6 +959,7 @@ function initP3() {
     var ticker = $('#p3DetailTicker');
     if (ticker) ticker.textContent = item.ticker || (item.year + '台风“' + item.name + '”影响沿海地区，请关注预警信息。');
     detail.hidden = false;
+    detail.scrollTop = 0;
     if (historyScene) historyScene.inert = true;
     $$('.sec:not(#p3)').forEach(function (section) { section.inert = true; });
     var back = $('.p3-back'); if (back) back.inert = true;

@@ -56,7 +56,7 @@
   overflow-y: auto;
   overscroll-behavior: auto;
   scrollbar-width: thin;
-  padding: clamp(68px, calc(94 * var(--u)), 86px) clamp(18px, calc(23 * var(--u)), 28px) clamp(74px, calc(100 * var(--u)), 95px);
+  padding: clamp(68px, calc(94 * var(--u)), 86px) clamp(18px, calc(23 * var(--u)), 28px) 28px;
 }
 .p3.is-paged .chapter-heading,
 .p3.is-paged .chapter-content > h2,
@@ -70,8 +70,7 @@
   color: #203b47;
 }
 .p3.is-paged .chapter-copy { margin: 16px 0 0; font:400 clamp(18px, calc(21 * var(--u)), 22px)/1.65 var(--f-fang); color: #263940; }
-.p3.is-paged .chapter-toolbar,
-.p3.is-paged .chapter-pager {
+.p3.is-paged .chapter-toolbar {
   position: absolute;
   left: 0;
   z-index: 35;
@@ -83,11 +82,7 @@
 }
 .p3.is-paged .chapter-toolbar { top: 0; justify-content: space-between; min-height: 56px; padding: 8px 16px; background: linear-gradient(rgba(238,243,241,.92), rgba(238,243,241,0)); }
 .p3.is-paged .chapter-toolbar span { font:700 clamp(17px, calc(19 * var(--u)), 21px)/1.2 var(--f-cal); text-align: right; max-width: 57%; }
-.p3.is-paged .chapter-pager { bottom: 0; justify-content: center; gap: 16px; min-height: 56px; padding: 6px 12px 8px; background: linear-gradient(transparent, rgba(238,243,241,.92)); }
-.p3.is-paged .chapter-pager span { font:600 16px/1.2 var(--f-hei); white-space: nowrap; }
-.p3.is-paged .chapter-toolbar button,
-.p3.is-paged .chapter-pager button,
-.detail-pager button {
+.p3.is-paged .chapter-toolbar button {
   min-width: 44px;
   min-height: 42px;
   border: 1px solid rgba(45,84,94,.26);
@@ -99,11 +94,8 @@
   pointer-events: auto;
 }
 .p3.is-paged .chapter-toolbar button { padding: 0 14px; font-size:18px; }
-.p3.is-paged .chapter-pager button:disabled { opacity: .36; cursor: default; }
-.p3.is-paged .chapter-toolbar button:focus-visible,
-.p3.is-paged .chapter-pager button:focus-visible { outline: 2px solid #b4333c; outline-offset: 2px; }
-.p3.is-paged:has(.p3-typhoon-detail:not([hidden])) .chapter-toolbar,
-.p3.is-paged:has(.p3-typhoon-detail:not([hidden])) .chapter-pager { display: none; }
+.p3.is-paged .chapter-toolbar button:focus-visible { outline: 2px solid #b4333c; outline-offset: 2px; }
+.p3.is-paged:has(.p3-typhoon-detail:not([hidden])) .chapter-toolbar { display: none; }
 
 /* Temperature, animation, and conditions remain one reading page. */
 .p3.is-paged .chapter-formation .chapter-content { overflow-y: auto; overscroll-behavior-y: auto; }
@@ -152,19 +144,17 @@
 .p3.is-paged .chapter-puzzle .p3-puzzle-heading p { font-size:18px; }
 .p3.is-paged .chapter-puzzle .p3-puzzle-start { min-height: 46px; font-size:22px; }
 .p3.is-paged .chapter-puzzle .p3-puzzle-preview figcaption { font-size:16px; }
-.p3.is-paged .chapter-years-whole .chapter-content { display: flex; flex-direction: column; align-items: center; overflow-y: hidden; }
-.p3.is-paged .chapter-years-whole .chapter-content > h2 { margin-bottom: 4px; font-size:clamp(26px, calc(30 * var(--u)), 32px); }
-.p3.is-paged .chapter-years-whole .p3-history-hint { margin: 0 0 4px; font-size:16px; line-height: 1.35; }
-.p3.is-paged .chapter-years-whole .chapter-timeline { flex: 0 1 auto; width: auto; height: min(58vh, 470px); min-height: 0; max-width: 100%; aspect-ratio: 448 / 780; overflow: visible; }
-.p3.is-paged .chapter-years-whole .p3-timeline-art { overflow: visible; }
-.p3.is-paged .chapter-years .p3-year-point { width: 30px; height: 30px; }
-.p3.is-paged .chapter-years .p3-year-point span { display: none; }
-.p3.is-paged .chapter-years .p3-year-point i { width: 24px; height: 24px; background: #b3313c; }
-.p3.is-paged .chapter-years .p3-year-point::after { content: attr(data-marker); position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font:700 15px/1 var(--f-hei); color: #fff; pointer-events: none; }
-.p3.is-paged .chapter-year-list { display: flex; flex: 0 0 auto; width: 100%; gap: 8px; margin-top: 6px; padding: 2px 1px 8px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: thin; }
-.p3.is-paged .chapter-year-link { flex: 0 0 min(45%, 160px); min-height: 62px; padding: 7px 9px; border: 1px solid rgba(60,93,102,.25); border-left: 4px solid #b3313c; border-radius: 5px; background: rgba(255,255,255,.78); color: #233943; text-align: left; cursor: pointer; scroll-snap-align: start; }
-.p3.is-paged .chapter-year-link b { display: block; font:700 clamp(18px, calc(20 * var(--u)), 21px)/1.2 var(--f-cal); }
-.p3.is-paged .chapter-year-link small { display: block; margin-top: 3px; font:400 16px/1.2 var(--f-fang); }
+.p3.is-paged .chapter-years-original .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; padding-bottom: 26px; }
+.p3.is-paged .chapter-years-original .chapter-content > h2 { margin-bottom: 4px; }
+.p3.is-paged .chapter-years-original .p3-history-hint { margin: 0 0 6px; font-size:16px; line-height: 1.35; }
+.p3.is-paged .chapter-years-original .p3-timeline { width: min(100%, calc(419 * var(--u))); height: auto; aspect-ratio: 448 / 780; margin: 8px auto 16px; overflow: visible; }
+.p3.is-paged .chapter-years-original .p3-year-point { width: 36px; height: 36px; }
+.p3.is-paged .chapter-years-original .p3-year-point span { display: block; width: 170px; font-size: 14px; line-height: 1.25; white-space: nowrap; pointer-events: auto; cursor: pointer; }
+.p3.is-paged .chapter-years-original [data-typhoon="meranti"] span { left: calc(-60 * var(--u)); top: calc(55 * var(--u)); }
+.p3.is-paged .chapter-years-original [data-typhoon="mangkhut"] span { left: calc(-155 * var(--u)); top: calc(-12 * var(--u)); }
+.p3.is-paged .chapter-years-original [data-typhoon="lekima"] span { left: calc(-75 * var(--u)); top: calc(-8 * var(--u)); }
+.p3.is-paged .chapter-years-original [data-typhoon="higos"] span { left: calc(-180 * var(--u)); top: calc(18 * var(--u)); }
+.p3.is-paged .chapter-years-original [data-typhoon="dusurui"] span { left: 0; top: calc(50 * var(--u)); }
 .p3.is-paged .chapter-loss .p3-loss-intro,
 .p3.is-paged .chapter-loss p { font-size:clamp(19px, calc(21 * var(--u)), 22px); line-height: 1.55; }
 .p3.is-paged .chapter-loss .p3-loss-chart { max-width: 100%; margin: 12px 0; }
@@ -243,15 +233,11 @@
 .p3.is-paged .chapter-finale { display: flex; padding: 70px 16px 75px; }
 .p3.is-paged .chapter-finale .p3-finale-copy { font-size:clamp(22px, calc(27 * var(--u)), 29px); line-height: 1.5; }
 .p3.is-paged .chapter-finale .p3-finale-copy b { font-size:clamp(30px, calc(38 * var(--u)), 40px); }
-.p3.is-paged:has(.p3-finale:not([hidden])) .chapter-pager { display: none; }
-
-/* Typhoon details use three full-height sheets with the close button always visible. */
-.p3.is-paged .p3-typhoon-detail { overflow: hidden; padding: 0; background: #f3f4f1 url("../assets/img/bg-smoke.webp") center/cover no-repeat; animation-duration: .16s; }
-.p3.is-paged .p3-detail-header { position: absolute; z-index: 2; top: 0; left: 0; right: 0; min-height: 68px; margin: 0; padding: 10px 16px; background: linear-gradient(rgba(240,245,243,.98),rgba(240,245,243,.86)); }
+/* A selected typhoon is one continuous reading view. */
+.p3.is-paged .p3-typhoon-detail { overflow-y: auto; padding: 0 16px 28px; background: #f3f4f1 url("../assets/img/bg-smoke.webp") center/cover no-repeat; animation: none; }
+.p3.is-paged .p3-detail-header { position: sticky; z-index: 2; top: 0; min-height: 68px; margin: 0 -16px 14px; padding: 10px 16px; background: linear-gradient(rgba(240,245,243,.98),rgba(240,245,243,.88)); }
 .p3.is-paged .p3-detail-header p { font-size:17px; }
 .p3.is-paged .p3-detail-header h3 { font-size:27px; }
-.p3.is-paged .detail-pages { width: 100%; height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; }
-.p3.is-paged .detail-sheet { box-sizing: border-box; width: 100%; height: 100%; min-height: 100%; padding: 88px 18px 72px; overflow-y: auto; scroll-snap-align: start; }
 .p3.is-paged .p3-detail-route { display: flex; flex-direction: column; gap: 16px; }
 .p3.is-paged .p3-detail-route img { width: 100%; height: auto; max-height: min(38vh, 310px); object-fit: contain; }
 .p3.is-paged .p3-detail-route h4,
@@ -260,15 +246,13 @@
 .p3.is-paged .p3-detail-section p { max-width: none; padding: 0; font-size:clamp(19px, calc(21 * var(--u)), 22px); line-height: 1.55; }
 .p3.is-paged .p3-detail-section { margin: 0 0 18px; }
 .p3.is-paged .p3-detail-section img { display: none; }
-.p3.is-paged .p3-detail-media { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; }
+.p3.is-paged .p3-detail-media { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 14px 0 0; padding: 0; }
 .p3.is-paged .p3-media-frame { width: 100%; aspect-ratio: 16 / 9; }
 .p3.is-paged .p3-media-card figcaption { font-size:18px; }
 .p3.is-paged .p3-detail-ticker { margin: 12px 0; font-size:19px; }
-.p3.is-paged .detail-pager { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; gap: 14px; min-height: 58px; background: linear-gradient(transparent, rgba(238,243,241,.96)); }
-.p3.is-paged .detail-pager span { font:600 16px/1 var(--f-hei); }
 
 @media (max-height: 700px) {
-  .p3.is-paged .chapter-content { padding-top: 63px; padding-bottom: 60px; }
+  .p3.is-paged .chapter-content { padding-top: 63px; padding-bottom: 24px; }
   .p3.is-paged .chapter-wall-hero { padding-top: 66px; }
   .p3.is-paged .chapter-game-menu .p3-games-intro > img { width: 56px; height: 68px; }
   .p3.is-paged .chapter-game-menu .p3-games-lead { margin: 3px auto 8px; }

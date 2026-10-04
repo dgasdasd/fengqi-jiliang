@@ -71,31 +71,15 @@
     if (stack) stack.remove();
   }
 
-  // 地图：拼图独占一屏；年份曲线必须保持完整连续，损失图表各占一屏。
+  // 地图：拼图独占一屏；年份与台风名称沿原本的完整曲线展示。
   var map = $('.p3-mapgame'), history = $('#p3HistoryBlock'), scene = $('#p3HistoryScene');
   if (map && history && scene) {
     var puzzlePage = page(map, '中国地图拼图', [$('.p3-mapgame > .p3-subtitle'), $('.p3-puzzle-panel', map)], 'chapter-puzzle');
     map.insertBefore(puzzlePage, history);
     var timeline = $('.p3-timeline', scene);
-    var points = $$('.p3-year-point', timeline);
     var oldTitle = $('.p3-subtitle', scene), oldHint = $('.p3-history-hint', scene);
-    timeline.classList.add('chapter-timeline');
-    oldHint.textContent = '点击路径节点，或左右滑动下方年份卡片查看台风详情';
-    var list = document.createElement('div');
-    list.className = 'chapter-year-list';
-    list.setAttribute('role', 'group');
-    list.setAttribute('aria-label', '代表台风年份卡片，左右滑动查看');
-    points.forEach(function (point, index) {
-      point.dataset.marker = String(index + 1);
-      var label = document.createElement('button');
-      label.type = 'button';
-      label.className = 'chapter-year-link';
-      label.innerHTML = '<b>' + point.querySelector('strong').textContent.trim() + point.querySelector('em').textContent.trim() + '</b>' +
-        '<small>' + point.querySelector('b').textContent.trim() + '</small>';
-      label.addEventListener('click', function () { point.click(); });
-      list.appendChild(label);
-    });
-    page(scene, '近十年最具代表台风', [oldTitle, oldHint, timeline, list], 'chapter-years chapter-years-whole');
+    oldHint.textContent = '点击年份，查看台风路径与影响';
+    page(scene, '近十年最具代表台风', [oldTitle, oldHint, timeline], 'chapter-years chapter-years-original');
     var report = $('.p3-loss-report', map), charts = $$('.p3-loss-chart', report);
     var analysis = $('.p3-loss-analysis', report), lines = children(analysis);
     page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0]], 'chapter-loss');
@@ -176,12 +160,7 @@
   var toolbar = document.createElement('div');
   toolbar.className = 'chapter-toolbar';
   toolbar.innerHTML = '<button id="p3ChapterReturn" type="button">‹ 返回导引</button><span id="p3ChapterName"></span>';
-  var pager = document.createElement('nav');
-  pager.className = 'chapter-pager';
-  pager.setAttribute('aria-label', '章节翻页');
-  pager.innerHTML = '<button type="button" aria-label="上一屏">↑</button><span aria-live="polite"></span><button type="button" aria-label="下一屏">↓</button>';
   root.appendChild(toolbar);
-  root.appendChild(pager);
 
   function activeView() { return $('.p3-view:not([hidden])'); }
   function visiblePages() {
@@ -192,15 +171,10 @@
   function topOf(p) { return p.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop; }
   function update() {
     var pages = visiblePages();
-    if (!pages.length) { pager.hidden = true; return; }
-    pager.hidden = false;
+    if (!pages.length) { current = null; toolbar.querySelector('span').textContent = ''; return; }
     current = pages.reduce(function (a, b) {
       return Math.abs(topOf(a) - scroller.scrollTop) <= Math.abs(topOf(b) - scroller.scrollTop) ? a : b;
     });
-    var index = pages.indexOf(current);
-    pager.querySelector('span').textContent = (index + 1) + ' / ' + pages.length + ' · 上滑翻页';
-    pager.querySelectorAll('button')[0].disabled = index === 0 && !previousView();
-    pager.querySelectorAll('button')[1].disabled = index === pages.length - 1 && !nextView();
     toolbar.querySelector('span').textContent = current.dataset.pageTitle || '';
   }
   function refresh() {
@@ -254,8 +228,6 @@
     }
     goTo(pages[Math.max(0, Math.min(pages.length - 1, index + direction))]);
   }
-  pager.querySelectorAll('button')[0].addEventListener('click', function () { turn(-1); });
-  pager.querySelectorAll('button')[1].addEventListener('click', function () { turn(1); });
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
   scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
   scroller.addEventListener('wheel', function (event) {
@@ -289,35 +261,4 @@
   window.P3Pages = { goTo: goTo, refresh: refresh };
   refresh();
 
-  // 台风弹窗也按生成路径、影响损失、现场视频分屏。
-  var detail = $('#p3TyphoonDetail');
-  if (detail) {
-    var sheets = document.createElement('div');
-    sheets.className = 'detail-pages';
-    function sheet(nodes) {
-      var el = document.createElement('section');
-      el.className = 'detail-sheet';
-      nodes.filter(Boolean).forEach(function (node) { el.appendChild(node); });
-      sheets.appendChild(el);
-    }
-    sheet([$('.p3-detail-route', detail)]);
-    sheet($$('.p3-detail-section', detail));
-    sheet([$('.p3-detail-media', detail), $('#p3DetailTicker')]);
-    detail.appendChild(sheets);
-    var detailPager = document.createElement('nav');
-    detailPager.className = 'detail-pager';
-    detailPager.innerHTML = '<button type="button" aria-label="台风信息上一屏">↑</button><span>1 / 3</span><button type="button" aria-label="台风信息下一屏">↓</button>';
-    detail.appendChild(detailPager);
-    function detailTurn(direction) {
-      var index = Math.round(sheets.scrollTop / sheets.clientHeight);
-      sheets.scrollTo({ top: Math.max(0, Math.min(2, index + direction)) * sheets.clientHeight, behavior: reduced ? 'auto' : 'smooth' });
-    }
-    detailPager.querySelectorAll('button')[0].addEventListener('click', function () { detailTurn(-1); });
-    detailPager.querySelectorAll('button')[1].addEventListener('click', function () { detailTurn(1); });
-    sheets.addEventListener('scroll', function () {
-      detailPager.querySelector('span').textContent = (Math.round(sheets.scrollTop / Math.max(1, sheets.clientHeight)) + 1) + ' / 3 · 上滑翻页';
-    }, { passive: true });
-    new MutationObserver(function () { if (!detail.hidden) { sheets.scrollTop = 0; detailPager.querySelector('span').textContent = '1 / 3 · 上滑翻页'; } })
-      .observe(detail, { attributes: true, attributeFilter: ['hidden'] });
-  }
 })();
