@@ -34,15 +34,23 @@
     var button = routeButtons[route];
     if (!button) return;
     entry.classList.add('is-hidden');
-    entry.style.display = 'flex';
+    // 直接摘掉入口层，避免 iframe 的合成帧在切换瞬间继续盖住主页面。
+    entry.style.display = 'none';
     entry.style.visibility = 'hidden';
     entry.style.pointerEvents = 'none';
     entry.setAttribute('aria-hidden', 'true');
     window.scrollTo(0, p3.offsetTop);
-    // 等主页面完成一次布局，再触发原来的入口按钮；这样不改动已有章节代码。
-    window.setTimeout(function () {
+    // 地图入口切换时先清掉可能还停留在上一次的形成页，避免旧温度计
+    // 在飞行动画开始前短暂闪现。下一帧触发原入口按钮即可，不再额外等待。
+    if (route === 'map') {
+      var oldStudy = document.getElementById('p3OriginStudy');
+      var originScene = document.getElementById('p3OriginScene');
+      if (oldStudy) oldStudy.hidden = true;
+      if (originScene) originScene.hidden = false;
+    }
+    window.requestAnimationFrame(function () {
       button.click();
-    }, 60);
+    });
   }
 
   window.addEventListener('message', function (event) {

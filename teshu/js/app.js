@@ -943,10 +943,22 @@
         }
         return;
       }
+      if (idx === 1) {
+        // 地图入口的主页面已经有“海浪 → 中国地图”的飞行路径，直接交给宿主，
+        // 避免先重复播放一次入口卡片动画而让用户误以为仍停在“风从哪里来”。
+        if (window.parent !== window && window.parent.postMessage) {
+          window.parent.postMessage({ type: 'teshu-route', route: cards[1].key }, '*');
+        } else {
+          go(cards[1].to);
+        }
+        return;
+      }
       busy = true;
       var a = centers[idx - 1], b = centers[idx];
       var cx = CTRL[idx - 1][0], cy = CTRL[idx - 1][1];
-      var t0 = Date.now(), dur = 900;
+      // 入口卡片之间保留一段可见的台风移动，但缩短等待，避免点击地图后
+      // 还停留在“风从哪里来”卡片上太久。
+      var t0 = Date.now(), dur = 500;
       typh.classList.add('on');
       function frame() {
         var p = (Date.now() - t0) / dur;
@@ -967,7 +979,7 @@
           } else {
             go(cards[idx].to);
           }
-        }, 160);
+        }, 20);
       }
       requestAnimationFrame(frame);
     }

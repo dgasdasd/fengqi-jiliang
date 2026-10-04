@@ -375,7 +375,7 @@ function initP3() {
     resetOriginStudy();
     var run = ++flightRun;
     var length = flightPathEl.getTotalLength();
-    var duration = reduced ? 1 : 1100;
+    var duration = reduced ? 1 : 360;
     if (flightLayer) {
       flightLayer.classList.remove('is-arrived');
       flightLayer.classList.add('is-playing');
