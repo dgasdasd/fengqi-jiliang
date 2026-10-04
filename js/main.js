@@ -269,8 +269,6 @@ function initP3() {
   var puzzleCountdown = $('#p3PuzzleCountdown'), puzzleStart = $('#p3PuzzleStart'), puzzleStatus = $('#p3PuzzleStatus');
   var detail = $('#p3TyphoonDetail'), detailClose = $('#p3DetailClose'), historyScene = $('#p3HistoryScene'), historyBlock = $('#p3HistoryBlock');
   var views = $$('.p3-view'), rail = $$('.p3-rail [data-p3-view]');
-  // 飞行层独立于四个内容页，目标页切换后仍能显示过渡动画。
-  if (flightLayer && flightLayer.parentNode === originScene) root.appendChild(flightLayer);
   function hideFlightLayer() {
     if (!flightLayer) return;
     flightLayer.classList.remove('is-playing', 'is-arrived', 'is-tree-playing', 'is-tree-arrived', 'is-greatwall-playing', 'is-greatwall-arrived');
