@@ -15,12 +15,6 @@
     el.textContent = value;
     return el;
   }
-  function text(value) {
-    var el = document.createElement('p');
-    el.className = 'chapter-copy';
-    el.textContent = value;
-    return el;
-  }
   function children(el) { return el ? Array.prototype.slice.call(el.children) : []; }
   function page(parent, title, nodes, extra) {
     var section = document.createElement('section');
@@ -59,16 +53,8 @@
   if (routeView) page(routeView, '台风的类型', children(routeView), 'chapter-route-extra');
   var stats = $('.p3-view[data-view="stats"]');
   if (stats) {
-    var cards = $$('.stats-chart-card', stats), summary = $('.stat-summary', stats);
-    var sentences = (summary.textContent.match(/[^。]+。?/g) || []).map(function (s) { return s.trim(); });
-    page(stats, '西北太平洋台风生成数量', [$('.p3-panel-heading', stats), cards[0], text(sentences[0] || '')], 'chapter-chart');
-    page(stats, '登陆我国的台风占比', [heading('登陆我国的台风占比'), cards[1], text(sentences[1] || '')], 'chapter-chart');
-    page(stats, '三种台风路径占比', [heading('三种台风路径占比'), cards[2], text(sentences.slice(2).join('')),
-      $('#p3StatsBack')], 'chapter-chart');
-    summary.remove();
-    var stack = $('.stats-chart-stack', stats), pies = $('.stats-pie-grid', stats);
-    if (pies) pies.remove();
-    if (stack) stack.remove();
+    page(stats, '台风统计', [$('.p3-panel-heading', stats), $('.stats-chart-stack', stats),
+      $('.stat-summary', stats), $('#p3StatsBack')], 'chapter-chart chapter-chart-overview');
   }
 
   // 地图：拼图独占一屏；年份与台风名称沿原本的完整曲线展示。
@@ -144,8 +130,7 @@
     page(story, '风雨中的他们', children(story), 'chapter-stories');
     var prep = $('#p3Prep'), panels = $('.p3-prep-panels', prep), invite = $('.p3-archive-invite', prep);
     page(prep, '沿海与内陆的风险', children(prep).filter(function (el) { return el !== panels && el !== invite; }), 'chapter-prep-region');
-    page(prep, '防灾准备档案', [heading('防灾准备档案'), panels], 'chapter-prep-cards');
-    page(prep, '制作我的防风准备卡', [invite], 'chapter-prep-invite');
+    page(prep, '防灾准备档案', [heading('防灾准备档案'), panels, invite], 'chapter-prep-cards');
   }
 
   // 档案袋打开后进入独立章节，避免继续从英雄与区域卡片向下滑到个人档案。
@@ -171,10 +156,11 @@
   function topOf(p) { return p.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop; }
   function update() {
     var pages = visiblePages();
-    if (!pages.length) { current = null; toolbar.querySelector('span').textContent = ''; return; }
+    if (!pages.length) { current = null; root.classList.remove('is-reading-page'); toolbar.querySelector('span').textContent = ''; return; }
     current = pages.reduce(function (a, b) {
       return Math.abs(topOf(a) - scroller.scrollTop) <= Math.abs(topOf(b) - scroller.scrollTop) ? a : b;
     });
+    root.classList.toggle('is-reading-page', current.classList.contains('chapter-chart-overview') || current.classList.contains('chapter-prep-cards'));
     toolbar.querySelector('span').textContent = current.dataset.pageTitle || '';
   }
   function refresh() {
@@ -231,6 +217,9 @@
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
   scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
   scroller.addEventListener('wheel', function (event) {
+    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-prep-cards .chapter-content');
+    if (readingContent && ((event.deltaY > 0 && readingContent.scrollTop < readingContent.scrollHeight - readingContent.clientHeight - 1) ||
+      (event.deltaY < 0 && readingContent.scrollTop > 1))) return;
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-thermo, .p3-typhoon-detail, .p3-prep-images')) return;
     event.preventDefault();
     if (Math.abs(event.deltaY) < 8 || Date.now() < wheelLock) return;

@@ -95,6 +95,7 @@
 }
 .p3.is-paged .chapter-toolbar button { padding: 0 14px; font-size:18px; }
 .p3.is-paged .chapter-toolbar button:focus-visible { outline: 2px solid #b4333c; outline-offset: 2px; }
+.p3.is-paged.is-reading-page .chapter-toolbar { background:rgba(238,243,241,.96); backdrop-filter:blur(8px); }
 .p3.is-paged:has(.p3-typhoon-detail:not([hidden])) .chapter-toolbar { display: none; }
 
 /* Temperature, animation, and conditions remain one reading page. */
@@ -135,6 +136,21 @@
 .p3.is-paged .chapter-chart .stats-pie-label b { font-size:19px; }
 .p3.is-paged .chapter-chart .stats-pie-legend { font-size:17px; gap: 8px; }
 .p3.is-paged .chapter-chart .p3-stats-back { position: static; display: block; width: fit-content; margin: 16px auto; }
+.p3.is-paged .chapter-chart-overview .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; }
+.p3.is-paged .chapter-chart-overview .chapter-content > .p3-panel-heading { margin-bottom: 12px; font-size:clamp(25px, calc(29 * var(--u)), 31px); }
+.p3.is-paged .chapter-chart-overview .stats-chart-stack { gap: 10px; margin-top: 0; }
+.p3.is-paged .chapter-chart-overview .stats-pie-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.p3.is-paged .chapter-chart-overview .stats-chart-card { padding: 8px; }
+.p3.is-paged .chapter-chart-overview .stats-chart-card figcaption { font-size:clamp(16px, calc(18 * var(--u)), 19px); line-height:1.3; }
+.p3.is-paged .chapter-chart-overview .stats-pie { width: min(100%, 132px); margin: 6px auto 10px; }
+.p3.is-paged .chapter-chart-overview .stats-pie-label { font-size:12px; }
+.p3.is-paged .chapter-chart-overview .stats-pie-label b { font-size:14px; }
+.p3.is-paged .chapter-chart-overview .stats-pie-label-main { left:auto; right:3%; top:19%; color:#254b59; text-shadow:0 1px rgba(255,255,255,.7); }
+.p3.is-paged .chapter-chart-overview .stats-pie-label-side { right:auto; left:4%; top:43%; color:#fff; text-shadow:0 1px 2px rgba(35,67,78,.35); }
+.p3.is-paged .chapter-chart-overview .stats-pie-path .stats-pie-label { display:none; }
+.p3.is-paged .chapter-chart-overview .stats-pie-legend { gap: 3px 5px; font-size:14px; }
+.p3.is-paged .chapter-chart-overview .stats-pie-legend span { white-space:normal; }
+.p3.is-paged .chapter-chart-overview .stat-summary { margin:12px 0 0; padding:0; background:transparent; font:400 clamp(18px, calc(20 * var(--u)), 21px)/1.55 var(--f-fang); color:#263940; }
 
 /* Puzzle, original winding route, and loss charts. */
 .p3.is-paged .p3-mapgame-back { display: none; }
@@ -214,7 +230,7 @@
 .p3.is-paged .chapter-stories .p3-after-quote { margin: 12px 0 0; font-size:clamp(19px, calc(22 * var(--u)), 23px); }
 .p3.is-paged .chapter-prep-region .p3-prep-lead,
 .p3.is-paged .chapter-prep-cards .p3-prep-panel header small,
-.p3.is-paged .chapter-prep-invite p,
+.p3.is-paged .chapter-prep-cards .p3-archive-invite p,
 .p3.is-paged .chapter-profile label,
 .p3.is-paged .chapter-profile .p3-profile-risk,
 .p3.is-paged .chapter-profile-reminder p { font-size:clamp(18px, calc(20 * var(--u)), 21px); line-height: 1.5; }
@@ -222,6 +238,7 @@
 .p3.is-paged .chapter-prep-cards .p3-prep-images img { max-height: 48vh; object-fit: contain; }
 .p3.is-paged .chapter-prep-cards .p3-prep-panel header strong { font-size:24px; }
 .p3.is-paged .chapter-prep-cards .p3-prep-caption { font-size:18px; }
+.p3.is-paged .chapter-prep-cards .p3-archive-invite { margin-top: 24px; padding-bottom: 16px; }
 .p3.is-paged .p3-after-section-kicker,
 .p3.is-paged .p3-prep-hint,
 .p3.is-paged .p3-map-pin { font-size:16px; }
