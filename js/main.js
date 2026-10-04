@@ -590,6 +590,65 @@ function initP3() {
 
   var prepRegionButtons = $$('[data-prep-region]');
   var prepPanels = $$('[data-prep-panel]');
+  var prepCarousels = prepPanels.map(function (panel) {
+    var viewport = panel.querySelector('.p3-prep-images');
+    var images = Array.prototype.slice.call(viewport.querySelectorAll('img'));
+    var current = 0, scrollTimer = 0;
+    viewport.tabIndex = 0;
+    viewport.setAttribute('role', 'group');
+    viewport.setAttribute('aria-roledescription', '轮播图');
+    viewport.setAttribute('aria-label', panel.querySelector('header strong').textContent);
+    images.forEach(function (image) { image.draggable = false; });
+
+    var controls = document.createElement('div');
+    controls.className = 'p3-prep-controls';
+    controls.innerHTML = '<button class="p3-prep-arrow" type="button" aria-label="上一张档案卡">‹</button><div class="p3-prep-dots"></div><button class="p3-prep-arrow" type="button" aria-label="下一张档案卡">›</button>';
+    panel.appendChild(controls);
+    var caption = document.createElement('p');
+    caption.className = 'p3-prep-caption';
+    caption.setAttribute('aria-live', 'polite');
+    panel.appendChild(caption);
+    var dots = images.map(function (image, index) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', '查看第' + (index + 1) + '张：' + image.alt);
+      dot.addEventListener('click', function () { go(index, true); });
+      controls.querySelector('.p3-prep-dots').appendChild(dot);
+      return dot;
+    });
+    function update() {
+      dots.forEach(function (dot, index) { dot.setAttribute('aria-current', index === current ? 'true' : 'false'); });
+      caption.textContent = images[current].alt + ' · ' + (current + 1) + ' / ' + images.length;
+    }
+    function go(index, animate) {
+      current = (index + images.length) % images.length;
+      clearTimeout(scrollTimer);
+      update();
+      if (!viewport.clientWidth) return;
+      var left = current * viewport.clientWidth;
+      if (animate && !reduced && viewport.scrollTo) viewport.scrollTo({ left: left, behavior: 'smooth' });
+      else viewport.scrollLeft = left;
+    }
+    controls.querySelectorAll('.p3-prep-arrow')[0].addEventListener('click', function () { go(current - 1, true); });
+    controls.querySelectorAll('.p3-prep-arrow')[1].addEventListener('click', function () { go(current + 1, true); });
+    viewport.addEventListener('scroll', function () {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(function () {
+        if (!viewport.clientWidth) return;
+        current = clamp(Math.round(viewport.scrollLeft / viewport.clientWidth), 0, images.length - 1);
+        update();
+      }, 120);
+    }, { passive: true });
+    viewport.addEventListener('keydown', function (event) {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      go(current + (event.key === 'ArrowRight' ? 1 : -1), true);
+    });
+    function align() { go(current, false); }
+    window.addEventListener('resize', align);
+    update();
+    return { panel: panel, align: align };
+  });
   function setPrepRegion(region) {
     prepRegionButtons.forEach(function (button) {
       var active = button.dataset.prepRegion === region;
@@ -600,6 +659,7 @@ function initP3() {
       panel.hidden = panel.dataset.prepPanel !== region;
       panel.classList.toggle('is-active', panel.dataset.prepPanel === region);
     });
+    prepCarousels.forEach(function (carousel) { if (!carousel.panel.hidden) carousel.align(); });
   }
   prepRegionButtons.forEach(function (button) {
     button.addEventListener('click', function () { setPrepRegion(button.dataset.prepRegion); });

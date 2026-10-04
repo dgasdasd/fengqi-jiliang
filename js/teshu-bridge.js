@@ -27,12 +27,14 @@
     try {
       frame.contentWindow.postMessage({ type: 'teshu-open-menu' }, '*');
     } catch (e) {}
+    document.documentElement.classList.remove('p3-route-open');
     window.scrollTo(0, 0);
   }
 
   function openRoute(route) {
     var button = routeButtons[route];
     if (!button) return;
+    document.documentElement.classList.add('p3-route-open');
     entry.classList.add('is-hidden');
     // 直接摘掉入口层，避免 iframe 的合成帧在切换瞬间继续盖住主页面。
     entry.style.display = 'none';
