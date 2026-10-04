@@ -1765,70 +1765,53 @@
     if (!document.getElementById('popup').hidden) scalePopup();
   }
 
-  /* ---------- BGM：全程贯穿（含封面） ----------
-     进入即尝试播放；被浏览器自动播放策略拦截时，等任意一次用户交互/音频就绪
-     再补播，直到真正响起为止（旧版只补播一次，第一次失败后就再也没音乐了）
-  ------------------------------------------------ */
+  /* ---------- Background music: start with the cover when allowed ---------- */
   function initBgm() {
     bgm = document.getElementById('bgm');
     bgmBtn = document.getElementById('bgmBtn');
+    var unlockBtn = document.getElementById('bgmUnlock');
     if (!bgm || !bgmBtn) return;
     bgm.volume = 0.55;
     bgm.muted = false;
     bgm.loop = true;
-    var wantPlay = true;            // 用户是否希望有音乐（点按钮可暂停）
-    var silentStarted = false;      // 是否已用“静音起播”占住播放
-    var silenced = false;           // 是否处于静音占位状态
-    // 打开页面就放：先直接带声播放；被自动播放策略拦下就先静音播放（多数浏览器允许），
-    // 之后任意一次交互立刻取消静音 —— 用户不用先点一下才有声音。
+    var wantPlay = true;
+    var hideUnlock = function () { if (unlockBtn) unlockBtn.hidden = true; };
+    var showUnlock = function () {
+      if (wantPlay && bgm.paused && unlockBtn) unlockBtn.hidden = false;
+    };
     var tryPlay = function () {
       if (!wantPlay || !bgm.paused) return;
-      var p = bgm.play();
-      if (p && p.catch) {
-        p.catch(function () {
-          if (!silentStarted) {
-            silentStarted = true;
-            silenced = true;
-            bgm.muted = true;
-            var q = bgm.play();
-            if (q && q.catch) q.catch(function () {});
-          }
-        });
-      }
-    };
-    var unmute = function () {
-      if (silenced || bgm.muted) {
-        silenced = false;
-        bgm.muted = false;
+      bgm.muted = false;
+      try {
         var p = bgm.play();
-        if (p && p.catch) p.catch(function () {});
-      }
+        if (p && p.then) p.then(hideUnlock, showUnlock);
+      } catch (e) { showUnlock(); }
     };
-    var kick = function () { unmute(); tryPlay(); };
-    var gestures = ['pointerdown', 'touchstart', 'click', 'keydown', 'wheel', 'scroll'];
+    var kick = function (ev) {
+      // The music buttons handle their own click; do not start and then pause in one gesture.
+      if (ev && ev.target &&
+          (bgmBtn.contains(ev.target) || (unlockBtn && unlockBtn.contains(ev.target)))) return;
+      tryPlay();
+    };
+    var gestures = ['pointerdown', 'touchstart', 'click', 'keydown'];
     gestures.forEach(function (ev) { window.addEventListener(ev, kick, true); });
     bgm.addEventListener('canplay', kick);
     bgm.addEventListener('loadeddata', kick);
     bgm.addEventListener('loadedmetadata', kick);
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
-    // 微信内置浏览器：WeixinJSBridgeReady 里允许带声自动播放
-    document.addEventListener('WeixinJSBridgeReady', function () {
-      silenced = false;
-      bgm.muted = false;
-      tryPlay();
-    }, false);
+    document.addEventListener('WeixinJSBridgeReady', tryPlay, false);
     var stopKick = function () {
       gestures.forEach(function (ev) { window.removeEventListener(ev, kick, true); });
       bgm.removeEventListener('canplay', kick);
       bgm.removeEventListener('loadeddata', kick);
       bgm.removeEventListener('loadedmetadata', kick);
     };
-    // 状态以 play/pause 事件为唯一权威
     bgm.addEventListener('playing', function () {
       audioUnlocked = true;
       bgmBtn.classList.add('playing');
-      if (!bgm.muted) bgmBtn.classList.remove('muted');
-      if (!silenced) stopKick();      // 真的带声响起来了，撤掉补播监听
+      bgmBtn.classList.remove('muted');
+      hideUnlock();
+      stopKick();
     });
     bgm.addEventListener('play', function () {
       bgmBtn.classList.add('playing');
@@ -1839,18 +1822,22 @@
       ev.stopPropagation();
       if (bgm.paused || bgm.muted) {
         wantPlay = true;
-        silenced = false;
-        bgm.muted = false;
-        var p = bgm.play();
-        if (p && p.catch) p.catch(function () {});
+        tryPlay();
       } else {
         wantPlay = false;
         bgm.pause();
+        hideUnlock();
         bgmBtn.classList.add('muted');
       }
     });
-    // 进入页面先试一次；没成的话上面的交互/就绪监听会继续补
-    tryPlay();
+    if (unlockBtn) unlockBtn.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      wantPlay = true;
+      tryPlay();
+    });
+    // The browser may reject audible autoplay. Its first user gesture starts the same track.
+    if (bgm.paused) tryPlay();
+    else { bgmBtn.classList.add('playing'); hideUnlock(); stopKick(); }
   }
 
   /* ---------- 正文第一页的台风播报音（在这一页循环播放） ---------- */
