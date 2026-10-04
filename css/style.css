@@ -648,10 +648,10 @@ body{
 .p3-g-river-sky,.p3-g-river-water,.p3-g-med-bg,.p3-g-neighbor-mud{position:absolute;inset:0;}
 .p3-g-river-sky{background:linear-gradient(180deg,#dcecf2,#f4f7f4 31%,#bfd8d8);}
 .p3-g-river-water{left:21%;right:21%;background:repeating-linear-gradient(175deg,rgba(255,255,255,.28) 0 calc(3 * var(--u)),transparent calc(3 * var(--u)) calc(15 * var(--u))),linear-gradient(180deg,#8dc7d1,#397f9b);border-left:1px solid rgba(255,255,255,.65);border-right:1px solid rgba(255,255,255,.65);}
-.p3-g-river-house{position:absolute;left:8%;top:5%;width:25%;height:11%;border-radius:4px;background:#d4a36d;box-shadow:inset 0 -9px 0 rgba(111,76,48,.25);}
-.p3-g-river-house::before{content:"";position:absolute;left:-12%;top:-55%;border-left:62px solid transparent;border-right:62px solid transparent;border-bottom:47px solid #b4483e;transform:scaleX(.78);transform-origin:center bottom;}
-.p3-g-river-house i{position:absolute;left:40%;bottom:0;width:20%;height:43%;background:#76553c;}
-.p3-g-river-house b{position:absolute;right:12%;top:30%;width:18%;height:22%;border-radius:50%;background:#8dc8d4;border:2px solid #5d827e;}
+.p3-g-river-house{position:absolute;left:8%;top:8%;width:25%;height:10%;border-radius:calc(4 * var(--u));background:#d4a36d;box-shadow:inset 0 calc(-6 * var(--u)) 0 rgba(111,76,48,.25);}
+.p3-g-river-house::before{content:"";position:absolute;left:50%;bottom:100%;width:120%;height:65%;background:#b4483e;clip-path:polygon(50% 0,100% 100%,0 100%);transform:translateX(-50%);}
+.p3-g-river-house i{position:absolute;left:50%;bottom:0;width:22%;height:45%;transform:translateX(-50%);border-radius:calc(2 * var(--u)) calc(2 * var(--u)) 0 0;background:#76553c;}
+.p3-g-river-house b{position:absolute;right:12%;top:18%;width:20%;aspect-ratio:1;border-radius:50%;background:#8dc8d4;border:calc(2 * var(--u)) solid #5d827e;}
 .p3-g-river-raft{position:absolute;width:34%;height:11%;transform:translate(-50%,-50%);z-index:5;}
 .p3-g-river-raft>img:first-child{display:block;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;}
 .p3-g-river-raft .p3-g-chibi{position:absolute;left:38%;bottom:22%;width:27%;height:74%;object-fit:contain;}
