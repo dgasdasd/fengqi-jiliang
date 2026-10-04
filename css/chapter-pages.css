@@ -151,14 +151,17 @@
 .p3.is-paged .chapter-puzzle .p3-puzzle-heading p { font-size: 16px; }
 .p3.is-paged .chapter-puzzle .p3-puzzle-start { min-height: 46px; font-size: 20px; }
 .p3.is-paged .chapter-puzzle .p3-puzzle-preview figcaption { font-size: 14px; }
-.p3.is-paged .chapter-years .chapter-timeline { width: 100%; height: auto; max-height: 57vh; overflow: visible; }
-.p3.is-paged .chapter-years .p3-timeline-art { overflow: hidden; }
-.p3.is-paged .chapter-years .p3-year-point { width: 42px; height: 42px; }
+.p3.is-paged .chapter-years-whole .chapter-content { display: flex; flex-direction: column; align-items: center; overflow-y: hidden; }
+.p3.is-paged .chapter-years-whole .chapter-content > h2 { margin-bottom: 4px; font-size: clamp(24px, calc(28 * var(--u)), 30px); }
+.p3.is-paged .chapter-years-whole .p3-history-hint { margin: 0 0 4px; font-size: 14px; line-height: 1.35; }
+.p3.is-paged .chapter-years-whole .chapter-timeline { flex: 0 1 auto; width: auto; height: min(58vh, 470px); min-height: 0; max-width: 100%; aspect-ratio: 448 / 780; overflow: visible; }
+.p3.is-paged .chapter-years-whole .p3-timeline-art { overflow: visible; }
+.p3.is-paged .chapter-years .p3-year-point { width: 30px; height: 30px; }
 .p3.is-paged .chapter-years .p3-year-point span { display: none; }
-.p3.is-paged .chapter-years .p3-year-point i { width: 23px; height: 23px; background: #b3313c; }
-.p3.is-paged .chapter-years .p3-year-point::after { content: attr(data-marker); position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font: 700 14px/1 var(--f-hei); color: #fff; pointer-events: none; }
-.p3.is-paged .chapter-year-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin-top: 14px; }
-.p3.is-paged .chapter-year-link { min-height: 55px; padding: 7px 9px; border: 1px solid rgba(60,93,102,.25); border-left: 4px solid #b3313c; border-radius: 5px; background: rgba(255,255,255,.78); color: #233943; text-align: left; cursor: pointer; }
+.p3.is-paged .chapter-years .p3-year-point i { width: 24px; height: 24px; background: #b3313c; }
+.p3.is-paged .chapter-years .p3-year-point::after { content: attr(data-marker); position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font: 700 13px/1 var(--f-hei); color: #fff; pointer-events: none; }
+.p3.is-paged .chapter-year-list { display: flex; flex: 0 0 auto; width: 100%; gap: 8px; margin-top: 6px; padding: 2px 1px 8px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: thin; }
+.p3.is-paged .chapter-year-link { flex: 0 0 min(45%, 160px); min-height: 62px; padding: 7px 9px; border: 1px solid rgba(60,93,102,.25); border-left: 4px solid #b3313c; border-radius: 5px; background: rgba(255,255,255,.78); color: #233943; text-align: left; cursor: pointer; scroll-snap-align: start; }
 .p3.is-paged .chapter-year-link b { display: block; font: 700 clamp(16px, calc(18 * var(--u)), 19px)/1.2 var(--f-cal); }
 .p3.is-paged .chapter-year-link small { display: block; margin-top: 3px; font: 400 14px/1.2 var(--f-fang); }
 .p3.is-paged .chapter-loss .p3-loss-intro,

@@ -73,48 +73,31 @@
     if (stack) stack.remove();
   }
 
-  // 地图：拼图独占一屏，原年份曲线分段展示，损失图表各占一屏。
+  // 地图：拼图独占一屏；年份曲线必须保持完整连续，损失图表各占一屏。
   var map = $('.p3-mapgame'), history = $('#p3HistoryBlock'), scene = $('#p3HistoryScene');
   if (map && history && scene) {
     var puzzlePage = page(map, '中国地图拼图', [$('.p3-mapgame > .p3-subtitle'), $('.p3-puzzle-panel', map)], 'chapter-puzzle');
     map.insertBefore(puzzlePage, history);
-    var timeline = $('.p3-timeline', scene), art = $('.p3-timeline-art', timeline);
-    var points = $$('.p3-year-point', timeline).map(function (point) {
-      return { element: point, y: parseFloat(point.style.getPropertyValue('--y')) / 100 * 780 };
-    });
+    var timeline = $('.p3-timeline', scene);
+    var points = $$('.p3-year-point', timeline);
     var oldTitle = $('.p3-subtitle', scene), oldHint = $('.p3-history-hint', scene);
-    var eras = [
-      { start: 0, height: 270, title: '代表台风 · 2015—2018' },
-      { start: 270, height: 250, title: '代表台风 · 2019—2021' },
-      { start: 520, height: 260, title: '代表台风 · 2022—2023' }
-    ];
-    eras.forEach(function (era, eraIndex) {
-      var start = era.start, height = era.height;
-      var line = document.createElement('div');
-      line.className = 'p3-timeline chapter-timeline';
-      line.style.aspectRatio = '448 / ' + height;
-      var svg = art.cloneNode(true);
-      svg.setAttribute('viewBox', '0 ' + start + ' 448 ' + height);
-      svg.setAttribute('preserveAspectRatio', 'none');
-      line.appendChild(svg);
-      var list = document.createElement('div');
-      list.className = 'chapter-year-list';
-      points.filter(function (entry) { return entry.y >= start && entry.y < start + height; }).forEach(function (entry, index) {
-        entry.element.style.setProperty('--y', ((entry.y - start) / height * 100) + '%');
-        entry.element.dataset.marker = String(index + 1);
-        line.appendChild(entry.element);
-        var label = document.createElement('button');
-        label.type = 'button';
-        label.className = 'chapter-year-link';
-        label.innerHTML = '<b>' + entry.element.querySelector('strong').textContent.trim() + entry.element.querySelector('em').textContent.trim() + '</b>' +
-          '<small>' + entry.element.querySelector('b').textContent.trim() + '</small>';
-        label.addEventListener('click', function () { entry.element.click(); });
-        list.appendChild(label);
-      });
-      page(scene, era.title, [eraIndex ? heading(era.title) : oldTitle,
-        eraIndex ? text('点击年份，查看台风路径与影响') : oldHint, line, list], 'chapter-years');
+    timeline.classList.add('chapter-timeline');
+    oldHint.textContent = '点击路径节点，或左右滑动下方年份卡片查看台风详情';
+    var list = document.createElement('div');
+    list.className = 'chapter-year-list';
+    list.setAttribute('role', 'group');
+    list.setAttribute('aria-label', '代表台风年份卡片，左右滑动查看');
+    points.forEach(function (point, index) {
+      point.dataset.marker = String(index + 1);
+      var label = document.createElement('button');
+      label.type = 'button';
+      label.className = 'chapter-year-link';
+      label.innerHTML = '<b>' + point.querySelector('strong').textContent.trim() + point.querySelector('em').textContent.trim() + '</b>' +
+        '<small>' + point.querySelector('b').textContent.trim() + '</small>';
+      label.addEventListener('click', function () { point.click(); });
+      list.appendChild(label);
     });
-    timeline.remove();
+    page(scene, '近十年最具代表台风', [oldTitle, oldHint, timeline, list], 'chapter-years chapter-years-whole');
     var report = $('.p3-loss-report', map), charts = $$('.p3-loss-chart', report);
     var analysis = $('.p3-loss-analysis', report), lines = children(analysis);
     page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0]], 'chapter-loss');
