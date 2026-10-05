@@ -234,6 +234,9 @@
 .p3.is-paged .chapter-carousel-controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 10px; font:600 19px/1 var(--f-cal); }
 .p3.is-paged .chapter-carousel-controls button { width: 42px; height: 42px; border: 1px solid #9fb6ba; border-radius: 50%; background: rgba(255,255,255,.86); font-size:27px; color: #315967; }
 .p3.is-paged .chapter-stories .p3-after-quote { margin: 12px 0 0; font-size:clamp(19px, calc(22 * var(--u)), 23px); }
+.p3.is-paged .chapter-stories .p3-story-charts { display: grid; gap: 18px; margin-top: 24px; }
+.p3.is-paged .chapter-stories .p3-story-charts img { display: block; width: 100%; height: auto; border-radius: 6px; }
+.p3.is-paged .chapter-stories .p3-story-analysis { margin: 24px 2px 10px; font-size:clamp(18px, calc(20 * var(--u)), 21px); line-height:1.85; text-align:justify; color:#26383d; }
 .p3.is-paged .chapter-prep-combined .p3-prep-lead,
 .p3.is-paged .chapter-prep-combined .p3-prep-panel header small,
 .p3.is-paged .chapter-prep-combined .p3-archive-invite p,
