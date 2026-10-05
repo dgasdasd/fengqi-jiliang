@@ -234,17 +234,19 @@
 .p3.is-paged .chapter-carousel-controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 10px; font:600 19px/1 var(--f-cal); }
 .p3.is-paged .chapter-carousel-controls button { width: 42px; height: 42px; border: 1px solid #9fb6ba; border-radius: 50%; background: rgba(255,255,255,.86); font-size:27px; color: #315967; }
 .p3.is-paged .chapter-stories .p3-after-quote { margin: 12px 0 0; font-size:clamp(19px, calc(22 * var(--u)), 23px); }
-.p3.is-paged .chapter-prep-region .p3-prep-lead,
-.p3.is-paged .chapter-prep-cards .p3-prep-panel header small,
-.p3.is-paged .chapter-prep-cards .p3-archive-invite p,
+.p3.is-paged .chapter-prep-combined .p3-prep-lead,
+.p3.is-paged .chapter-prep-combined .p3-prep-panel header small,
+.p3.is-paged .chapter-prep-combined .p3-archive-invite p,
 .p3.is-paged .chapter-profile label,
 .p3.is-paged .chapter-profile .p3-profile-risk,
 .p3.is-paged .chapter-profile-reminder p { font-size:clamp(18px, calc(20 * var(--u)), 21px); line-height: 1.5; }
-.p3.is-paged .chapter-prep-region .p3-region-map-wrap { width: 100%; height: min(37vh, 260px); }
-.p3.is-paged .chapter-prep-cards .p3-prep-images img { max-height: 48vh; object-fit: contain; }
-.p3.is-paged .chapter-prep-cards .p3-prep-panel header strong { font-size:24px; }
-.p3.is-paged .chapter-prep-cards .p3-prep-caption { font-size:18px; }
-.p3.is-paged .chapter-prep-cards .p3-archive-invite { margin-top: 24px; padding-bottom: 16px; }
+.p3.is-paged .chapter-prep-combined .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; padding-bottom: 28px; }
+.p3.is-paged .chapter-prep-combined .chapter-heading { margin: 24px 0 12px; }
+.p3.is-paged .chapter-prep-combined .p3-region-map-wrap { width: 100%; height: min(37vh, 260px); }
+.p3.is-paged .chapter-prep-combined .p3-prep-images img { max-height: 48vh; object-fit: contain; }
+.p3.is-paged .chapter-prep-combined .p3-prep-panel header strong { font-size:24px; }
+.p3.is-paged .chapter-prep-combined .p3-prep-caption { font-size:18px; }
+.p3.is-paged .chapter-prep-combined .p3-archive-invite { margin-top: 24px; padding-bottom: 16px; }
 .p3.is-paged .p3-after-section-kicker,
 .p3.is-paged .p3-prep-hint,
 .p3.is-paged .p3-map-pin { font-size:16px; }

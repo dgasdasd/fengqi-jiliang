@@ -116,9 +116,9 @@
       carousel.querySelector('span').textContent = (storyIndex + 1) + ' / ' + storyCards.length;
     }, { passive: true });
     page(story, '风雨中的他们', children(story), 'chapter-stories');
-    var prep = $('#p3Prep'), panels = $('.p3-prep-panels', prep), invite = $('.p3-archive-invite', prep);
-    page(prep, '沿海与内陆的风险', children(prep).filter(function (el) { return el !== panels && el !== invite; }), 'chapter-prep-region');
-    page(prep, '防灾准备档案', [heading('防灾准备档案'), panels, invite], 'chapter-prep-cards');
+    var prep = $('#p3Prep'), panels = $('.p3-prep-panels', prep);
+    panels.before(heading('防灾准备档案'));
+    page(prep, '防灾准备档案', children(prep), 'chapter-prep-combined');
   }
 
   // 档案袋打开后进入独立章节，避免继续从英雄与区域卡片向下滑到个人档案。
@@ -150,7 +150,7 @@
     });
     root.classList.toggle('is-reading-page', current.classList.contains('chapter-chart-overview') ||
       current.classList.contains('chapter-loss-combined') || current.classList.contains('chapter-impact-journey') ||
-      current.classList.contains('chapter-stories') || current.classList.contains('chapter-prep-cards'));
+      current.classList.contains('chapter-stories') || current.classList.contains('chapter-prep-combined'));
     toolbar.querySelector('span').textContent = current.dataset.pageTitle || '';
   }
   function refresh() {
@@ -207,7 +207,7 @@
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
   scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
   scroller.addEventListener('wheel', function (event) {
-    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-stories .chapter-content, .chapter-prep-cards .chapter-content');
+    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-stories .chapter-content, .chapter-prep-combined .chapter-content');
     if (readingContent && ((event.deltaY > 0 && readingContent.scrollTop < readingContent.scrollHeight - readingContent.clientHeight - 1) ||
       (event.deltaY < 0 && readingContent.scrollTop > 1))) return;
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-thermo, .p3-typhoon-detail, .p3-prep-images')) return;
