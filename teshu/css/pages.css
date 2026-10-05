@@ -3,8 +3,8 @@
 ============================================================ */
 
 /* ---------- P1 封面：风栖过的脊梁 ----------
-   出场顺序：浅色雾霾底 → 台风水墨刮过 → 渐变山川浮出
-   → 最下方人物背影与最上方标题同时出现
+   出场顺序：山河从下方升起 → 台风水墨刮过
+   → 左下方人物群像与上方标题同时出现
 ------------------------------------------------ */
 .p1{
   background-color:#e8e5df;                     /* 图片加载前的兜底底色 */
@@ -14,19 +14,18 @@
   background-repeat:no-repeat;
   overflow:hidden;
 }
-/* 山川：只用墨色山体（白纸底已剔除），下缘渐变化开融进背景 */
+/* 山河先从下方升起，透明素材直接融入雾霾背景。 */
 .a-p1bg{
-  animation:p1BgIn 1.1s cubic-bezier(.22,.9,.3,1) 1.5s both;
-  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,0) 2%,#000 20%,#000 38%,rgba(0,0,0,0) 58%);
-  mask-image:linear-gradient(180deg,rgba(0,0,0,0) 2%,#000 20%,#000 38%,rgba(0,0,0,0) 58%);
+  animation:p1BgIn 1.2s cubic-bezier(.18,.86,.28,1) .2s both;
+  will-change:transform,opacity;
 }
 @keyframes p1BgIn{
-  from{opacity:0;transform:translateY(8px) scale(1.03)}
+  from{opacity:0;transform:translateY(150px)}
   to{opacity:1;transform:none}
 }
-/* 台风水墨图标先从左向右刮过，随后才显露山川 */
+/* 山河落位后，台风水墨从左向右掠过山脊。 */
 .a-p1wind{
-  animation:p1WindSweep 1.2s cubic-bezier(.45,.05,.35,1) .2s both;
+  animation:p1WindSweep 1.35s cubic-bezier(.45,.05,.35,1) 1.45s both;
   will-change:transform,opacity;
 }
 @keyframes p1WindSweep{
@@ -36,20 +35,46 @@
   76%{opacity:.95;transform:translate(262px,-2px) rotate(9deg) scale(1.05)}
   100%{opacity:0;transform:translate(360px,16px) rotate(14deg) scale(1.1)}
 }
-/* 人物背影：山川出现后，与最上方标题同时出现 */
-.a-p1person{animation:p1PersonIn 1s cubic-bezier(.2,.85,.3,1) 2.75s both}
+/* 风掠过后，人物群像从左下方显现。 */
+.a-p1person{animation:p1PersonIn 1s cubic-bezier(.2,.85,.3,1) 2.9s both}
 @keyframes p1PersonIn{
-  from{opacity:0;transform:translateY(24px)}
+  from{opacity:0;transform:translateY(34px) scale(.96)}
   to{opacity:1;transform:none}
 }
-/* 六个大字：风栖过的脊梁（右→左），与人物背影同时出现 */
+/* 前景岩脊盖住人物脚尖，人物因此像真正站在山石上。 */
+.p1-ground{
+  position:absolute;left:0;right:0;bottom:0;z-index:4;height:31px;
+  pointer-events:none;background:#070707;
+  clip-path:polygon(0 68%,5% 58%,11% 61%,17% 43%,24% 51%,31% 33%,38% 42%,45% 24%,52% 39%,59% 31%,66% 51%,73% 42%,80% 57%,88% 49%,94% 63%,100% 55%,100% 100%,0 100%);
+  animation:p1GroundIn .75s cubic-bezier(.18,.86,.28,1) .65s both;
+  will-change:transform,opacity;
+}
+@keyframes p1GroundIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+/* 六个大字：上排黑色「风栖过的」，下排红色「脊梁」。 */
 .p1-chars{position:absolute;left:0;top:0;width:320px;height:100%}
 .p1-char{
   font-family:var(--font-hei);          /* 封面标题保持原来的字体 */
-  font-size:68px;color:#1c1a18;font-weight:700;
+  color:#111;font-weight:700;
   text-shadow:0 2px 10px rgba(255,255,255,.7),0 1px 2px rgba(0,0,0,.16);
 }
-.p1-char.is-red{color:#c3433c;text-shadow:0 2px 12px rgba(255,255,255,.6),0 1px 2px rgba(104,11,6,.25)}
+.p1-char-upper{font-size:54px}
+.p1-char-lower{font-size:78px}
+.p1-char.is-red{color:#bd2025;text-shadow:0 2px 12px rgba(255,255,255,.6),0 1px 2px rgba(104,11,6,.25)}
+.p1-seals{position:absolute;inset:0;z-index:12;pointer-events:none}
+.p1-seal{
+  position:absolute;display:grid;place-items:center;
+  color:#a72a27;border:1px solid rgba(167,42,39,.78);
+  font-family:var(--font-fang);font-size:7px;font-style:normal;line-height:1;
+  opacity:0;animation:p1SealIn .55s ease 3.3s forwards;
+}
+.p1-seal-left{left:78px;top:188px;width:16px;height:18px}
+.p1-seal-right-top{left:246px;top:148px;width:18px;height:20px;font-size:6px;writing-mode:vertical-rl}
+.p1-seal-right-bottom{left:247px;top:184px;width:12px;height:16px}
+@keyframes p1SealIn{from{opacity:0;transform:scale(.72)}to{opacity:.82;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .a-p1bg,.a-p1person,.p1-ground,.p1-char,.p1-seal{animation:none!important;opacity:1!important;transform:none!important}
+  .a-p1wind{display:none!important}
+}
 
 /* ---------- P2 正文第一页：黑灰水墨台风漩涡 + 飘落新闻碎片 + 大字 ---------- */
 .p2{color:#141a22}
@@ -1043,7 +1068,7 @@
    最后一轮：封面清酒体、条件置顶、视频遮罩收紧、台风类型三按钮
 ============================================================ */
 /* 封面主标题采用加粗隶书。 */
-.p1-char{font-family:var(--font-lishu);font-weight:700}
+.p1-char{font-family:"MSZ","Ma Shan Zheng",var(--font-kai);font-weight:700}
 /* 五条条件置顶：在视频/图片之上 */
 .p3-cond2{position:relative;z-index:6}
 .p3-stagebox{z-index:0}

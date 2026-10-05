@@ -200,11 +200,11 @@
     return page;
   }
 
-  /* ---------- 首页特殊处理：台风水墨 → 雾霾山景 → 人物+大字 ---------- */
+  /* ---------- 首页特殊处理：山河升起 → 台风水墨掠过 → 人物+大字 ---------- */
   function decorateP1(page) {
     var pg = MAIN[0];
     var inner = page._inner;
-    // 三张图层按数据顺序：0=灰色雾霾山景底图，1=人物背影，2=台风水墨图标
+    // 三张图层按数据顺序：0=山河，1=人物群像，2=台风水墨图标
     // 挂上 a-* 类，翻页回到首页时会被 go() 统一重新触发
     var roles = ['a-p1bg', 'a-p1person', 'a-p1wind'];
     var imgs = Array.prototype.slice.call(inner.querySelectorAll('.el-img'));
@@ -215,20 +215,28 @@
       n.style.animationDelay = '';
       if (roles[i]) n.classList.add(roles[i]);
     });
-    // 山川只用黑色墨迹那版（白纸底已剔除），放大下移到画面中下方
+    // 使用用户提供的新山河抠图，右侧主峰压住画面，山脚落到屏幕底边。
     if (imgs[0]) {
       var bgImg = imgs[0].querySelector('img');
-      if (bgImg) bgImg.src = 'assets/img/p1-mountain-black.png';
-      imgs[0].style.left = '-40px';
-      imgs[0].style.top = '90px';
+      if (bgImg) bgImg.src = 'assets/img/p1-mountain-20261005.png';
+      imgs[0].style.left = '-42px';
+      imgs[0].style.top = 'auto';
+      imgs[0].style.bottom = '0px';
       imgs[0].style.width = '400px';
-      imgs[0].style.height = '533px';
+      imgs[0].style.height = '417px';
     }
-    // 人物背影贴住画面最底部，下面不留空隙
+    // 使用新的六人群像，参考效果图缩在左下角，并贴住画面底部。
     if (imgs[1]) {
+      var personImg = imgs[1].querySelector('img');
+      if (personImg) personImg.src = 'assets/img/p1-people-20261005.png';
+      imgs[1].style.left = '2px';
       imgs[1].style.top = 'auto';
-      imgs[1].style.bottom = '0px';
+      imgs[1].style.bottom = '-4px';
+      imgs[1].style.width = '215px';
+      imgs[1].style.height = '180px';
     }
+    // 独立的前景岩脊只遮住脚尖，不再把山体底部的白雾重复盖到人物腿上。
+    inner.appendChild(el('div', 'p1-ground'));
     // 台风的水墨图标：沿山脊的高度起笔
     if (imgs[2]) imgs[2].style.top = '178px';
     // 移除原始 6 个文字元素，改用逐字动画
@@ -243,25 +251,28 @@
     });
     chars.forEach(function (c, i) {
       var n = c.n;
-      var left = parseFloat(n.style.left) || 0;
-      var top = parseFloat(n.style.top) || 0;
-      var w = parseFloat(n.style.width) || 86;
-      var h = parseFloat(n.style.height) || 106;
       n.innerHTML = '';
       n.classList.remove('a-typeIn', 'a-fadeUp', 'a-fadeIn', 'a-zoomIn');
       n.classList.add('p1-char');
-      n.style.left = left + 'px';
-      n.style.top = (top + 96) + 'px';     // 下移，别太贴顶，且让大字完整落在画面内
-      n.style.width = w + 'px';
-      n.style.height = h + 'px';
+      var isLower = i >= 4;
+      n.classList.add(isLower ? 'p1-char-lower' : 'p1-char-upper');
+      n.style.left = (isLower ? 86 + (i - 4) * 78 : 34 + i * 58) + 'px';
+      n.style.top = (isLower ? 132 : 58) + 'px';
+      n.style.width = (isLower ? 88 : 64) + 'px';
+      n.style.height = (isLower ? 94 : 78) + 'px';
       n.style.display = 'grid';
       n.style.placeItems = 'center';
       n.textContent = c.t;
       //「脊梁」两个字用红色
       if (c.t === '脊' || c.t === '梁') n.classList.add('is-red');
-      // 山川出现后与人物背影同时起笔（2.75s），逐字依次落位
-      n.style.animation = 'charIn .85s cubic-bezier(.2,1.05,.35,1) ' + (2.75 + i * 0.1) + 's both, charFloat 4.6s ease-in-out ' + (3.8 + i * 0.1) + 's infinite';
+      // 风离开后人物与题字一起显现，黑色上排、红色下排。
+      n.style.animation = 'charIn .8s cubic-bezier(.2,1.05,.35,1) ' + (2.9 + i * 0.08) + 's both, charFloat 4.6s ease-in-out ' + (3.9 + i * 0.08) + 's infinite';
     });
+    var seals = el('div', 'p1-seals');
+    seals.innerHTML = '<i class="p1-seal p1-seal-left">风</i>' +
+      '<i class="p1-seal p1-seal-right-top">山河</i>' +
+      '<i class="p1-seal p1-seal-right-bottom">安</i>';
+    inner.appendChild(seals);
     page.classList.add('p1');
   }
 
