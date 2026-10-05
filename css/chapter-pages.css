@@ -237,9 +237,9 @@
 .p3.is-paged .chapter-prep-combined .p3-prep-lead,
 .p3.is-paged .chapter-prep-combined .p3-prep-panel header small,
 .p3.is-paged .chapter-prep-combined .p3-archive-invite p,
-.p3.is-paged .chapter-profile label,
-.p3.is-paged .chapter-profile .p3-profile-risk,
-.p3.is-paged .chapter-profile-reminder p { font-size:clamp(18px, calc(20 * var(--u)), 21px); line-height: 1.5; }
+.p3.is-paged .chapter-profile-combined label,
+.p3.is-paged .chapter-profile-combined .p3-profile-risk,
+.p3.is-paged .chapter-profile-combined .p3-reminder p { font-size:clamp(18px, calc(20 * var(--u)), 21px); line-height: 1.5; }
 .p3.is-paged .chapter-prep-combined .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; padding-bottom: 28px; }
 .p3.is-paged .chapter-prep-combined .chapter-heading { margin: 24px 0 12px; }
 .p3.is-paged .chapter-prep-combined .p3-region-map-wrap { width: 100%; height: min(37vh, 260px); }
@@ -252,9 +252,11 @@
 .p3.is-paged .p3-map-pin { font-size:16px; }
 .p3.is-paged .p3-archive-invite button,
 .p3.is-paged .p3-profile-seal { min-height: 44px; font-size:19px; }
-.p3.is-paged .chapter-profile .p3-profile-fieldset legend { font-size:22px; }
-.p3.is-paged .chapter-profile .p3-profile-fieldset input { width: 20px; height: 20px; }
-.p3.is-paged .chapter-profile-reminder h4 { font-size:22px; }
+.p3.is-paged .chapter-profile-combined .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; padding-bottom: 28px; }
+.p3.is-paged .chapter-profile-combined .chapter-heading { margin: 24px 0 12px; }
+.p3.is-paged .chapter-profile-combined .p3-profile-fieldset legend { font-size:22px; }
+.p3.is-paged .chapter-profile-combined .p3-profile-fieldset input { width: 20px; height: 20px; }
+.p3.is-paged .chapter-profile-combined .p3-reminder h4 { font-size:22px; }
 .p3.is-paged .chapter-finale { display: flex; padding: 70px 16px 75px; }
 .p3.is-paged .chapter-finale .p3-finale-copy { font-size:clamp(22px, calc(27 * var(--u)), 29px); line-height: 1.5; }
 .p3.is-paged .chapter-finale .p3-finale-copy b { font-size:clamp(30px, calc(38 * var(--u)), 40px); }

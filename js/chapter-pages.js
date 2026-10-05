@@ -124,9 +124,9 @@
   // 档案袋打开后进入独立章节，避免继续从英雄与区域卡片向下滑到个人档案。
   var archive = $('.p3-archive');
   if (archive) {
-    var profile = $('#p3Profile'), reminder = $('.p3-reminder', profile), seal = $('#p3ArchiveSeal');
-    page(profile, '我的防风准备卡', children(profile).filter(function (el) { return el !== reminder && el !== seal; }), 'chapter-profile');
-    page(profile, '封存我的准备', [heading('让准备早台风一步'), reminder, seal], 'chapter-profile-reminder');
+    var profile = $('#p3Profile'), reminder = $('.p3-reminder', profile);
+    reminder.before(heading('让准备早台风一步'));
+    page(profile, '我的防风准备卡', children(profile), 'chapter-profile-combined');
     adopt($('#p3Finale'), '风起山河，不负脊梁', 'chapter-finale');
   }
 
@@ -150,7 +150,8 @@
     });
     root.classList.toggle('is-reading-page', current.classList.contains('chapter-chart-overview') ||
       current.classList.contains('chapter-loss-combined') || current.classList.contains('chapter-impact-journey') ||
-      current.classList.contains('chapter-stories') || current.classList.contains('chapter-prep-combined'));
+      current.classList.contains('chapter-stories') || current.classList.contains('chapter-prep-combined') ||
+      current.classList.contains('chapter-profile-combined'));
     toolbar.querySelector('span').textContent = current.dataset.pageTitle || '';
   }
   function refresh() {
@@ -207,7 +208,7 @@
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
   scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
   scroller.addEventListener('wheel', function (event) {
-    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-stories .chapter-content, .chapter-prep-combined .chapter-content');
+    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-stories .chapter-content, .chapter-prep-combined .chapter-content, .chapter-profile-combined .chapter-content');
     if (readingContent && ((event.deltaY > 0 && readingContent.scrollTop < readingContent.scrollHeight - readingContent.clientHeight - 1) ||
       (event.deltaY < 0 && readingContent.scrollTop > 1))) return;
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-thermo, .p3-typhoon-detail, .p3-prep-images')) return;

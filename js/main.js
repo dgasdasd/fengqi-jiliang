@@ -689,6 +689,8 @@ function initP3() {
       profile.hidden = false;
     }
     show('archive');
+    var profileContent = profile && profile.querySelector('.chapter-content');
+    if (profileContent) profileContent.scrollTop = 0;
     var first = profile && profile.querySelector('input[name="p3Region"]');
     if (first) first.focus({ preventScroll: true });
   });
