@@ -64,8 +64,8 @@
   });
   if (gameClose) gameClose.addEventListener('click', showOptions);
   if (continueButton) continueButton.addEventListener('click', function () {
-    var target = document.getElementById('p3AfterCards');
-    if (target) target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    var target = document.querySelector('#p3AfterCards .p3-story-grid');
+    if (target) target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
   });
 
   function startRiver(box) {

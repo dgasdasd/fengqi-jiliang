@@ -519,6 +519,7 @@ function initP3() {
 
   var impactStep = 'question';
   var impactDialogs = $$('.p3-impact-dialog');
+  var impactStatistics = $('.p3-impact-statistics');
   function setImpactStep(step) {
     impactStep = step;
     if (impactScene) impactScene.dataset.impactStep = step;
@@ -531,7 +532,12 @@ function initP3() {
     if (impactChainTrigger) impactChainTrigger.hidden = step !== 'downstream';
     if (step !== 'downstream' && impactChain) {
       impactChain.hidden = true;
+      if (impactStatistics) impactStatistics.hidden = true;
       if (impactScene) impactScene.dataset.chainOpen = 'false';
+    }
+    if (step === 'question') {
+      var readingContent = impactScene && impactScene.closest('.chapter-content');
+      if (readingContent) readingContent.scrollTop = 0;
     }
   }
   impactDialogs.forEach(function (dialog) {
@@ -554,6 +560,7 @@ function initP3() {
   if (impactChainTrigger) impactChainTrigger.addEventListener('click', function () {
     if (impactStep !== 'downstream' || !impactChain) return;
     impactChain.hidden = false;
+    if (impactStatistics) impactStatistics.hidden = false;
     if (impactScene) impactScene.dataset.chainOpen = 'true';
     impactChainTrigger.hidden = true;
     window.setTimeout(function () {

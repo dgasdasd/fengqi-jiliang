@@ -73,29 +73,17 @@
     analysis.remove();
   }
 
-  // 树木：人物对话独占一屏，灾害链和图表逐屏呈现。
+  // 树木：人物对话与完整灾害链在同一阅读页，图表仍独立呈现。
   var impact = $('.p3-impact'), impactScene = $('#p3ImpactScene'), chain = $('#p3ImpactChain');
   if (impact && impactScene && chain) {
-    impact.appendChild(chain);
-    page(impact, '风带来了什么', [impactScene], 'chapter-dialogue');
-    impact.appendChild(chain);
-    var lead = $('.p3-impact-chain-lead', chain), rows = $$('.p3-impact-chain-row', chain);
-    var oldList = $('.p3-impact-chain-list', chain);
-    [0, 1].forEach(function (half) {
-      var group = document.createElement('div');
-      group.className = 'p3-impact-chain-list';
-      rows.slice(half * 2, half * 2 + 2).forEach(function (row) { group.appendChild(row); });
-      page(chain, half ? '灾害链 · 乡村与下游' : '灾害链 · 海上与城市',
-        [heading(half ? '灾害链 · 乡村与下游' : '灾害链 · 海上与城市'), half ? null : lead, group], 'chapter-chain');
-    });
-    oldList.remove();
+    page(impact, '风带来了什么', [impactScene, chain], 'chapter-impact-journey');
     var impactStats = $('.p3-impact-statistics', chain), impactCharts = $$('.p3-impact-chart', impactStats);
     var impactCopies = $$('.p3-impact-stat-copy', impactStats);
+    impact.appendChild(impactStats);
     page(impactStats, '台风灾害链平均伤害', [$('.p3-impact-statistics h3'), $('.p3-impact-stat-intro'), impactCharts[0], impactCopies[0]], 'chapter-impact-chart');
     page(impactStats, '灾害损失构成', [heading('灾害损失构成'), impactCharts[1], impactCopies[1], $('#p3ImpactReturn')], 'chapter-impact-chart');
     var chartGrid = $('.p3-impact-chart-grid', impactStats);
     if (chartGrid) chartGrid.remove();
-    chain.appendChild(impactStats);
   }
 
   // 长城：小游戏仍使用原来的脚本，人物卡片保持点击翻面。
@@ -161,7 +149,8 @@
       return Math.abs(topOf(a) - scroller.scrollTop) <= Math.abs(topOf(b) - scroller.scrollTop) ? a : b;
     });
     root.classList.toggle('is-reading-page', current.classList.contains('chapter-chart-overview') ||
-      current.classList.contains('chapter-loss-combined') || current.classList.contains('chapter-prep-cards'));
+      current.classList.contains('chapter-loss-combined') || current.classList.contains('chapter-impact-journey') ||
+      current.classList.contains('chapter-stories') || current.classList.contains('chapter-prep-cards'));
     toolbar.querySelector('span').textContent = current.dataset.pageTitle || '';
   }
   function refresh() {
@@ -218,7 +207,7 @@
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
   scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
   scroller.addEventListener('wheel', function (event) {
-    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-prep-cards .chapter-content');
+    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-stories .chapter-content, .chapter-prep-cards .chapter-content');
     if (readingContent && ((event.deltaY > 0 && readingContent.scrollTop < readingContent.scrollHeight - readingContent.clientHeight - 1) ||
       (event.deltaY < 0 && readingContent.scrollTop > 1))) return;
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-thermo, .p3-typhoon-detail, .p3-prep-images')) return;
@@ -246,7 +235,13 @@
   }).observe(reveal, { attributes: true, attributeFilter: ['hidden'] });
   var chainTrigger = $('#p3ImpactChainTrigger');
   if (chainTrigger) chainTrigger.addEventListener('click', function () {
-    requestAnimationFrame(function () { goTo($('.chapter-chain', chain), true); });
+    requestAnimationFrame(function () {
+      var content = $('.chapter-impact-journey .chapter-content');
+      if (content && !chain.hidden) content.scrollTo({
+        top: chain.getBoundingClientRect().top - content.getBoundingClientRect().top + content.scrollTop - 64,
+        behavior: reduced ? 'auto' : 'smooth'
+      });
+    });
   });
   window.P3Pages = { goTo: goTo, refresh: refresh };
   refresh();
