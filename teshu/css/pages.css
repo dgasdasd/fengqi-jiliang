@@ -8,7 +8,7 @@
 ------------------------------------------------ */
 .p1{
   background-color:#e8e5df;                     /* 图片加载前的兜底底色 */
-  background-image:url("../assets/img/p1-bg-haze.jpg");
+  background-image:radial-gradient(ellipse at 42% 34%,rgba(255,255,255,.3),rgba(255,255,255,0) 72%),url("../assets/img/p1-bg-haze.jpg");
   background-size:cover;
   background-position:center center;
   background-repeat:no-repeat;
@@ -19,6 +19,7 @@
   animation:p1BgIn 1.2s cubic-bezier(.18,.86,.28,1) .2s both;
   will-change:transform,opacity;
 }
+.p1 .a-p1bg img,.p1 .a-p1person img{object-fit:fill}
 @keyframes p1BgIn{
   from{opacity:0;transform:translateY(150px)}
   to{opacity:1;transform:none}
@@ -43,33 +44,44 @@
 }
 /* 前景岩脊盖住人物脚尖，人物因此像真正站在山石上。 */
 .p1-ground{
-  position:absolute;left:0;right:0;bottom:0;z-index:4;height:31px;
-  pointer-events:none;background:#070707;
-  clip-path:polygon(0 68%,5% 58%,11% 61%,17% 43%,24% 51%,31% 33%,38% 42%,45% 24%,52% 39%,59% 31%,66% 51%,73% 42%,80% 57%,88% 49%,94% 63%,100% 55%,100% 100%,0 100%);
-  animation:p1GroundIn .75s cubic-bezier(.18,.86,.28,1) .65s both;
+  position:absolute;left:0;right:0;bottom:0;z-index:4;height:9.1%;
+  pointer-events:none;background:url("../assets/img/p1-foreground-ridge.svg") left bottom/100% 100% no-repeat;
+  opacity:0;
   will-change:transform,opacity;
 }
+.p1.on .p1-ground{animation:p1GroundIn .75s cubic-bezier(.18,.86,.28,1) .65s both}
 @keyframes p1GroundIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 /* 六个大字：上排黑色「风栖过的」，下排红色「脊梁」。 */
-.p1-chars{position:absolute;left:0;top:0;width:320px;height:100%}
+.p1-title{position:absolute;inset:0;z-index:10;margin:0;pointer-events:none}
+.p1-title-line{position:absolute;display:block}
+.p1-title-upper{left:16.2%;top:10.5%;width:64.6%;height:12.2%}
+.p1-title-lower{left:29.1%;top:21.8%;width:46.6%;height:15.4%}
 .p1-char{
-  font-family:var(--font-hei);          /* 封面标题保持原来的字体 */
-  color:#111;font-weight:700;
-  text-shadow:0 2px 10px rgba(255,255,255,.7),0 1px 2px rgba(0,0,0,.16);
+  position:absolute;display:block;height:100%;
+  opacity:0;
 }
-.p1-char-upper{font-size:54px}
-.p1-char-lower{font-size:78px}
-.p1-char.is-red{color:#bd2025;text-shadow:0 2px 12px rgba(255,255,255,.6),0 1px 2px rgba(104,11,6,.25)}
+.p1.on .p1-char{animation:p1InkIn .85s cubic-bezier(.2,.75,.25,1) both}
+.p1-char img{width:100%;height:100%;max-width:none;object-fit:fill}
+.p1-title-upper .p1-char:first-child{left:0;top:0;width:34.7%}
+.p1-title-upper .p1-char:nth-child(2){left:32.7%;top:6.5%;width:25.5%;height:80%}
+.p1-title-upper .p1-char:nth-child(3){left:57.4%;top:6%;width:24.8%;height:83.6%}
+.p1-title-upper .p1-char:nth-child(4){left:79.6%;top:14.7%;width:20.7%;height:74%}
+.p1-title-upper .p1-char:nth-child(2) img{transform:rotate(-1deg)}
+.p1-title-upper .p1-char:nth-child(3) img{transform:rotate(1deg)}
+.p1-title-lower .p1-char:first-child{left:0;top:0;width:51.8%}
+.p1-title-lower .p1-char:last-child{left:44.7%;top:1.6%;width:55.1%;height:92%}
+.p1-title-lower .p1-char:last-child img{transform:rotate(-1deg)}
+@keyframes p1InkIn{from{opacity:0;transform:translateY(12px) scale(.96);filter:blur(2px)}to{opacity:1;transform:none;filter:none}}
 .p1-seals{position:absolute;inset:0;z-index:12;pointer-events:none}
 .p1-seal{
-  position:absolute;display:grid;place-items:center;
-  color:#a72a27;border:1px solid rgba(167,42,39,.78);
-  font-family:var(--font-fang);font-size:7px;font-style:normal;line-height:1;
-  opacity:0;animation:p1SealIn .55s ease 3.3s forwards;
+  position:absolute;display:block;
+  opacity:0;
 }
-.p1-seal-left{left:78px;top:188px;width:16px;height:18px}
-.p1-seal-right-top{left:246px;top:148px;width:18px;height:20px;font-size:6px;writing-mode:vertical-rl}
-.p1-seal-right-bottom{left:247px;top:184px;width:12px;height:16px}
+.p1-seal img{display:block;width:100%;height:100%;object-fit:fill}
+.p1.on .p1-seal{animation:p1SealIn .55s ease 3.3s forwards}
+.p1-seal-left{left:28.2%;top:26.2%;width:2.3%;height:2.05%}
+.p1-seal-right-top{left:73.5%;top:23.5%;width:3.2%;height:2.15%}
+.p1-seal-right-bottom{left:74%;top:28%;width:2%;height:2.4%}
 @keyframes p1SealIn{from{opacity:0;transform:scale(.72)}to{opacity:.82;transform:none}}
 @media (prefers-reduced-motion:reduce){
   .a-p1bg,.a-p1person,.p1-ground,.p1-char,.p1-seal{animation:none!important;opacity:1!important;transform:none!important}

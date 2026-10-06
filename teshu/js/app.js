@@ -219,59 +219,59 @@
     if (imgs[0]) {
       var bgImg = imgs[0].querySelector('img');
       if (bgImg) bgImg.src = 'assets/img/p1-mountain-20261005.png';
-      imgs[0].style.left = '-42px';
+      imgs[0].style.left = '-32px';
       imgs[0].style.top = 'auto';
       imgs[0].style.bottom = '0px';
-      imgs[0].style.width = '400px';
-      imgs[0].style.height = '417px';
+      imgs[0].style.width = '350px';
+      imgs[0].style.height = '58.5%';
     }
     // 使用新的六人群像，参考效果图缩在左下角，并贴住画面底部。
     if (imgs[1]) {
       var personImg = imgs[1].querySelector('img');
       if (personImg) personImg.src = 'assets/img/p1-people-20261005.png';
-      imgs[1].style.left = '2px';
+      imgs[1].style.left = '2.4%';
       imgs[1].style.top = 'auto';
-      imgs[1].style.bottom = '-4px';
-      imgs[1].style.width = '215px';
-      imgs[1].style.height = '180px';
+      imgs[1].style.bottom = '1.7%';
+      imgs[1].style.width = '61.5%';
+      imgs[1].style.height = '24.5%';
     }
-    // 独立的前景岩脊只遮住脚尖，不再把山体底部的白雾重复盖到人物腿上。
+    // 前景岩脊沿群像脚底向右下方倾斜，避免人物站在一条平直黑边上。
     inner.appendChild(el('div', 'p1-ground'));
     // 台风的水墨图标：沿山脊的高度起笔
-    if (imgs[2]) imgs[2].style.top = '178px';
-    // 移除原始 6 个文字元素，改用逐字动画
-    var chars = [];
+    if (imgs[2]) imgs[2].style.top = '37%';
+    // 按明确的两行文字排版，不再依赖原始散排文字的 x 坐标排序。
     Array.prototype.slice.call(inner.querySelectorAll('.el-text')).forEach(function (n) {
-      var t = (n.textContent || '').trim();
-      if (t && t.length <= 2) { chars.push({ n: n, t: t }); }
+      n.remove();
     });
-    // 按 x 从左到右排序（原始顺序是打散的）
-    chars.sort(function (a, b) {
-      return parseFloat(a.n.style.left) - parseFloat(b.n.style.left);
+    var title = el('h1', 'p1-title');
+    title.setAttribute('aria-label', '风栖过的脊梁');
+    ['风栖过的', '脊梁'].forEach(function (line, row) {
+      var lineEl = el('span', 'p1-title-line ' + (row ? 'p1-title-lower' : 'p1-title-upper'));
+      line.split('').forEach(function (letter, index) {
+        var i = row ? index + 4 : index;
+        var n = el('span', 'p1-char');
+        var image = document.createElement('img');
+        image.src = 'assets/img/p1-ink-title-' + i + '.svg?v=20261006-lettering2';
+        image.alt = '';
+        image.setAttribute('aria-hidden', 'true');
+        n.dataset.letter = letter;
+        n.style.animationDelay = (2.9 + i * .065) + 's';
+        n.appendChild(image);
+        lineEl.appendChild(n);
+      });
+      title.appendChild(lineEl);
     });
-    chars.forEach(function (c, i) {
-      var n = c.n;
-      n.innerHTML = '';
-      n.classList.remove('a-typeIn', 'a-fadeUp', 'a-fadeIn', 'a-zoomIn');
-      n.classList.add('p1-char');
-      var isLower = i >= 4;
-      n.classList.add(isLower ? 'p1-char-lower' : 'p1-char-upper');
-      n.style.left = (isLower ? 86 + (i - 4) * 78 : 34 + i * 58) + 'px';
-      n.style.top = (isLower ? 132 : 58) + 'px';
-      n.style.width = (isLower ? 88 : 64) + 'px';
-      n.style.height = (isLower ? 94 : 78) + 'px';
-      n.style.display = 'grid';
-      n.style.placeItems = 'center';
-      n.textContent = c.t;
-      //「脊梁」两个字用红色
-      if (c.t === '脊' || c.t === '梁') n.classList.add('is-red');
-      // 风离开后人物与题字一起显现，黑色上排、红色下排。
-      n.style.animation = 'charIn .8s cubic-bezier(.2,1.05,.35,1) ' + (2.9 + i * 0.08) + 's both, charFloat 4.6s ease-in-out ' + (3.9 + i * 0.08) + 's infinite';
-    });
+    inner.appendChild(title);
     var seals = el('div', 'p1-seals');
-    seals.innerHTML = '<i class="p1-seal p1-seal-left">风</i>' +
-      '<i class="p1-seal p1-seal-right-top">山河</i>' +
-      '<i class="p1-seal p1-seal-right-bottom">安</i>';
+    seals.setAttribute('aria-hidden', 'true');
+    ['left', 'right-top', 'right-bottom'].forEach(function (position) {
+      var stamp = el('span', 'p1-seal p1-seal-' + position);
+      var stampImage = document.createElement('img');
+      stampImage.src = 'assets/img/p1-seal-' + position + '.svg';
+      stampImage.alt = '';
+      stamp.appendChild(stampImage);
+      seals.appendChild(stamp);
+    });
     inner.appendChild(seals);
     page.classList.add('p1');
   }

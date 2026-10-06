@@ -219,13 +219,15 @@
 .p3.is-paged .chapter-game-menu .p3-games-intro { min-height: 0; }
 .p3.is-paged .chapter-game-menu .p3-games-intro > img { width: 70px; height: 88px; }
 .p3.is-paged .chapter-stories .p3-games-continue { margin: 0 auto 12px; font-size:19px; }
-.p3.is-paged .chapter-game .p3-game-stage { width: 100%; max-width: 100%; margin: 0; padding: 6px; }
-.p3.is-paged .chapter-game .p3-game-canvas { width: min(100%, 32.53vh); height: min(61vh, 560px); aspect-ratio: 320 / 600; margin: auto; }
-.p3.is-paged .chapter-game .p3-game-stage-head strong { font-size:23px; }
-.p3.is-paged .chapter-game .p3-game-stage-head button { font-size:18px; }
-.p3.is-paged .chapter-game .p3-g-river-hint,
-.p3.is-paged .chapter-game .p3-g-med-hint,
-.p3.is-paged .chapter-game .p3-g-neighbor-hint { font-size:18px; }
+/* 小游戏与「基层的力量，和你一起」的标题文字同页 —— 画布要缩到文字下面还能装进一屏。 */
+.p3.is-paged .chapter-game-menu .p3-games-continue { margin: calc(12 * var(--u)) auto calc(10 * var(--u)); font-size:19px; }
+.p3.is-paged .chapter-game-menu .p3-game-stage { width: 100%; max-width: 100%; margin: 12px 0 0; padding: 6px; }
+.p3.is-paged .chapter-game-menu .p3-game-canvas { width: min(100%, 26.4vh, 224px); height: min(49.5vh, 420px); aspect-ratio: 320 / 600; margin: auto; }
+.p3.is-paged .chapter-game-menu .p3-game-stage-head strong { font-size:22px; }
+.p3.is-paged .chapter-game-menu .p3-game-stage-head button { font-size:17px; }
+.p3.is-paged .chapter-game-menu .p3-g-river-hint,
+.p3.is-paged .chapter-game-menu .p3-g-med-hint,
+.p3.is-paged .chapter-game-menu .p3-g-neighbor-hint { font-size:17px; }
 .p3.is-paged .chapter-stories .p3-after-section-copy { font-size:18px; }
 .p3.is-paged .chapter-story-carousel { display: flex; width: 100%; gap: 0; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .p3.is-paged .chapter-story-carousel .p3-story-card { flex: 0 0 100%; min-height: min(34vh, 290px); scroll-snap-align: start; }
@@ -244,18 +246,50 @@
 .p3.is-paged .chapter-profile-combined .p3-profile-risk,
 .p3.is-paged .chapter-profile-combined .p3-reminder p { font-size:clamp(18px, calc(20 * var(--u)), 21px); line-height: 1.5; }
 .p3.is-paged .chapter-prep-combined .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; padding-bottom: 28px; }
+.p3.is-paged .chapter-prep-scrollable .chapter-content { overflow-y: auto; max-height: 100vh; }
 .p3.is-paged .chapter-prep-combined .chapter-heading { margin: 24px 0 12px; }
-.p3.is-paged .chapter-prep-combined .p3-region-map-wrap { width: 100%; height: min(37vh, 260px); }
-.p3.is-paged .chapter-prep-combined .p3-prep-images img { max-height: 48vh; object-fit: contain; }
-.p3.is-paged .chapter-prep-combined .p3-prep-panel header strong { font-size:24px; }
+.p3.is-paged .chapter-prep-combined .p3-region-map-wrap { width: 100%; height: min(28vh, 200px); }
+.p3.is-paged .chapter-prep-combined .p3-prep-images img { max-height: 35vh; object-fit: contain; }
+.p3.is-paged .chapter-prep-combined .p3-prep-panel header strong { font-size:22px; }
 .p3.is-paged .chapter-prep-combined .p3-prep-caption { font-size:18px; }
 .p3.is-paged .chapter-prep-combined .p3-archive-invite { margin-top: 24px; padding-bottom: 16px; }
+
+/* 过渡文字：衔接逆行者档案和防灾准备 */
+.p3-transition-text {
+  padding: calc(25 * var(--u)) calc(18 * var(--u)) calc(20 * var(--u));
+  line-height: 1.8;
+  color: #2d2d2d;
+}
+.p3-transition-text p {
+  font-size: calc(14 * var(--u));
+  margin: 0 0 calc(12 * var(--u)) 0;
+  text-align: justify;
+}
+.p3-transition-text p:last-child {
+  margin-bottom: 0;
+}
+@media (min-width: 375px) {
+  .p3-transition-text {
+    padding: 28px 20px 22px;
+  }
+  .p3-transition-text p {
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+}
+
+/* NEXT 标签：与过渡文字保持距离 */
+.p3-after-section-kicker {
+  margin-top: calc(18 * var(--u));
+}
+
 .p3.is-paged .p3-after-section-kicker,
 .p3.is-paged .p3-prep-hint,
 .p3.is-paged .p3-map-pin { font-size:16px; }
 .p3.is-paged .p3-archive-invite button,
 .p3.is-paged .p3-profile-seal { min-height: 44px; font-size:19px; }
 .p3.is-paged .chapter-profile-combined .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; padding-bottom: 28px; }
+.p3.is-paged .chapter-profile-scrollable .chapter-content { overflow-y: auto; max-height: 100vh; }
 .p3.is-paged .chapter-profile-combined .chapter-heading { margin: 24px 0 12px; }
 .p3.is-paged .chapter-profile-combined .p3-profile-fieldset legend { font-size:22px; }
 .p3.is-paged .chapter-profile-combined .p3-profile-fieldset input { width: 20px; height: 20px; }

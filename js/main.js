@@ -656,7 +656,7 @@ function initP3() {
     update();
     return { panel: panel, align: align };
   });
-  function setPrepRegion(region) {
+  function setPrepRegion(region, bringIntoView) {
     prepRegionButtons.forEach(function (button) {
       var active = button.dataset.prepRegion === region;
       button.classList.toggle('is-active', active);
@@ -667,9 +667,20 @@ function initP3() {
       panel.classList.toggle('is-active', panel.dataset.prepPanel === region);
     });
     prepCarousels.forEach(function (carousel) { if (!carousel.panel.hidden) carousel.align(); });
+
+    // 点完区域要立刻看见结果：把「防灾准备档案」标题连同档案卡一起滚到眼前。
+    // 否则按钮按了却停在介绍文字和地图上，得自己往下滑才看得到档案，很割裂。
+    if (!bringIntoView) return;
+    var shown = null;
+    prepPanels.forEach(function (panel) { if (!panel.hidden) shown = panel; });
+    var scroller = shown && shown.closest('.chapter-content');
+    if (!scroller) return;
+    var anchor = scroller.querySelector('.chapter-heading') || shown;
+    var top = anchor.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop - 10;
+    scroller.scrollTo({ top: Math.max(0, top), behavior: reduced ? 'auto' : 'smooth' });
   }
   prepRegionButtons.forEach(function (button) {
-    button.addEventListener('click', function () { setPrepRegion(button.dataset.prepRegion); });
+    button.addEventListener('click', function () { setPrepRegion(button.dataset.prepRegion, true); });
   });
   setPrepRegion('coastal');
 

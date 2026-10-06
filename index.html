@@ -10,18 +10,28 @@
 <!-- 关键资源预加载：GitHub Pages 到国内延迟高，不预热的话首屏会出现"图一张张蹦出来" -->
 <link rel="preload" as="image" href="assets/img/bg-smoke.webp" fetchpriority="high">
 <link rel="preload" as="image" href="assets/img/bg-eye.webp" fetchpriority="high">
-<link rel="preload" as="image" href="assets/img/person.webp">
+<link rel="preload" as="image" href="assets/img/people-new.png">
 <link rel="preload" as="font" type="font/woff2" href="fonts/msz.subset.woff2" crossorigin>
+<style>
+/* 方正温情雅漓体 */
+@font-face {
+  font-family: 'FZFont';
+  src: url('fonts/FZWenQYLDDTS-M.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+</style>
 <link rel="stylesheet" href="css/tokens.css?v=20261004-fonts1">
-<link rel="stylesheet" href="css/style.css?v=20261004-readability2">
-<link rel="stylesheet" href="css/chapter-pages.css?v=20261005-storycharts1">
+<link rel="stylesheet" href="css/style.css?v=20261006-sync1">
+<link rel="stylesheet" href="css/chapter-pages.css?v=20261006-sync1">
 </head>
 <body>
 
 <!-- teshu 原版前三页：第一页、第二页和四图标导引页只在入口阶段显示。
      图标点击后由 bridge 交给下面现有的第三页内容，其他页面结构保持原样。 -->
 <div id="teshuEntry" class="teshu-entry" aria-label="风栖过的脊梁导引页">
-  <iframe id="teshuEntryFrame" src="teshu/index.html?v=20261005-cover-match6" title="风栖过的脊梁导引页" allow="autoplay"></iframe>
+  <iframe id="teshuEntryFrame" src="teshu/index.html?v=20261006-cover-lettering2" title="风栖过的脊梁导引页" allow="autoplay"></iframe>
 </div>
 
 <main class="frame" id="frame">
@@ -47,10 +57,8 @@
 
       </defs>
 
-      <!-- 用 ridge-a.webp（白=透明，α=1−亮度，颜色取黑）而不是原图 + mix-blend-mode。
-           SVG 内部是独立混合组，multiply 里的白不是"乘没了"，而是**不透明地盖住**底纹，
-           结果整页上半部分的雾全被挡掉。手算 multiply 就不受混合组影响。 -->
-      <image class="mount" mask="url(#mistMask)" href="assets/img/ridge-a.webp"
+      <!-- 新山体：从下往上浮现 -->
+      <image class="mount" mask="url(#mistMask)" href="assets/img/mountain-new.png"
              x="-106" y="-490" width="841.9" height="1190" preserveAspectRatio="none"/>
 
       <!-- 山脚飞白：沿山体下沿撒的墨点（对应原片山脚的溅墨） -->
@@ -63,20 +71,16 @@
         <image href="assets/img/typhoon-ink.webp" x="-43" y="-48" width="86" height="96"/>
       </g>
 
-      <!-- 人影：黑色剪影，站在山下留白里（落点由 main.js 算） -->
-      <image class="person" id="personImg" href="assets/img/person.webp"
+      <!-- 新人物剪影：多个人物站在山下 -->
+      <image class="person" id="personImg" href="assets/img/people-new.png"
              x="49.9" y="536" width="201.2" height="430" preserveAspectRatio="none"/>
     </svg>
 
-    <!-- 题字：直接从原片多帧合成后抠出的字形，1:1 落在原片的位置上
-         （马善政只有 Regular 一个字重，加描边会把笔锋糊平，所以改用原片字形） -->
+    <!-- 标题：使用方正劲豪榜书字体，"风"和"脊梁"字号加大 -->
     <h1 class="title" aria-label="风栖过的脊梁">
-      <img class="c" src="assets/img/title-1feng.webp"  alt="" style="--x:21;--y:174;--w:93;--h:78">
-      <img class="c" src="assets/img/title-2qi.webp"    alt="" style="--x:94;--y:239;--w:97;--h:75">
-      <img class="c" src="assets/img/title-3guo.webp"   alt="" style="--x:176;--y:172;--w:87;--h:84">
-      <img class="c" src="assets/img/title-4de.webp"    alt="" style="--x:244;--y:240;--w:80;--h:76">
-      <img class="c" src="assets/img/title-5ji.webp"    alt="" style="--x:295;--y:170;--w:92;--h:88">
-      <img class="c" src="assets/img/title-6liang.webp" alt="" style="--x:358;--y:236;--w:80;--h:91">
+      <span class="title-text">
+        <span class="char-large">风</span><span class="char-normal">栖过的</span><span class="char-large">脊梁</span>
+      </span>
     </h1>
 
     <div class="hint"><i></i><i></i></div>
@@ -283,6 +287,25 @@
 
       <section class="p3-after-cards" id="p3AfterCards" aria-labelledby="p3AfterCardsTitle">
         <p class="p3-after-section-kicker">DATA · 逆行者档案</p>
+
+        <!-- 新增：三张救灾数据图表 -->
+        <div class="p3-rescue-charts">
+          <figure class="p3-rescue-chart">
+            <img src="assets/img/7393824d9ef04e780a1994bfc08573d5.jpg" alt="2023年五号超强台风杜苏芮救灾情况" loading="lazy">
+          </figure>
+          <figure class="p3-rescue-chart">
+            <img src="assets/img/46f90b6707b0fb9779da2730935283ee.jpg" alt="2021年台风烟花救灾情况" loading="lazy">
+          </figure>
+          <figure class="p3-rescue-chart">
+            <img src="assets/img/ae7fbff4923281c94f058a9ffc9ffb03.jpg" alt="2023年11号台风海葵救灾情况" loading="lazy">
+          </figure>
+        </div>
+
+        <!-- 新增：五股力量说明文字 -->
+        <div class="p3-rescue-summary">
+          <p>从台风预警鸣响到灾后家园复苏的全过程，基层干部、消防员、医护人员、民兵与人民群众五股力量始终同向而行、并肩相守。基层干部扎根一线筑牢防控根基，消防员逆险而上扛起攻坚重任，医护人员坚守阵地托举生命希望，民兵冲锋在前守护一方平安，人民群众守望相助汇聚温暖暖流。五类角色缺一不可，每份坚守各有分量，不同的岗位拧成同一股抗灾合力，以平凡的担当筑起风雨不透的防线，生动诠释了众志成城的精神内核，挺起了风栖之下始终挺立的中国脊梁。</p>
+        </div>
+
         <h3 id="p3AfterCardsTitle">一个人背后，是千千万万个他们</h3>
         <p class="p3-after-section-copy">每一张卡片，都记录着风雨中一个普通人的选择。点击卡片翻面，读完故事再继续向下。</p>
         <button class="p3-games-continue" type="button">继续查看风雨中的他们 <span>⌄</span></button>
@@ -328,6 +351,12 @@
       </section>
 
       <section class="p3-prep" id="p3Prep" aria-labelledby="p3PrepTitle">
+        <div class="p3-transition-text">
+          <p>一张张档案卡片，记下风雨之中普通人挺身而出的选择。</p>
+          <p>危难不只是突发的一瞬，抵御风雨的底气，藏在风暴来临前的每一份筹备之中。</p>
+          <p>风从海上来，而守护的防线，早已提前筑起。在风暴抵达之前，他们早已行动，开展隐患排查、落实防灾预案，不屈于风雨，守护千家万户。这些逆行者，究竟做了哪些防灾筹备？</p>
+          <p>无论身处沿海或是内陆，都需要读懂风险，提前做好应对，让每一次准备，都早台风一步。</p>
+        </div>
         <p class="p3-after-section-kicker">NEXT · 防灾准备</p>
         <h3 id="p3PrepTitle">风从海上来，但伤害不止于海岸线</h3>
         <p class="p3-prep-lead">无论你居住于沿海或是内陆，这份档案卡里，都有你需要的答案。</p>
@@ -345,11 +374,11 @@
         <div class="p3-prep-panels">
           <article class="p3-prep-panel is-active" data-prep-panel="coastal">
             <header><strong>沿海档案卡</strong><small>风暴潮 · 海水倒灌 · 城市内涝 · 大风灾害</small></header>
-            <div class="p3-prep-images"><img src="assets/p3/after/rebuild-coastal.jpg" alt="沿海灾后恢复建设"><img src="assets/p3/after/prepare-coastal.jpg" alt="沿海城乡应急准备"><img src="assets/p3/after/avoid-coastal.jpg" alt="沿海避险清单"></div>
+            <div class="p3-prep-images"><img src="assets/img/7832eef8c2d2ffbb807d1c1a482941d9.jpg" alt="沿海地区风险雷达图"><img src="assets/p3/after/rebuild-coastal.jpg" alt="沿海灾后恢复建设"><img src="assets/p3/after/prepare-coastal.jpg" alt="沿海城乡应急准备"><img src="assets/p3/after/avoid-coastal.jpg" alt="沿海避险清单"></div>
           </article>
           <article class="p3-prep-panel" data-prep-panel="inland" hidden>
             <header><strong>内陆档案卡</strong><small>山洪 · 滑坡 · 泥石流 · 强降雨 · 交通阻断</small></header>
-            <div class="p3-prep-images"><img src="assets/p3/after/rebuild-inland.jpg" alt="内陆灾后恢复建设"><img src="assets/p3/after/prepare-coastal-alt.jpg" alt="内陆城乡应急准备"><img src="assets/p3/after/avoid-inland.jpg" alt="内陆避险清单"></div>
+            <div class="p3-prep-images"><img src="assets/img/3eb1246f19d0f88d8c1f118d37f5b2e7.jpg" alt="内陆地区风险雷达图"><img src="assets/p3/after/rebuild-inland.jpg" alt="内陆灾后恢复建设"><img src="assets/p3/after/prepare-coastal-alt.jpg" alt="内陆城乡应急准备"><img src="assets/p3/after/avoid-inland.jpg" alt="内陆避险清单"></div>
           </article>
         </div>
         <div class="p3-archive-invite">
@@ -560,14 +589,14 @@
           <h3 id="p3LossReportTitle">台风损害影响</h3>
           <p class="p3-loss-intro">台风灾害损失<strong>不仅</strong>取决于风力和风速，更取决于影响路径、影响范围、下垫面社会经济暴露度以及是否诱发<strong>次生灾害</strong>。</p>
           <figure class="p3-loss-chart">
-            <img src="assets/p3/charts/typhoon-decade-loss.gif?v=20261004-loss1" width="260" height="221" loading="lazy" decoding="async" alt="近十年代表性台风损害对比图：对比各年台风的风速、影响人数、直接经济损失和死亡失踪人数">
+            <img src="assets/img/纵向堆叠面积图-副本.gif" width="260" height="221" loading="lazy" decoding="async" alt="近十年代表性台风损害对比图：对比各年台风的风速、影响人数、直接经济损失和死亡失踪人数">
           </figure>
           <div class="p3-loss-analysis">
             <p>高强度台风如果避开<strong>经济核心区</strong>，其绝对损失未必最高。</p>
-            <p>台风环流与中纬度系统相互作用形成的“台风+暴雨+洪涝”<strong>复合灾害</strong>，影响范围横跨东南沿海至华北、东北，远超一般台风。</p>
+            <p>台风环流与中纬度系统相互作用形成的”台风+暴雨+洪涝”<strong>复合灾害</strong>，影响范围横跨东南沿海至华北、东北，远超一般台风。</p>
           </div>
           <figure class="p3-loss-chart">
-            <img src="assets/p3/charts/dusurui-yagi-loss.gif?v=20261004-loss1" width="260" height="221" loading="lazy" decoding="async" alt="杜苏芮与摩羯损害对比图：对比两场台风的风速、影响人数、直接经济损失等指标">
+            <img src="assets/img/纵向堆叠面积图-副本 (1).gif" width="260" height="221" loading="lazy" decoding="async" alt="杜苏芮与摩羯损害对比图：对比两场台风的风速、影响人数、直接经济损失等指标">
           </figure>
         </section>
       </section>
@@ -586,9 +615,9 @@
 
 </main>
 
-<script src="js/main.js?v=20261005-profilecombined1"></script>
+<script src="js/main.js?v=20261006-sync1"></script>
 <script src="js/p3-games.js?v=20261005-impactgames1"></script>
-<script src="js/chapter-pages.js?v=20261005-profilecombined1"></script>
+<script src="js/chapter-pages.js?v=20261006-sync1"></script>
 <script src="js/teshu-bridge.js?v=20261004-carousel1"></script>
 </body>
 </html>

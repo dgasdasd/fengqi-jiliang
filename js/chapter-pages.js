@@ -90,12 +90,15 @@
   var after = $('.p3-after');
   if (after) {
     adopt($('.p3-after-hero', after), '风停之后', 'chapter-wall-hero');
-    var games = $('#p3AfterGames'), stage = $('#p3GameStage');
-    var gamePage = page(after, '互助小游戏', [stage], 'chapter-game');
-    after.insertBefore(gamePage, games.nextSibling);
-    gate(gamePage, function () { return !stage.hidden; });
-    page(games, '基层的力量，和你一起', children(games), 'chapter-game-menu');
+    // 小游戏与「基层的力量，和你一起」的标题文字同处一页：
+    // 选游戏后只是把三个选项换成游戏画布，不再单独成页，
+    // 免得小游戏那一页上方留出大片空白。
+    var games = $('#p3AfterGames');
     var story = $('#p3AfterCards'), storyGrid = $('.p3-story-grid', story);
+    var continueBtn = $('.p3-games-continue', story);
+    // 将"继续查看风雨中的他们"按钮移到游戏区域
+    if (continueBtn) games.appendChild(continueBtn);
+    page(games, '基层的力量，和你一起', children(games), 'chapter-game-menu');
     var storyCards = $$('.p3-story-card', storyGrid);
     storyGrid.classList.add('chapter-story-carousel');
     storyGrid.setAttribute('aria-label', '逆行者故事，左右滑动切换，点击卡片翻面');
@@ -118,7 +121,7 @@
     page(story, '风雨中的他们', children(story), 'chapter-stories');
     var prep = $('#p3Prep'), panels = $('.p3-prep-panels', prep);
     panels.before(heading('防灾准备档案'));
-    page(prep, '防灾准备档案', children(prep), 'chapter-prep-combined');
+    page(prep, '防灾准备档案', children(prep), 'chapter-prep-combined chapter-prep-scrollable');
   }
 
   // 档案袋打开后进入独立章节，避免继续从英雄与区域卡片向下滑到个人档案。
@@ -126,7 +129,7 @@
   if (archive) {
     var profile = $('#p3Profile'), reminder = $('.p3-reminder', profile);
     reminder.before(heading('让准备早台风一步'));
-    page(profile, '我的防风准备卡', children(profile), 'chapter-profile-combined');
+    page(profile, '我的防风准备卡', children(profile), 'chapter-profile-combined chapter-profile-scrollable');
     adopt($('#p3Finale'), '风起山河，不负脊梁', 'chapter-finale');
   }
 
