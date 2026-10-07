@@ -1030,7 +1030,9 @@ function initP3() {
     // 任意页面切换都使旧的路径动画失效，避免返回后旧回调把页面切回去。
     routeToken++;
     hideFlightLayer();
-    if (name !== 'mapgame' && puzzleMode === 'memory') {
+    var seaNames = ['origin', 'process', 'evidence', 'route', 'mapgame'];
+    var seaFlow = seaNames.indexOf(name) >= 0;
+    if (!seaFlow && puzzleMode === 'memory') {
       clearInterval(puzzleTimer);
       puzzleTimer = null;
       puzzleMode = 'ready';
@@ -1041,7 +1043,9 @@ function initP3() {
       if (puzzleStart) puzzleStart.hidden = false;
       if (puzzleStatus) puzzleStatus.textContent = '先观察完整地图，再开始拼图';
     }
-    views.forEach(function (v) { v.hidden = v.dataset.view !== name; });
+    views.forEach(function (v) {
+      v.hidden = seaFlow ? ['origin', 'process', 'evidence', 'mapgame'].indexOf(v.dataset.view) < 0 : v.dataset.view !== name;
+    });
     if (historyScene) {
       historyScene.classList.remove('is-entering');
       if (name === 'history') {
@@ -1050,18 +1054,25 @@ function initP3() {
       }
     }
     rail.forEach(function (b) { b.classList.toggle('is-active', b.dataset.p3View === name); });
-    if (scroll) scroll.scrollTop = 0;
+    var destination = seaFlow && {
+      process: list,
+      evidence: $('.p3-evidence-scrollbox'),
+      route: originRoute,
+      mapgame: puzzleBoard
+    }[name];
+    if (destination && window.P3Pages) window.P3Pages.goTo(destination, true);
+    else if (scroll) scroll.scrollTop = 0;
   }
   root.addEventListener('p3-entry-route', function (event) {
     var key = event.detail && event.detail.route;
-    var target = { wave: 'origin', map: 'mapgame', tree: 'impact', wall: 'after' }[key];
+    var target = { wave: 'origin', map: 'origin', tree: 'impact', wall: 'after' }[key];
     if (!target) return;
     if (study) study.hidden = true;
     if (originScene) originScene.hidden = false;
     resetOriginStudy();
     if (key === 'tree') setImpactStep('question');
     show(target);
-    if (key === 'wave') enterOriginStudy();
+    if (key === 'wave' || key === 'map') enterOriginStudy();
   });
   rail.forEach(function (b) { b.addEventListener('click', function () { if (b.dataset.p3View === 'route') setRoute('west', false); show(b.dataset.p3View); }); });
   $$('[data-route]').forEach(function (b) { b.addEventListener('click', function () { setRoute(b.dataset.route, false); }); });
@@ -1078,14 +1089,6 @@ function initP3() {
     var target = document.getElementById(targetId);
     if (target) target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
   }); });
-  var statsBack = $('#p3StatsBack');
-  if (statsBack) statsBack.addEventListener('click', function () {
-    show('origin');
-    enterOriginStudy();
-    if (originRoute) window.setTimeout(function () {
-      originRoute.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-    }, 40);
-  });
   var back = $('.p3-back');
   if (back) back.addEventListener('click', function () { glideTo(secs[1].offsetTop); });
   show('origin');

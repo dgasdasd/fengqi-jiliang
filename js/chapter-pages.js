@@ -37,41 +37,44 @@
   }
   function gate(section, test) { gates.push({ page: section, test: test }); }
 
-  // 海浪：温度、动画、形成条件共用一页；达到 26.5°C 后在原位展开。
+  // 沧溟起势：形成条件、形成过程、路径和地图档案连续翻阅。
   var study = $('#p3OriginStudy'), reveal = $('#p3OriginReveal');
+  var seaPages = [], routePage;
   if (study && reveal) {
     reveal.insertBefore(heading('台风形成的条件'), $('#p3OriginCopy'));
-    page(study, '海面温度与台风形成', [$('.p3-study-head', study), $('#p3ThermoStage'), reveal], 'chapter-formation');
-    var routePage = page(study, '台风的类型', [$('#p3OriginRoute')], 'chapter-routes');
-    gate(routePage, function () { return !reveal.hidden; });
+    page(study, '海面温度与台风形成', [$('.p3-study-head', study), $('#p3ThermoStage'), reveal,
+      $('.p3-origin-next')], 'chapter-formation');
   }
   var process = $('.p3-view[data-view="process"]');
   var evidence = $('.p3-view[data-view="evidence"]');
-  if (process) page(process, '台风形成的过程', children(process), 'chapter-process');
-  if (evidence) page(evidence, '台风形成的四个阶段', children(evidence), 'chapter-evidence');
+  if (process) seaPages.push(page(process, '台风形成的过程', children(process), 'chapter-process'));
+  if (evidence) {
+    seaPages.push(page(evidence, '台风形成的四个阶段', children(evidence), 'chapter-evidence'));
+    routePage = page(evidence, '台风的类型', [$('#p3OriginRoute')], 'chapter-routes');
+    seaPages.push(routePage);
+  }
   var routeView = $('.p3-view[data-view="route"]');
   if (routeView) page(routeView, '台风的类型', children(routeView), 'chapter-route-extra');
-  var stats = $('.p3-view[data-view="stats"]');
-  if (stats) {
-    page(stats, '台风统计', [$('.p3-panel-heading', stats), $('.stats-chart-stack', stats),
-      $('.stat-summary', stats), $('#p3StatsBack')], 'chapter-chart chapter-chart-overview');
-  }
 
   // 地图：拼图独占一屏；年份与台风名称沿原本的完整曲线展示。
   var map = $('.p3-mapgame'), history = $('#p3HistoryBlock'), scene = $('#p3HistoryScene');
   if (map && history && scene) {
     var puzzlePage = page(map, '中国地图拼图', [$('.p3-mapgame > .p3-subtitle'), $('.p3-puzzle-panel', map)], 'chapter-puzzle');
     map.insertBefore(puzzlePage, history);
+    seaPages.push(puzzlePage);
     var timeline = $('.p3-timeline', scene);
     var oldTitle = $('.p3-subtitle', scene), oldHint = $('.p3-history-hint', scene);
     oldHint.textContent = '点击年份，查看台风路径与影响';
-    page(scene, '近十年最具代表台风', [oldTitle, oldHint, timeline], 'chapter-years chapter-years-original');
+    seaPages.push(page(scene, '近十年最具代表台风', [oldTitle, oldHint, timeline], 'chapter-years chapter-years-original'));
     var report = $('.p3-loss-report', map), charts = $$('.p3-loss-chart', report);
     var analysis = $('.p3-loss-analysis', report), lines = children(analysis);
-    page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0],
-      heading('复合灾害的影响'), lines[1], charts[1]], 'chapter-loss chapter-loss-combined');
+    seaPages.push(page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0],
+      heading('复合灾害的影响'), lines[1], charts[1]], 'chapter-loss chapter-loss-combined'));
     analysis.remove();
   }
+  seaPages.forEach(function (section) {
+    gate(section, function () { return study && !study.hidden && reveal && !reveal.hidden; });
+  });
 
   // 树木：人物对话与完整灾害链在同一阅读页，图表仍独立呈现。
   var impact = $('.p3-impact'), impactScene = $('#p3ImpactScene'), chain = $('#p3ImpactChain');
@@ -138,11 +141,8 @@
   toolbar.innerHTML = '<button id="p3ChapterReturn" type="button">‹ 返回导引</button><span id="p3ChapterName"></span>';
   root.appendChild(toolbar);
 
-  function activeView() { return $('.p3-view:not([hidden])'); }
   function visiblePages() {
-    var view = activeView();
-    if (!view) return [];
-    return $$('.chapter-page', view).filter(function (p) { return !p.closest('[hidden]') && p.getClientRects().length > 0; });
+    return $$('.chapter-page').filter(function (p) { return !p.closest('[hidden]') && p.getClientRects().length > 0; });
   }
   function topOf(p) { return p.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop; }
   function update() {
@@ -175,37 +175,10 @@
     current = p;
     update();
   }
-  function nextView() {
-    var view = activeView();
-    var name = view && view.dataset.view;
-    if (name === 'origin' && reveal && reveal.hidden) return null;
-    return { origin: 'process', process: 'evidence', evidence: 'stats' }[name];
-  }
-  function previousView() {
-    var view = activeView();
-    return { process: 'origin', evidence: 'process', stats: 'evidence' }[view && view.dataset.view];
-  }
   function turn(direction) {
     refresh();
     var pages = visiblePages(), index = pages.indexOf(current);
     if (index < 0) return;
-    if (direction > 0 && index === pages.length - 1 && nextView()) {
-      var next = $('[data-next="' + nextView() + '"]', activeView());
-      if (next) next.click();
-      else $('.p3-rail [data-p3-view="' + nextView() + '"]').click();
-      requestAnimationFrame(function () { goTo(visiblePages()[0], true); });
-      return;
-    }
-    if (direction < 0 && index === 0 && previousView()) {
-      var previous = previousView();
-      var back = previous === 'origin' ? $('#p3ProcessBack') : previous === 'process' ? $('#p3EvidenceBack') : $('.p3-rail [data-p3-view="evidence"]');
-      if (back) back.click();
-      requestAnimationFrame(function () {
-        var priorPages = visiblePages();
-        goTo(priorPages[priorPages.length - 1], true);
-      });
-      return;
-    }
     goTo(pages[Math.max(0, Math.min(pages.length - 1, index + direction))]);
   }
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });

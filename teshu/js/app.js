@@ -915,10 +915,8 @@
       { key: 'tree', title: '疆土临险', sub: '风雨过境，察大地所承之困', image: 'guide-land.jpg', delay: 4.1 },
       { key: 'wall', title: '人间筑防', sub: '凡人赴险，守万家安固之基', image: 'guide-people.jpg', delay: 6.35 }
     ];
-    var firstButton, chooser;
     var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function openRoute(key) {
-      if (chooser) chooser.hidden = true;
       if (window.parent !== window && window.parent.postMessage) {
         window.parent.postMessage({ type: 'teshu-route', route: key }, '*');
       } else {
@@ -954,57 +952,13 @@
       button.appendChild(caption);
       button.addEventListener('click', function (event) {
         event.stopPropagation();
-        if (chapter.key === 'sea') {
-          chooser.hidden = false;
-          chooser.querySelector('[data-guide-route]').focus();
-        } else {
-          openRoute(chapter.key);
-        }
+        openRoute(chapter.key === 'sea' ? 'wave' : chapter.key);
       });
-      if (!index) firstButton = button;
       sections.appendChild(button);
     });
     guide.appendChild(sections);
     guide.appendChild(el('p', 'guide-ending', '循着风雨痕迹，看见守护的力量。'));
 
-    // 三个主板块保留原有四条内容路径，海洋板块内可选形成过程或地图档案。
-    chooser = el('div', 'guide-choice');
-    chooser.hidden = true;
-    chooser.setAttribute('role', 'dialog');
-    chooser.setAttribute('aria-modal', 'true');
-    chooser.setAttribute('aria-labelledby', 'guideChoiceTitle');
-    chooser.innerHTML = '<div class="guide-choice-panel">' +
-      '<button class="guide-choice-close" type="button" aria-label="关闭，返回导引">×</button>' +
-      '<h2 id="guideChoiceTitle">沧溟起势</h2><p>循着风的脉络，选择一段故事</p>' +
-      '<button class="guide-choice-route" type="button" data-guide-route="wave">' +
-      '<strong>风从哪里来</strong><span>台风的形成与路径类型</span><i aria-hidden="true">›</i></button>' +
-      '<button class="guide-choice-route" type="button" data-guide-route="map">' +
-      '<strong>风去过哪里</strong><span>地图拼图与台风年份档案</span><i aria-hidden="true">›</i></button></div>';
-    function closeChoice() {
-      chooser.hidden = true;
-      try { firstButton.focus({ preventScroll: true }); } catch (error) { firstButton.focus(); }
-    }
-    chooser.querySelector('.guide-choice-close').addEventListener('click', closeChoice);
-    chooser.addEventListener('click', function (event) {
-      event.stopPropagation();
-      if (event.target === chooser) closeChoice();
-    });
-    chooser.querySelectorAll('[data-guide-route]').forEach(function (button) {
-      button.addEventListener('click', function () { openRoute(button.dataset.guideRoute); });
-    });
-    chooser.addEventListener('keydown', function (event) {
-      event.stopPropagation();
-      if (event.key === 'Escape') { event.preventDefault(); closeChoice(); }
-      if (event.key !== 'Tab') return;
-      var buttons = chooser.querySelectorAll('button');
-      var first = buttons[0], last = buttons[buttons.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-    });
-    ['wheel', 'touchstart', 'touchend'].forEach(function (eventName) {
-      chooser.addEventListener(eventName, function (event) { event.stopPropagation(); }, { passive: true });
-    });
-    guide.appendChild(chooser);
     inner.appendChild(guide);
     page.appendChild(inner);
     page._inner = inner;
