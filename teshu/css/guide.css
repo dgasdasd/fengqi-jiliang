@@ -1,0 +1,101 @@
+/* 三板块导引：开场文字 → 配图 → 标题卡片，依次显现并保留。 */
+.page-menu{
+  background:linear-gradient(rgba(250,249,239,.88),rgba(250,249,239,.88)),url('../assets/img/p1-bg-haze.jpg') center/cover;
+}
+.guide-wrap{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  gap:12px;padding:18px 14px 14px;color:#173a37;
+}
+.guide-header{flex:0 0 auto;text-align:center}
+.guide-title{
+  margin:0;font-family:var(--font-kai);font-size:23px;font-weight:700;
+  line-height:1.25;letter-spacing:-.02em;white-space:nowrap;
+}
+.guide-subtitle{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin:6px 0 0;font-family:var(--font-kai);font-size:15.5px;
+  line-height:1.35;color:#293c37;
+}
+.guide-subtitle::before,.guide-subtitle::after{
+  content:'';height:1px;flex:1;background:rgba(59,78,64,.34);
+}
+.guide-lead{
+  margin:10px 0 0;padding:7px 4px;
+  border-top:1px solid rgba(46,81,74,.15);border-bottom:1px solid rgba(46,81,74,.15);
+  background:rgba(43,88,78,.055);font-family:var(--font-kai);
+  font-size:15px;line-height:1.4;font-weight:700;color:#204e46;
+}
+.guide-lead span{display:block}
+.guide-lead strong{color:#9b352c;font-weight:700}
+.guide-chapters{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:12px}
+.guide-block{
+  position:relative;flex:1 1 0;min-height:0;width:100%;display:block;
+  padding:0;border:0;background:none;text-align:center;color:inherit;
+}
+.guide-block:disabled{cursor:default;opacity:1}
+.guide-block:focus-visible{outline:2px solid #a05d36;outline-offset:3px;border-radius:6px}
+.guide-art{position:absolute;inset:0;display:block;border-radius:5px;overflow:hidden}
+.guide-art img{display:block;width:100%;height:100%;object-fit:cover}
+.guide-block-wall .guide-art img{object-position:center 42%}
+.guide-trace{position:absolute;inset:0;display:block;pointer-events:none}
+.guide-trace svg{display:block;width:100%;height:100%;overflow:hidden}
+.guide-trace path{fill:none;stroke:rgba(249,251,242,.8);stroke-width:1;stroke-dasharray:2.5 3.5}
+.guide-trace circle{fill:#f8faef}
+.guide-block-wall .guide-trace path{stroke:rgba(63,82,69,.4)}
+.guide-block-wall .guide-trace circle{fill:#405c4e}
+.guide-caption{
+  position:absolute;right:5px;bottom:4px;z-index:1;display:block;width:69%;
+  padding:9px 7px 8px;border:1px solid rgba(249,250,241,.95);border-radius:10px;
+  background:rgba(244,247,236,.88);box-shadow:0 2px 5px rgba(21,44,37,.1);
+}
+.guide-caption::before{
+  content:'';position:absolute;inset:3px;border:1px solid rgba(255,255,251,.95);
+  border-radius:7px;pointer-events:none;
+}
+.guide-caption strong{display:block;font-family:var(--font-kai);font-size:26px;line-height:1.15;font-weight:700}
+.guide-caption > span{display:block;margin-top:4px;font-family:var(--font-fang);font-size:12.5px;line-height:1.35;white-space:nowrap;letter-spacing:-.035em}
+.guide-ending{
+  display:flex;justify-content:center;align-items:center;gap:7px;
+  flex:0 0 auto;margin:0;text-align:center;font-family:var(--font-kai);
+  font-size:15px;line-height:1.35;font-weight:700;
+}
+.guide-ending::before,.guide-ending::after{content:'';height:1px;flex:1;background:rgba(59,78,64,.34)}
+
+/* 只在导引页显示时播放；最后一帧保留，不循环、不随滚动重新隐藏。 */
+.guide-title,.guide-subtitle,.guide-lead,.guide-art,.guide-caption,.guide-ending{opacity:0}
+.page-menu.on .guide-title{animation:guideFade .75s ease .15s both}
+.page-menu.on .guide-subtitle{animation:guideFade .75s ease .5s both}
+.page-menu.on .guide-lead{animation:guideFade .75s ease .85s both}
+.page-menu.on .guide-art{animation:guideRise 1.1s cubic-bezier(.2,.65,.3,1) var(--art-delay) both}
+.page-menu.on .guide-caption{animation:guideRise .8s cubic-bezier(.2,.65,.3,1) var(--caption-delay) both}
+.page-menu.on .guide-ending{animation:guideFade .9s ease 8.5s both}
+@keyframes guideFade{from{opacity:0}to{opacity:1}}
+@keyframes guideRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.guide-choice{
+  position:absolute;inset:0;z-index:35;display:grid;place-items:center;padding:20px;
+  background:rgba(18,42,37,.46);
+}
+.guide-choice[hidden]{display:none}
+.guide-choice-panel{
+  position:relative;width:100%;padding:28px 16px 20px;border-radius:12px;
+  background:#f7f7ed;box-shadow:0 10px 30px rgba(13,35,30,.22);text-align:center;
+}
+.guide-choice-close{position:absolute;top:3px;right:5px;width:34px;height:34px;font-size:25px;color:#2b4940}
+.guide-choice-panel h2{margin:0;font-family:var(--font-kai);font-size:27px;line-height:1.2}
+.guide-choice-panel > p{margin:8px 0 20px;font-size:13px;line-height:1.4}
+.guide-choice-route{
+  position:relative;width:100%;margin-top:10px;padding:14px 22px 14px 12px;
+  background:rgba(43,80,67,.06);border:1px solid rgba(43,80,67,.23);border-radius:6px;
+  text-align:left;color:#23473d;
+}
+.guide-choice-route strong{display:block;font-family:var(--font-kai);font-size:21px;line-height:1.3}
+.guide-choice-route span{display:block;margin-top:4px;font-size:13px;line-height:1.35}
+.guide-choice-route i{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:24px;font-style:normal}
+.guide-choice button:focus-visible{outline:2px solid #a05d36;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+  .page-menu.on .guide-title,.page-menu.on .guide-subtitle,.page-menu.on .guide-lead,
+  .page-menu.on .guide-art,.page-menu.on .guide-caption,.page-menu.on .guide-ending{
+    opacity:1;transform:none;animation:none;
+  }
+}

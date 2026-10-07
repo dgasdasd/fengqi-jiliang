@@ -899,118 +899,114 @@
   function buildMenuPage(wallTarget) {
     var page = el('div', 'page page-menu');
     var inner = el('div', 'long-inner');
-    page.appendChild(inner);
-    var wrap = el('div', 'menu-wrap');
-    // 台风氛围：缓转的漩涡 + 三层淅沥雨丝 + 云
-    var bg = el('div', 'menu-bg');
-    bg.innerHTML = '<div class="menu-vortex"></div>' +
-      '<div class="menu-rain"><i class="rd a"></i><i class="rd b"></i><i class="streak"></i></div>' +
-      '<div class="menu-cloud c1"></div><div class="menu-cloud c2"></div>' +
-      '<div class="menu-compass"><svg viewBox="0 0 40 40">' +
-      '<circle cx="20" cy="20" r="17" fill="none" stroke="rgba(46,89,143,.35)" stroke-width="1"/>' +
-      '<circle cx="20" cy="20" r="11" fill="none" stroke="rgba(46,89,143,.25)" stroke-width="1"/>' +
-      '<path d="M20 4v6M20 30v6M4 20h6M30 20h6" stroke="rgba(46,89,143,.4)" stroke-width="1.2"/>' +
-      '<path d="M20 12l3 8-3-2-3 2z" fill="rgba(46,89,143,.55)"/>' +
-      '</svg></div>';
-    wrap.appendChild(bg);
-    wrap.appendChild(el('div', 'menu-title', '风栖过的<em>脊梁</em>'));
-    wrap.appendChild(el('div', 'menu-title-line'));
-    wrap.appendChild(el('div', 'menu-sub', '顺着风走一遍 · 从它怎么来，到它去了哪'));
+    var guide = el('main', 'guide-wrap');
+    var header = el('header', 'guide-header');
+    header.appendChild(el('h1', 'guide-title', '风掠大地，人作脊梁'));
+    header.appendChild(el('p', 'guide-subtitle', '山河遇疾风，凡人守万家'));
+    header.appendChild(el('p', 'guide-lead',
+      '<span>循着风雨脉络，<strong>点击板块</strong>，</span>' +
+      '<span>探寻风暴之下的故事。</span>'));
+    guide.appendChild(header);
 
-    // 四张卡的几何（设计单位：纵向拉开间隔并整体下移）
-    var CW = 140, CH = 146;
-    var cards = [
-      { to: 3, key: 'wave', num: '01', cap: '风从哪里来', sub: '台风的形成', left: 6, top: 118 },
-      { to: 5, key: 'map', num: '02', cap: '风去过哪里', sub: '近十年台风路径', left: 174, top: 236 },
-      { to: 6, key: 'tree', num: '03', cap: '风带来了什么', sub: '灾害与影响', left: 6, top: 354 },
-      { to: (wallTarget == null ? 9 : wallTarget), key: 'wall', num: '04', cap: '风停止后', sub: '风雨中的脊梁', left: 174, top: 472 }
+    var sections = el('section', 'guide-chapters');
+    sections.setAttribute('aria-label', '选择风雨故事板块');
+    var chapters = [
+      { key: 'sea', title: '沧溟起势', sub: '沧溟蓄势，寻风暴行经之途', image: 'guide-storm.jpg', delay: 1.85 },
+      { key: 'tree', title: '疆土临险', sub: '风雨过境，察大地所承之困', image: 'guide-land.jpg', delay: 4.1 },
+      { key: 'wall', title: '人间筑防', sub: '凡人赴险，守万家安固之基', image: 'guide-people.jpg', delay: 6.35 }
     ];
-    // 相邻卡之间的虚线（同一组数据既画线也用来让台风图标沿线移动）
-    var CTRL = [[190, 208], [158, 366], [190, 444]];
-    var centers = cards.map(function (c) {
-      return { x: c.left + CW / 2, y: c.top + CH / 2 };
-    });
-    var path = el('div', 'menu-path');
-    path.innerHTML = '<svg viewBox="0 0 320 693">' +
-      CTRL.map(function (c, i) {
-        var a = centers[i], b = centers[i + 1];
-        return '<path d="M' + a.x + ' ' + a.y + ' Q' + c[0] + ' ' + c[1] + ' ' + b.x + ' ' + b.y + '"/>';
-      }).join('') + '</svg>';
-    wrap.appendChild(path);
-    // 沿虚线移动的台风图标（用你给的龙卷风图案）
-    var typh = el('div', 'menu-typh');
-    var timg = document.createElement('img');
-    timg.alt = '';
-    timg.src = 'assets/img/012-PSMbX7IDUKd77Ru.png';
-    typh.appendChild(timg);
-    wrap.appendChild(typh);
-
-    var busy = false;
-    function travelTo(idx) {
-      if (busy) return;
-      if (idx === 0) {
-        // 第一个入口也交给宿主页面，保持四个图标的跳转规则一致。
-        if (window.parent !== window && window.parent.postMessage) {
-          window.parent.postMessage({ type: 'teshu-route', route: cards[0].key }, '*');
-        } else {
-          go(cards[0].to);
-        }
-        return;
+    var firstButton, chooser;
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function openRoute(key) {
+      if (chooser) chooser.hidden = true;
+      if (window.parent !== window && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'teshu-route', route: key }, '*');
+      } else {
+        go({ wave: 3, map: 5, tree: 6, wall: wallTarget == null ? 9 : wallTarget }[key]);
       }
-      busy = true;
-      var a = centers[idx - 1], b = centers[idx];
-      var cx = CTRL[idx - 1][0], cy = CTRL[idx - 1][1];
-      var t0 = Date.now(), dur = 900;
-      // 显示前先定位起点，避免重播时短暂出现在上一次的终点。
-      typh.style.left = a.x + 'px';
-      typh.style.top = a.y + 'px';
-      typh.style.transform = 'translate(-50%,-50%) scale(.94)';
-      typh.classList.add('on');
-      function frame() {
-        // 动画中返回上一页时取消跳转，不让旧回调突然打开内容页。
-        if (!page.classList.contains('on')) {
-          typh.classList.remove('on');
-          busy = false;
-          return;
-        }
-        var p = (Date.now() - t0) / dur;
-        if (p > 1) p = 1;
-        var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;   // easeInOutQuad
-        var x = (1 - e) * (1 - e) * a.x + 2 * (1 - e) * e * cx + e * e * b.x;
-        var y = (1 - e) * (1 - e) * a.y + 2 * (1 - e) * e * cy + e * e * b.y;
-        typh.style.left = x + 'px';
-        typh.style.top = y + 'px';
-        typh.style.transform = 'translate(-50%,-50%) scale(' +
-          (0.94 + 0.16 * Math.sin(Math.PI * p)).toFixed(3) + ')';
-        if (p < 1) { requestAnimationFrame(frame); return; }
-        typh.classList.remove('on');                 // 刮到目标图标后消失
-        busy = false;
-        // 导引页已完成沿线动画，宿主直接打开对应内容，不再播放第二个台风。
-        if (window.parent !== window && window.parent.postMessage) {
-          window.parent.postMessage({ type: 'teshu-route', route: cards[idx].key }, '*');
-        } else {
-          go(cards[idx].to);
-        }
-      }
-      requestAnimationFrame(frame);
     }
-
-    cards.forEach(function (it, idx) {
-      var b = el('div', 'menu-item');
-      b.style.left = it.left + 'px';
-      b.style.top = it.top + 'px';
-      b.style.width = CW + 'px';
-      b.style.height = CH + 'px';
-      b.innerHTML = '<span class="menu-num">' + it.num + '</span>' +
-        '<span class="menu-ico"></span>' +
-        '<span class="menu-cap">' + it.cap + '</span>' +
-        '<span class="menu-sub2">' + it.sub + '</span>';
-      chainImg(b.querySelector('.menu-ico'), it.key, MENU_ICONS[it.key]);
-      b.addEventListener('click', function (ev) { ev.stopPropagation(); travelTo(idx); });
-      wrap.appendChild(b);
+    chapters.forEach(function (chapter, index) {
+      var button = el('button', 'guide-block guide-block-' + chapter.key);
+      button.type = 'button';
+      button.dataset.chapter = chapter.key;
+      button.setAttribute('aria-label', chapter.title + '：' + chapter.sub);
+      button.style.setProperty('--art-delay', chapter.delay + 's');
+      button.style.setProperty('--caption-delay', (chapter.delay + .75) + 's');
+      button.disabled = !reducedMotion;
+      var art = el('span', 'guide-art');
+      var picture = document.createElement('img');
+      picture.src = 'assets/img/' + chapter.image;
+      picture.alt = '';
+      picture.width = 1279;
+      picture.height = 561;
+      picture.decoding = 'async';
+      art.appendChild(picture);
+      var trace = el('span', 'guide-trace');
+      trace.setAttribute('aria-hidden', 'true');
+      trace.innerHTML = '<svg viewBox="0 0 320 180" preserveAspectRatio="none">' +
+        '<path d="M162 0 C180 30 134 51 152 76 S172 107 161 134 S159 166 162 180"/>' +
+        '<circle cx="161" cy="134" r="2.1"/></svg>';
+      art.appendChild(trace);
+      button.appendChild(art);
+      var caption = el('span', 'guide-caption',
+        '<strong>' + chapter.title + '</strong><span>' + chapter.sub + '</span>');
+      caption.addEventListener('animationend', function () { button.disabled = false; });
+      button.appendChild(caption);
+      button.addEventListener('click', function (event) {
+        event.stopPropagation();
+        if (chapter.key === 'sea') {
+          chooser.hidden = false;
+          chooser.querySelector('[data-guide-route]').focus();
+        } else {
+          openRoute(chapter.key);
+        }
+      });
+      if (!index) firstButton = button;
+      sections.appendChild(button);
     });
-    wrap.appendChild(el('div', 'menu-hint', '点击图标，开始这一段风雨之旅'));
-    inner.appendChild(wrap);
+    guide.appendChild(sections);
+    guide.appendChild(el('p', 'guide-ending', '循着风雨痕迹，看见守护的力量。'));
+
+    // 三个主板块保留原有四条内容路径，海洋板块内可选形成过程或地图档案。
+    chooser = el('div', 'guide-choice');
+    chooser.hidden = true;
+    chooser.setAttribute('role', 'dialog');
+    chooser.setAttribute('aria-modal', 'true');
+    chooser.setAttribute('aria-labelledby', 'guideChoiceTitle');
+    chooser.innerHTML = '<div class="guide-choice-panel">' +
+      '<button class="guide-choice-close" type="button" aria-label="关闭，返回导引">×</button>' +
+      '<h2 id="guideChoiceTitle">沧溟起势</h2><p>循着风的脉络，选择一段故事</p>' +
+      '<button class="guide-choice-route" type="button" data-guide-route="wave">' +
+      '<strong>风从哪里来</strong><span>台风的形成与路径类型</span><i aria-hidden="true">›</i></button>' +
+      '<button class="guide-choice-route" type="button" data-guide-route="map">' +
+      '<strong>风去过哪里</strong><span>地图拼图与台风年份档案</span><i aria-hidden="true">›</i></button></div>';
+    function closeChoice() {
+      chooser.hidden = true;
+      try { firstButton.focus({ preventScroll: true }); } catch (error) { firstButton.focus(); }
+    }
+    chooser.querySelector('.guide-choice-close').addEventListener('click', closeChoice);
+    chooser.addEventListener('click', function (event) {
+      event.stopPropagation();
+      if (event.target === chooser) closeChoice();
+    });
+    chooser.querySelectorAll('[data-guide-route]').forEach(function (button) {
+      button.addEventListener('click', function () { openRoute(button.dataset.guideRoute); });
+    });
+    chooser.addEventListener('keydown', function (event) {
+      event.stopPropagation();
+      if (event.key === 'Escape') { event.preventDefault(); closeChoice(); }
+      if (event.key !== 'Tab') return;
+      var buttons = chooser.querySelectorAll('button');
+      var first = buttons[0], last = buttons[buttons.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
+    ['wheel', 'touchstart', 'touchend'].forEach(function (eventName) {
+      chooser.addEventListener(eventName, function (event) { event.stopPropagation(); }, { passive: true });
+    });
+    guide.appendChild(chooser);
+    inner.appendChild(guide);
+    page.appendChild(inner);
     page._inner = inner;
     page._long = 0;
     return page;
