@@ -1,6 +1,6 @@
 /* 三板块导引：开场文字 → 配图 → 标题卡片，依次显现并保留。 */
 .page-menu{
-  background:linear-gradient(rgba(250,249,239,.88),rgba(250,249,239,.88)),url('../assets/img/p1-bg-haze.jpg') center/cover;
+  background:linear-gradient(rgba(248,248,246,.22),rgba(248,248,246,.22)),url('../../assets/img/bg-smoke.webp') center/cover no-repeat;
 }
 .guide-wrap{
   position:absolute;inset:0;display:flex;flex-direction:column;
