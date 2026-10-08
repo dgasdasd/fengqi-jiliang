@@ -290,10 +290,13 @@ function initP3() {
     study.hidden = false;
     if (scroll) scroll.scrollTop = 0;
     var formationLab = $('#p3FormationLab');
-    if (formationLab) formationLab.focus({ preventScroll: true });
+    var thermometer = $('#p3Thermo');
+    if (thermometer && !$('#p3ThermoStage').hidden) thermometer.focus({ preventScroll: true });
+    else if (formationLab) formationLab.focus({ preventScroll: true });
   }
   function resetOriginStudy() {
     if (window.TyphoonFormation) window.TyphoonFormation.reset();
+    if (window.TyphoonTemperature) window.TyphoonTemperature.reset();
   }
   if (waveHit) waveHit.addEventListener('click', enterOriginStudy);
   var flightRun = 0, routeToken = 0;

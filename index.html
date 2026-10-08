@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="css/tokens.css?v=20261004-fonts1">
 <link rel="stylesheet" href="css/style.css?v=20261007-cards1">
 <link rel="stylesheet" href="css/chapter-pages.css?v=20261008-timeline1">
-<link rel="stylesheet" href="css/formation-lab.css?v=20261008-lab1">
+<link rel="stylesheet" href="css/formation-lab.css?v=20261008-thermo1">
 </head>
 <body>
 
@@ -146,7 +146,16 @@
       </div>
 
       <section class="p3-origin-study" id="p3OriginStudy" aria-label="台风形成条件" hidden>
-        <div class="formation-lab" id="p3FormationLab" data-energy="0" tabindex="-1">
+        <div class="p3-thermo-stage" id="p3ThermoStage">
+          <p class="p3-thermo-prompt" id="p3ThermoPrompt">滑动温度计度数，看风的形成吧</p>
+          <div class="p3-thermo" id="p3Thermo" role="slider" aria-label="海面温度" aria-describedby="p3ThermoPrompt" aria-orientation="vertical" aria-valuemin="20" aria-valuemax="30" aria-valuenow="20" aria-valuetext="20.0摄氏度" tabindex="0">
+            <span class="thermo-c">°C</span><span class="thermo-f">°F</span>
+            <div class="thermo-scale"><i></i><b id="p3Mercury"></b><em id="p3Temp">20.0°C</em></div>
+            <div class="thermo-eye"></div>
+          </div>
+          <p class="p3-thermo-value" id="p3ThermoValue">摄氏度：20.0°</p>
+        </div>
+        <div class="formation-lab" id="p3FormationLab" data-energy="0" tabindex="-1" hidden>
           <div class="lab-workspace">
             <div class="lab-arena" aria-label="五个台风形成条件">
               <div class="lab-orbit" aria-hidden="true"></div>
@@ -555,9 +564,10 @@
 </main>
 
 <script src="js/formation-lab.js?v=20261008-lab1"></script>
-<script src="js/main.js?v=20261008-timeline1"></script>
+<script src="js/formation-temperature.js?v=20261008-thermo1"></script>
+<script src="js/main.js?v=20261008-thermo1"></script>
 <script src="js/p3-games.js?v=20261005-impactgames1"></script>
-<script src="js/chapter-pages.js?v=20261008-timeline1"></script>
+<script src="js/chapter-pages.js?v=20261008-thermo1"></script>
 <script src="js/teshu-bridge.js?v=20261004-carousel1"></script>
 </body>
 </html>

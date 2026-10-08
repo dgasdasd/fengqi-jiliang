@@ -41,7 +41,7 @@
   var study = $('#p3OriginStudy'), reveal = $('#p3OriginReveal');
   var seaPages = [], routePage;
   if (study && reveal) {
-    page(study, '台风形成条件', [$('#p3FormationLab'), reveal], 'chapter-formation');
+    page(study, '台风形成条件', [$('#p3ThermoStage'), $('#p3FormationLab'), reveal], 'chapter-formation');
   }
   var process = $('.p3-view[data-view="process"]');
   var evidence = $('.p3-view[data-view="evidence"]');
