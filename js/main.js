@@ -265,7 +265,7 @@ function initP3() {
   var impactReturn = $('#p3ImpactReturn'), impactBack = $('#p3ImpactBack');
   var puzzleBoard = $('#p3PuzzleBoard'), puzzleGrid = $('#p3PuzzleGrid'), puzzleFull = $('#p3PuzzleFull'), mapgameBack = $('#p3MapgameBack');
   var puzzleCountdown = $('#p3PuzzleCountdown'), puzzleStart = $('#p3PuzzleStart'), puzzleStatus = $('#p3PuzzleStatus');
-  var detail = $('#p3TyphoonDetail'), detailClose = $('#p3DetailClose'), historyScene = $('#p3HistoryScene'), historyBlock = $('#p3HistoryBlock');
+  var detail = $('#p3TyphoonDetail'), detailClose = $('#p3DetailClose'), historyScene = $('#p3HistoryScene');
   var views = $$('.p3-view'), rail = $$('.p3-rail [data-p3-view]');
   function hideFlightLayer() {
     if (!flightLayer) return;
@@ -616,34 +616,20 @@ function initP3() {
   var puzzleOrder = [0, 1, 2, 3, 4, 5, 6, 7, 8];
   var puzzleTimer = null;
   var dragState = null;
-  var completedAt = 0;
   function puzzleSolved() {
     return puzzleOrder.every(function (piece, slot) { return piece === slot; });
   }
   function setPuzzleSolved() {
     puzzleMode = 'complete';
-    completedAt = performance.now();
-    if (puzzleStatus) puzzleStatus.textContent = '拼图完成！可以再玩一次，或查看下方时间轴。';
+    if (puzzleStatus) puzzleStatus.textContent = '拼图完成！可以再玩一次。';
     if (puzzleBoard) {
       puzzleBoard.classList.remove('is-playing');
       puzzleBoard.classList.add('is-complete');
-      puzzleBoard.setAttribute('aria-label', '拼图已完成，点击地图前往下方台风时间轴');
+      puzzleBoard.setAttribute('aria-label', '中国地图拼图已完成');
     }
     if (puzzleGrid) puzzleGrid.hidden = true;
     if (puzzleFull) puzzleFull.hidden = false;
     if (puzzleStart) { puzzleStart.hidden = false; puzzleStart.textContent = '再玩一次'; }
-  }
-  function goToHistoryBelowMap() {
-    if (!historyBlock) return;
-    if (historyScene) {
-      historyScene.classList.remove('is-entering');
-      void historyScene.offsetWidth;
-      historyScene.classList.add('is-entering');
-    }
-    window.setTimeout(function () {
-      if (window.P3Pages) window.P3Pages.goTo(historyBlock.querySelector('.chapter-page'), true);
-      else historyBlock.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-    }, 40);
   }
   function tileLabel(piece, slot) {
     return '地图第' + (piece + 1) + '块，当前位置第' + (slot + 1) + '格。使用方向键移动';
@@ -719,11 +705,6 @@ function initP3() {
   function onTileKeyDown(e) {
     var tile = e.currentTarget;
     var slot = Number(tile.dataset.slot), row = Math.floor(slot / 3), col = slot % 3, target = -1;
-    if (puzzleMode === 'complete' && (e.key === 'Enter' || e.key === ' ')) {
-      e.preventDefault();
-      goToHistoryBelowMap();
-      return;
-    }
     if (puzzleMode !== 'playing') return;
     if (e.key === 'ArrowLeft' && col > 0) target = slot - 1;
     if (e.key === 'ArrowRight' && col < 2) target = slot + 1;
@@ -774,20 +755,7 @@ function initP3() {
     tick();
     puzzleTimer = setInterval(tick, 1000);
   }
-  if (puzzleBoard) {
-    puzzleBoard.addEventListener('click', function () {
-      if (puzzleMode === 'complete' && performance.now() - completedAt > 450) goToHistoryBelowMap();
-    });
-    puzzleBoard.addEventListener('keydown', function (e) {
-      if (puzzleMode === 'complete' && (e.key === 'Enter' || e.key === ' ')) {
-        e.preventDefault();
-        goToHistoryBelowMap();
-      }
-    });
-  }
   if (puzzleStart) puzzleStart.addEventListener('click', startPuzzle);
-  var puzzleTimeline = $('#p3PuzzleTimeline');
-  if (puzzleTimeline) puzzleTimeline.addEventListener('click', goToHistoryBelowMap);
   if (mapgameBack) mapgameBack.addEventListener('click', function () {
     flightRun++;
     treeFlightRun++;
@@ -1010,7 +978,7 @@ function initP3() {
       if (puzzleFull) puzzleFull.hidden = false;
       if (puzzleGrid) puzzleGrid.hidden = true;
       if (puzzleStart) { puzzleStart.hidden = false; puzzleStart.textContent = '开始游戏'; }
-      if (puzzleStatus) puzzleStatus.textContent = '可以挑战拼图，也可以直接查看下方时间轴';
+      if (puzzleStatus) puzzleStatus.textContent = '先观察完整地图，再开始拼图';
     }
     views.forEach(function (v) {
       v.hidden = seaFlow ? ['origin', 'process', 'evidence', 'mapgame'].indexOf(v.dataset.view) < 0 : v.dataset.view !== name;
@@ -1034,14 +1002,14 @@ function initP3() {
   }
   root.addEventListener('p3-entry-route', function (event) {
     var key = event.detail && event.detail.route;
-    var target = { wave: 'origin', map: 'origin', tree: 'impact', wall: 'after' }[key];
+    var target = { wave: 'origin', map: 'mapgame', tree: 'impact', wall: 'after' }[key];
     if (!target) return;
     if (study) study.hidden = true;
     if (originScene) originScene.hidden = false;
     resetOriginStudy();
     if (key === 'tree') setImpactStep('question');
     show(target);
-    if (key === 'wave' || key === 'map') enterOriginStudy();
+    if (key === 'wave') enterOriginStudy();
   });
   rail.forEach(function (b) { b.addEventListener('click', function () { if (b.dataset.p3View === 'route') setRoute('west', false); show(b.dataset.p3View); }); });
   $$('[data-route]').forEach(function (b) { b.addEventListener('click', function () { setRoute(b.dataset.route, false); }); });

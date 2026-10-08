@@ -146,10 +146,11 @@
 .p3.is-paged .chapter-puzzle .p3-puzzle-start { min-height: 46px; font-size:22px; }
 .p3-puzzle-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:9px; }
 .p3-puzzle-actions .p3-puzzle-start { min-width:0; padding-inline:16px; }
-.p3-puzzle-actions .p3-puzzle-timeline { background:#fff; color:#285a72; border:1px solid #285a72; }
 .p3.is-paged .chapter-puzzle .p3-puzzle-preview figcaption { font-size:16px; }
 .p3.is-paged .chapter-years-original .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; padding-bottom: 26px; }
 .p3.is-paged .chapter-years-original .chapter-content > h2 { margin-bottom: 4px; }
+.p3.is-paged .chapter-map-timeline .chapter-content > h2 { margin-bottom:18px; }
+.p3.is-paged .chapter-map-timeline .p3-history { margin-top:24px; }
 .p3.is-paged .chapter-years-original .p3-history-hint { margin: 0 0 6px; font-size:16px; line-height: 1.35; }
 .p3.is-paged .chapter-years-original .p3-timeline { width: min(100%, calc(419 * var(--u))); height: auto; aspect-ratio: 448 / 780; margin: 8px auto 16px; overflow: visible; }
 .p3.is-paged .chapter-years-original .p3-year-point { width: 36px; height: 36px; }

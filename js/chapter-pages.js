@@ -54,16 +54,16 @@
   var routeView = $('.p3-view[data-view="route"]');
   if (routeView) page(routeView, '台风的类型', children(routeView), 'chapter-route-extra');
 
-  // 地图档案始终可翻阅，拼图仅作为独立小游戏。
+  // 拼图与时间轴在同一滚动页，时间轴始终接在小游戏下方。
   var map = $('.p3-mapgame'), history = $('#p3HistoryBlock'), scene = $('#p3HistoryScene');
   if (map && history && scene) {
-    var puzzlePage = page(map, '中国地图拼图', [$('.p3-mapgame > .p3-subtitle'), $('.p3-puzzle-panel', map)], 'chapter-puzzle');
-    map.insertBefore(puzzlePage, history);
-    var timeline = $('.p3-timeline', scene);
-    var oldTitle = $('.p3-subtitle', scene), oldHint = $('.p3-history-hint', scene);
-    oldHint.textContent = '点击年份，查看台风路径与影响';
-    page(scene, '近十年最具代表台风', [oldTitle, oldHint, timeline], 'chapter-years chapter-years-original');
     var report = $('.p3-loss-report', map), charts = $$('.p3-loss-chart', report);
+    map.appendChild(report);
+    var puzzlePage = page(map, '近十年最具代表台风', [$('.p3-mapgame > .p3-subtitle'), $('.p3-puzzle-panel', map), history], 'chapter-puzzle chapter-years-original chapter-map-timeline');
+    map.insertBefore(puzzlePage, report);
+    var oldTitle = $('.p3-subtitle', scene), oldHint = $('.p3-history-hint', scene);
+    oldTitle.remove();
+    oldHint.textContent = '点击年份，查看台风路径与影响';
     var analysis = $('.p3-loss-analysis', report), lines = children(analysis);
     page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0],
       heading('复合灾害的影响'), lines[1], charts[1]], 'chapter-loss chapter-loss-combined');
@@ -181,7 +181,7 @@
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
   scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
   scroller.addEventListener('wheel', function (event) {
-    var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-stories .chapter-content, .chapter-prep-combined .chapter-content, .chapter-profile-combined .chapter-content');
+    var readingContent = event.target.closest('.chapter-map-timeline .chapter-content, .chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-stories .chapter-content, .chapter-prep-combined .chapter-content, .chapter-profile-combined .chapter-content');
     if (readingContent && ((event.deltaY > 0 && readingContent.scrollTop < readingContent.scrollHeight - readingContent.clientHeight - 1) ||
       (event.deltaY < 0 && readingContent.scrollTop > 1))) return;
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-typhoon-detail, .p3-prep-images')) return;
@@ -192,13 +192,24 @@
   }, { passive: false });
   root.addEventListener('keydown', function (event) {
     if (event.target.closest('button, input, [role="slider"], .p3-puzzle-board, .p3-game-canvas, .p3-typhoon-detail')) return;
-    if (event.key === 'PageDown' || event.key === 'PageUp') { event.preventDefault(); turn(event.key === 'PageDown' ? 1 : -1); }
+    if (event.key === 'PageDown' || event.key === 'PageUp') {
+      event.preventDefault();
+      var direction = event.key === 'PageDown' ? 1 : -1;
+      var content = current && current.classList.contains('chapter-map-timeline') && $('.chapter-content', current);
+      if (content && ((direction > 0 && content.scrollTop < content.scrollHeight - content.clientHeight - 1) || (direction < 0 && content.scrollTop > 1))) {
+        content.scrollBy({ top:direction * content.clientHeight * .85, behavior:reduced ? 'auto' : 'smooth' });
+      } else turn(direction);
+    }
   });
   var observer = new MutationObserver(function () { requestAnimationFrame(refresh); });
   observer.observe(scroller, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
   window.addEventListener('resize', function () { if (current) goTo(current, true); });
-  root.addEventListener('p3-entry-route', function () {
-    requestAnimationFrame(function () { goTo(visiblePages()[0], true); });
+  root.addEventListener('p3-entry-route', function (event) {
+    var mapEntry = event.detail && event.detail.route === 'map';
+    requestAnimationFrame(function () {
+      if (mapEntry && puzzlePage) $('.chapter-content', puzzlePage).scrollTop = 0;
+      goTo(mapEntry ? puzzlePage : visiblePages()[0], true);
+    });
   });
   if (reveal) new MutationObserver(function () {
     if (!reveal.hidden) requestAnimationFrame(function () {
