@@ -23,8 +23,9 @@
 }
 </style>
 <link rel="stylesheet" href="css/tokens.css?v=20261004-fonts1">
-<link rel="stylesheet" href="css/style.css?v=20261006-sync1">
-<link rel="stylesheet" href="css/chapter-pages.css?v=20261006-sync1">
+<link rel="stylesheet" href="css/style.css?v=20261007-cards1">
+<link rel="stylesheet" href="css/chapter-pages.css?v=20261008-poster2">
+<link rel="stylesheet" href="css/formation-lab.css?v=20261008-lab1">
 </head>
 <body>
 
@@ -145,25 +146,33 @@
       </div>
 
       <section class="p3-origin-study" id="p3OriginStudy" aria-label="台风形成条件" hidden>
-        <header class="p3-study-head">
-          <button class="p3-study-back" id="p3StudyBack" type="button" aria-label="返回海浪与地图">‹</button>
-          <h2>风从哪里来</h2>
-          <div class="p3-track"><span>台风的形成</span><i></i></div>
-        </header>
-        <div class="p3-thermo-stage" id="p3ThermoStage">
-          <p class="p3-thermo-prompt">调节海面温度</p>
-          <div class="p3-thermo" id="p3Thermo" role="slider" aria-label="海面温度" aria-valuemin="20" aria-valuemax="30" aria-valuenow="20" aria-valuetext="20.0摄氏度" tabindex="0">
-            <span class="thermo-c">°C</span><span class="thermo-f">°F</span>
-            <div class="thermo-scale"><i></i><b id="p3Mercury"></b><em id="p3Temp">20.0°C</em></div>
-            <div class="thermo-eye"></div>
+        <div class="formation-lab" id="p3FormationLab" data-energy="0" tabindex="-1">
+          <div class="lab-workspace">
+            <div class="lab-arena" aria-label="五个台风形成条件">
+              <div class="lab-orbit" aria-hidden="true"></div>
+              <div class="lab-chamber" aria-label="台风孕育舱">
+                <img id="p3FormationStill" src="assets/formation/idle.webp" alt="平静的温暖洋面">
+                <video id="p3FormationVideo" muted loop playsinline webkit-playsinline preload="none" aria-label="当前条件的形成动画"></video>
+              </div>
+              <h2 class="lab-title">孕育舱</h2>
+              <button class="lab-switch lab-switch-warm" type="button" data-condition="warm" aria-pressed="false"><img src="assets/formation/warm-switch.webp" alt=""><span>广阔温暖洋面</span><i aria-hidden="true">✓</i></button>
+              <button class="lab-switch lab-switch-moisture" type="button" data-condition="moisture" aria-pressed="false"><img src="assets/formation/moisture-switch.webp" alt=""><span>充沛水汽</span><i aria-hidden="true">✓</i></button>
+              <button class="lab-switch lab-switch-disturbance" type="button" data-condition="disturbance" aria-pressed="false"><img src="assets/formation/disturbance-switch.webp" alt=""><span>初始扰动</span><i aria-hidden="true">✓</i></button>
+              <button class="lab-switch lab-switch-coriolis" type="button" data-condition="coriolis" aria-pressed="false"><img src="assets/formation/coriolis-switch.webp" alt=""><span>地转偏向力</span><i aria-hidden="true">✓</i></button>
+              <button class="lab-switch lab-switch-shear" type="button" data-condition="shear" aria-pressed="false"><img src="assets/formation/shear-switch.webp" alt=""><span>低空风切变</span><i aria-hidden="true">✓</i></button>
+            </div>
+            <div class="lab-progress">
+              <div class="lab-progress-heading"><span>台风形成进度</span><strong id="p3FormationPercent">0%</strong></div>
+              <div class="lab-progress-track" id="p3FormationProgress" role="progressbar" aria-label="台风形成进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="lab-explanation" aria-live="polite" aria-atomic="true"><h3 id="p3FormationCondition">点亮五个能量开关</h3><p id="p3FormationExplanation">点击周围的开关，观察孕育舱里的变化。每集齐一个条件，形成进度增加20%。</p></div>
+            <div class="lab-actions"><button id="p3FormationReset" type="button">重新孕育</button><button class="lab-continue" type="button" data-next="process" hidden>了解形成过程 →</button></div>
           </div>
-          <p class="p3-thermo-value" id="p3ThermoValue">摄氏度：20.0°</p>
+          <div class="lab-success" id="p3FormationSuccess" role="dialog" aria-modal="true" aria-labelledby="p3FormationSuccessTitle" tabindex="-1" hidden>
+            <div class="lab-success-card"><img src="assets/img/typhoon-ink.webp" alt=""><p class="lab-success-kicker">五个条件 · 全部激活</p><h2 id="p3FormationSuccessTitle">恭喜你！<br>成功孕育了一场台风。</h2><p>温暖洋面、水汽、扰动、旋转与较弱的风切变，共同为台风形成创造了条件。</p><button id="p3FormationSuccessContinue" type="button">继续探索台风的形成 →</button><button id="p3FormationSuccessClose" type="button">回到孕育舱</button></div>
+          </div>
         </div>
-        <div class="p3-origin-reveal" id="p3OriginReveal" aria-live="polite" hidden>
-          <p class="p3-origin-kicker">台风的形成</p>
-          <div class="p3-origin-video"><video src="assets/p3/5.mp4" muted loop playsinline preload="metadata" aria-label="循环播放的台风形成动画"></video></div>
-          <div class="p3-origin-copy" id="p3OriginCopy" aria-live="polite"></div>
-        </div>
+        <div id="p3OriginReveal" aria-hidden="true" hidden></div>
         <section class="p3-origin-route" id="p3OriginRoute" aria-label="台风路径类型">
           <div class="p3-origin-route-heading">台风的类型 <small>（按路径划分）</small></div>
           <div class="route-controls" role="tablist" aria-label="路径分类">
@@ -507,22 +516,11 @@
           <button class="p3-year-point" type="button" data-typhoon="dusurui" style="--x:60.3%;--y:93.2%;--lx:16;--ly:2;--delay:2.46s"><i></i><span><strong>2023年 台风 </strong><em>“杜苏芮”</em><b>编号：2305</b></span></button>
         </div>
       </div>
-      <article class="p3-typhoon-detail" id="p3TyphoonDetail" role="dialog" aria-modal="true" aria-labelledby="p3DetailTitle" hidden tabindex="-1">
-        <header class="p3-detail-header">
-          <div><p id="p3DetailKicker"></p><h3 id="p3DetailTitle"></h3></div>
-          <button class="p3-detail-close" id="p3DetailClose" type="button" aria-label="关闭台风信息">×</button>
-        </header>
-        <div class="p3-detail-route">
-          <img id="p3DetailMap" src="assets/p3/paths/rainbow.jpg" alt="台风路径图">
-          <div><h4>① 生成与登陆路径</h4><p id="p3DetailPath"></p></div>
-        </div>
-        <section class="p3-detail-section"><h4>② 影响圈</h4><p id="p3DetailImpact"></p><img src="assets/p3/bf27c365e0684832c527596d57ee7b9b.png" alt="" aria-hidden="true"></section>
-        <section class="p3-detail-section"><h4>③ 损失</h4><p id="p3DetailLoss"></p></section>
-        <div class="p3-detail-media" id="p3DetailMedia" aria-label="相关现场视频">
-          <figure class="p3-media-card"><div class="p3-media-frame"><video id="p3DetailMediaOne" controls muted playsinline preload="metadata" aria-label="台风影响现场视频"></video></div><figcaption id="p3DetailMediaOneCaption">现场画面</figcaption></figure>
-          <figure class="p3-media-card"><div class="p3-media-frame"><video id="p3DetailMediaTwo" controls muted playsinline preload="metadata" aria-label="台风新闻视频"></video></div><figcaption id="p3DetailMediaTwoCaption">新闻播报</figcaption></figure>
-        </div>
-        <p class="p3-detail-ticker" id="p3DetailTicker"></p>
+      <article class="p3-typhoon-detail is-poster" id="p3TyphoonDetail" role="dialog" aria-modal="true" aria-labelledby="p3DetailTitle" hidden tabindex="-1">
+        <!-- 资料卡：底图 + 抠出的文本框（107素材）按例图位置叠放，文字为 HTML，由 main.js 的 typhoonPosters 生成 -->
+        <h3 class="p3-sr-only" id="p3DetailTitle"></h3>
+        <div class="p3-poster" id="p3Poster"></div>
+        <button class="p3-detail-close p3-poster-close" id="p3DetailClose" type="button" aria-label="关闭台风信息">×</button>
       </article>
         <section class="p3-loss-report" aria-labelledby="p3LossReportTitle">
           <h3 id="p3LossReportTitle">台风损害影响</h3>
@@ -553,9 +551,10 @@
 
 </main>
 
-<script src="js/main.js?v=20261007-seaflow1"></script>
+<script src="js/formation-lab.js?v=20261008-lab1"></script>
+<script src="js/main.js?v=20261008-lab1"></script>
 <script src="js/p3-games.js?v=20261005-impactgames1"></script>
-<script src="js/chapter-pages.js?v=20261007-seaflow1"></script>
+<script src="js/chapter-pages.js?v=20261008-lab1"></script>
 <script src="js/teshu-bridge.js?v=20261004-carousel1"></script>
 </body>
 </html>

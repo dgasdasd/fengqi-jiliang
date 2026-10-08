@@ -256,10 +256,9 @@ function initP3() {
       });
     }, { threshold: [0.5] }).observe(root);
   }
-  var scroll = $('#p3Scroll'), origin = $('.p3-origin'), originScene = $('#p3OriginScene'), waveHit = $('#p3WaveHit'), study = $('#p3OriginStudy'), studyBack = $('#p3StudyBack'), thermoStage = $('#p3ThermoStage'), thermo = $('#p3Thermo'), mercury = $('#p3Mercury'), temp = $('#p3Temp'), thermoValue = $('#p3ThermoValue');
+  var scroll = $('#p3Scroll'), origin = $('.p3-origin'), originScene = $('#p3OriginScene'), waveHit = $('#p3WaveHit'), study = $('#p3OriginStudy');
   var originRoute = $('#p3OriginRoute'), originRouteMap = $('#p3OriginRouteMap'), originRouteCopy = $('#p3OriginRouteCopy');
-  var video = $('#p3OriginReveal .p3-origin-video video'), originReveal = $('#p3OriginReveal');
-  var copy = $('#p3OriginCopy'), list = $('#p3ProcessList'), originNext = $('.p3-origin-next'), processBack = $('#p3ProcessBack'), evidenceBack = $('#p3EvidenceBack');
+  var list = $('#p3ProcessList'), processBack = $('#p3ProcessBack'), evidenceBack = $('#p3EvidenceBack');
   var flightLayer = $('#p3FlightLayer'), flightPathEl = $('#p3FlightPath'), flightIcon = $('#p3TyphoonFlight'), mapHit = $('#p3MapHit');
   var treeFlightPathEl = $('#p3TreeFlightPath'), treeFlightIcon = $('#p3TreeTyphoonFlight'), treeHit = $('#p3TreeHit'), impactScene = $('#p3ImpactScene');
   var greatWallFlightPathEl = $('#p3GreatWallFlightPath'), greatWallFlightIcon = $('#p3GreatWallTyphoonFlight'), greatWallHit = $('#p3GreatWallHit');
@@ -281,101 +280,27 @@ function initP3() {
     ['成熟阶段', '中心附近风力高达12级并具有明显且规整的台风眼。'],
     ['消亡阶段', '台风登陆后因摩擦力迅速增大而逐渐消散。']
   ];
-  var originFactors = [
-    ['assets/p3/707079f00a737da677eb798019e8a465.png', '广阔且温暖的洋面', '温度超过26.5摄氏度，深度大于60米'],
-    ['assets/p3/7a29fb60ed7ceb1b7f4a4e0ba88116a0.png', '地转偏向力', '地球自转形成的偏向力，是让气流旋转起来的关键'],
-    ['assets/p3/bf27c365e0684832c527596d57ee7b9b.png', '低空风切变', '高低空风速差异小'],
-    ['assets/p3/fbe4cfa605e0fab807689fc773301980.png', '充沛的水汽供应', '热带洋面蒸发旺盛，为台风形成提供充足水汽'],
-    ['assets/img/typhoon-ink.webp', '初始扰动', '大气中必须存在一个具备微弱气旋性环流的低压扰动或云团，将周围的水汽初步汇聚起来。']
-  ];
   if (list) list.innerHTML = processText.map(function (x, i) {
     return '<p style="animation-delay:' + (i * 90) + 'ms"><strong>' + x[0] + '：</strong>' + x[1] + '</p>';
   }).join('');
 
-  var value = 20, unlocked = false, factorTimers = [];
   function enterOriginStudy() {
     if (!originScene || !study) return;
     originScene.hidden = true;
     study.hidden = false;
     if (scroll) scroll.scrollTop = 0;
-    if (thermo) thermo.focus({ preventScroll: true });
+    var formationLab = $('#p3FormationLab');
+    if (formationLab) formationLab.focus({ preventScroll: true });
   }
   function resetOriginStudy() {
-    unlocked = false;
-    factorTimers.forEach(clearTimeout);
-    factorTimers = [];
-    if (thermoStage) thermoStage.classList.remove('is-hidden');
-    if (originReveal) { originReveal.hidden = true; originReveal.classList.remove('is-revealing'); }
-    if (copy) copy.innerHTML = '';
-    if (originNext) originNext.hidden = true;
-    if (video) { video.pause(); video.currentTime = 0; }
-    setTemp(20);
-  }
-  function revealOrigin() {
-    if (unlocked || value < 26.5) return;
-    unlocked = true;
-    if (originReveal) {
-      originReveal.hidden = false;
-      originReveal.classList.add('is-revealing');
-    }
-    if (thermoStage) thermoStage.classList.add('is-hidden');
-    if (video) { video.currentTime = 0; video.play().catch(function () {}); }
-    if (copy) {
-      copy.innerHTML = '';
-      factorTimers.forEach(clearTimeout);
-      factorTimers = [];
-      originFactors.forEach(function (factor, i) {
-        factorTimers.push(setTimeout(function () {
-          var row = document.createElement('article');
-          row.className = 'p3-factor';
-          row.style.setProperty('--factor-delay', (i * 70) + 'ms');
-          row.innerHTML = '<span class="p3-factor-icon" aria-hidden="true"><img src="' + factor[0] + '" alt=""></span><p><strong>' + factor[1] + '：</strong>' + factor[2] + '</p>';
-          copy.appendChild(row);
-          if (i === originFactors.length - 1 && originNext) originNext.hidden = false;
-        }, 650 + i * 900));
-      });
-    }
-  }
-  function setTemp(v) {
-    value = clamp(v, 20, 30);
-    var pct = (value - 20) / 10;
-    if (mercury) mercury.style.height = (18 + pct * 66).toFixed(1) + '%';
-    if (temp) temp.textContent = value.toFixed(1) + '°C';
-    if (thermoValue) thermoValue.textContent = '摄氏度：' + value.toFixed(1) + '°';
-    if (thermo) {
-      thermo.setAttribute('aria-valuenow', value.toFixed(1));
-      thermo.setAttribute('aria-valuetext', value.toFixed(1) + '摄氏度');
-      thermo.classList.toggle('hot', value >= 26.5);
-    }
-  }
-  function tempFromY(clientY) {
-    if (!thermo) return;
-    var r = thermo.getBoundingClientRect();
-    var p = clamp(1 - (clientY - r.top - r.height * .16) / (r.height * .66), 0, 1);
-    setTemp(20 + p * 10);
+    if (window.TyphoonFormation) window.TyphoonFormation.reset();
   }
   if (waveHit) waveHit.addEventListener('click', enterOriginStudy);
-  if (studyBack) studyBack.addEventListener('click', function () {
-    if (study) study.hidden = true;
-    if (originScene) originScene.hidden = false;
-    resetOriginStudy();
-    if (waveHit) waveHit.focus({ preventScroll: true });
-  });
-  if (thermo) {
-    thermo.addEventListener('pointerdown', function (e) { thermo.setPointerCapture(e.pointerId); tempFromY(e.clientY); revealOrigin(); });
-    thermo.addEventListener('pointermove', function (e) { if (e.buttons) { tempFromY(e.clientY); revealOrigin(); } });
-    thermo.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowUp' || e.key === 'ArrowRight') { e.preventDefault(); setTemp(value + .5); revealOrigin(); }
-      if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') { e.preventDefault(); setTemp(value - .5); revealOrigin(); }
-    });
-  }
-  setTemp(value);
-
   var flightRun = 0, routeToken = 0;
   function playFlight() {
     if (!flightPathEl || !flightIcon || (mapHit && mapHit.classList.contains('is-playing'))) return;
     // 从海浪形成页切到地图时，先清掉上一页的内容，避免路径动画期间
-    // 露出旧的温度计/形成条件画面。
+    // 露出旧的孕育舱画面。
     if (study) study.hidden = true;
     if (originScene) originScene.hidden = false;
     resetOriginStudy();
@@ -929,55 +854,144 @@ function initP3() {
     muifa: { year: '2022年', name: '梅花', number: '2212', map: 'assets/p3/paths/muifa.jpg', path: '生成于西北太平洋；9月14日20时30分在浙江舟山普陀区登陆，15日0时30分在上海奉贤区再次登陆，16日0时在山东青岛第三次登陆，16日12时40分在辽宁大连第四次登陆。路径：西北太平洋→东海→浙江→上海→山东→辽宁。', impact: '七级风圈半径约300公里，十级风圈约80—120公里。影响浙江、上海、江苏、山东、辽宁、吉林等地。', loss: '死亡失踪较少，紧急转移安置约40万人，直接经济损失约100亿元。浙江、上海、山东、辽宁等地农田受淹、房屋损坏、港口和交通受影响。', media: ['assets/p3/source/news-14.mp4','assets/p3/source/news-0.mp4'], mediaCaption: ['海面现场','新闻视频'], ticker: '梅花多次登陆，影响范围跨越长三角、山东和辽宁。' },
     dusurui: { year: '2023年', name: '杜苏芮', number: '2305', map: 'assets/p3/paths/dusurui.jpg', path: '生成于西北太平洋；7月28日9时55分在福建晋江市沿海登陆。路径：西北太平洋→巴士海峡→南海东北部→福建晋江→江西→安徽→华北→东北。', impact: '七级风圈半径约400公里，十级风圈约120—180公里。影响台湾、福建、浙江、江西、安徽、河南、河北、北京、天津、吉林、黑龙江等地；残余环流诱发华北极端暴雨。', loss: '死亡失踪约107人，紧急转移安置约120万人，直接经济损失约1100亿元（含华北暴雨影响）。福建、京津冀、东北等地洪涝严重，农田、房屋、交通大面积损毁。', media: ['assets/p3/source/news-5.mp4','assets/p3/source/news-14.mp4'], mediaCaption: ['暴雨现场','新闻视频'], ticker: '杜苏芮登陆后与中纬度系统相互作用，华北出现极端暴雨。' }
   };
+  /* 时间轴资料卡：底图 + 抠出的文本框都来自 107素材。
+     坐标全部按例图量出（单位：占画布宽/高的百分比），字号用 cqw（画布宽的百分之一），
+     所以无论屏幕多大，文字和底图的相对位置都与例图一致。
+     图片随网站一起保存在 assets/cards/，本地预览和部署使用同一套资源。 */
+  var CARD_DIR = 'assets/cards/';
+  var CF = {
+    header: 'e4627b3611baee04f20a738e8c7f65d3.webp',
+    rainbowBase: '38b4241fe38833eb2a811c187d07092e.webp', rainbowInfo: '0944f98eeec9788782e2077dbb91e942.webp', rainbowRed: 'b2e11712920b05f6253759589f02f4b3.webp',
+    lekimaBase: '5fd67d5d7dcb878d2d4ed85119d597e2.webp', lekimaPill: '585d647217930ff78b966254de20cc0e.webp', lekimaRed: '7bf93de45ad045b413c0b796cf9b9900.webp',
+    dusuruiBase: '4dfc775ce666d36f19f416a4940b1598.webp', dusuruiTag: '0b8fb0c5d4340987c6ec74551eff4724.webp', dusuruiPanel: '9a1b41e3b6b369f3b401069fa28c7482.webp', dusuruiRed: '0273ac13c26e4c1edcebd2d2a4636ec8.webp',
+    muifaBase: '57e00c1017bb9a070d11244132c81b22.webp', muifaPanel: 'b7de6448cbfcead027e41227b15d710b.webp', muifaRed: '2011f838d787e9054092dc739960ebed.webp',
+    higosBase: 'c5a39d2f8ad4cf2c6a440f5f5b4056ff.webp', higosPanel: 'fbbe34669f27e431ba41f1b424c84af9.webp', higosRed: 'ae9796f99cd5ee6af17c4b6cce9e5a4c.webp',
+    infaBase: 'a1d8a8371c00c65411e66a75bd54acd5.webp', infaPill: '25a19183d292f17a22516e9810b79bf2.webp', infaRed: '3cc761cf612e09d6c02013ce72ceb2da.webp',
+    mangBase: '8e12deba4818b0542cd44b5395e4c7c9.webp', mangBar: '7f6abfb951242177180327947f43fcb8.webp', mangRed: 'edda3e4ac48635c330ed40cadd4bcade.webp',
+    merBase: '6e20fa29d4d67f423f304cdf99943621.webp', merTime: 'b1d61875c38c620bd14d3d3c08b0c1d7.webp', merHarm: 'a86c6a44ae02df9b4d3f9c2884db379b.webp', merLoss: '2d48f5c4389beb1f83c05f8d1acbd9cb.webp', merRed: '894658d9ecbfb61cf9606668e02738d4.webp',
+    hatoBase: '82b95d7ec940a42070b392fbff81c6f4.webp', hatoRed: '2c0d9d5adacced9df0d4e76fb32d861c.webp'
+  };
+  var typhoonPosters = {
+    rainbow: { title: '台风“彩虹”', w: 907, base: CF.rainbowBase, frame: [2.4, 10, 95.2, 87.6], stage: '#e7eff0', close: [90, 6.4, 8.5], layers: [
+      { x: 0, y: 4.2, w: 100, h: 4.6, html: '台风“彩虹”', css: 'color:#1b3a46;font-size:6.6cqw;font-weight:900;letter-spacing:.06em' },
+      { x: 57.1, y: 12, w: 37.5, h: 2.9, html: '<span class="tg-white">2015</span><span class="tg-red">南海上岸</span>', cls: 'pt-tagrow' },
+      { x: 51.7, y: 26.9, w: 42.3, h: 12.7, img: CF.rainbowInfo, html: '七级风圈　约200公里<br>十级风圈　约60公里<br>转移约18万人', css: 'align-items:flex-start;text-align:left;padding-left:5cqw;font-size:3.3cqw;line-height:1.65;font-weight:600' },
+      { x: 5.3, y: 86.75, w: 89.3, h: 9.5, img: CF.rainbowRed, html: '彩虹登陆粤西，强风暴雨重创湛江等地。', cls: 'pt-red', css: 'font-size:4.6cqw' }
+    ] },
+    meranti: { title: '台风“莫兰蒂”', w: 900, base: CF.merBase, close: [92, 2.6, 8], layers: [
+      { x: 5, y: 4.7, w: 80, h: 9.4, html: '台风莫兰蒂', cls: 'pt-hero', css: 'font-size:15cqw;letter-spacing:-.02em' },
+      { x: 82.6, y: 6.2, w: 10.8, h: 2.6, html: '2016', css: 'font-size:3.4cqw;background:#24344a;border:1px solid rgba(255,255,255,.55);border-radius:1cqw' },
+      { x: 78.3, y: 10.9, w: 18.3, h: 2.5, html: '超强登陆', cls: 'pt-redtag' },
+      { x: 76.5, y: 13.6, w: 18.3, h: 2.5, html: '闽南重创', cls: 'pt-redtag' },
+      { x: 4.2, y: 18.1, w: 41.6, h: 14.4, img: CF.merTime, html: '<span class="t1">9月15日</span><span class="t2">3:05</span><span class="t3">福建厦门翔安区登陆</span>', cls: 'pt-time' },
+      { x: 5, y: 38, w: 66, h: 19.4, html: '<h4>✦ 登陆瞬间</h4><p>生成于西北太平洋关岛附近；<br>9月15日3时05分在福建厦门翔安区登陆。<br>路径：关岛附近→巴士海峡→台湾海峡→福建厦门翔安区。</p>', cls: 'pt-bluecard' },
+      { x: 30, y: 48, w: 64.4, h: 24.3, img: CF.merHarm, html: '<h4>风暴势力圈</h4><p>七级风圈半径约300—400公里，<br>十级风圈约120—180公里。<br>影响中国台湾、福建、浙江、江西、安徽、江苏等地。</p>', cls: 'pt-harm' },
+      { x: 4.4, y: 63.5, w: 65, h: 24.5, img: CF.merLoss, html: '<h4>灾情实录</h4><p>福建、浙江、江西等受灾，死亡失踪约49人，紧急转移安置约50万人，直接经济损失约<b>300亿元</b>。<br>厦门、泉州等地房屋倒塌、树木大面积倒伏、交通瘫痪。</p>', cls: 'pt-loss' },
+      { x: 6.1, y: 90, w: 89.4, h: 5.8, img: CF.merRed, html: '莫兰蒂登陆闽南后，强风暴雨影响东南沿海<br>与内陆多省。', cls: 'pt-red', css: 'font-size:3.7cqw;padding:0 5cqw' }
+    ] },
+    hato: { title: '台风“天鸽”', w: 907, base: CF.hatoBase, close: [92, 2.6, 8], layers: [
+      { x: 0, y: 4.6, w: 100, h: 4, html: '台风天鸽', css: 'font-size:6.8cqw;font-weight:900;letter-spacing:.06em;text-shadow:0 2px 6px rgba(0,0,0,.5)' },
+      { x: 7.9, y: 11, w: 70, h: 2.4, html: '2017　珠江口突袭', css: 'align-items:flex-start;font-size:4cqw;font-weight:600;font-family:var(--f-song);text-shadow:0 1px 4px rgba(0,0,0,.6)' },
+      { x: 7.9, y: 13.6, w: 70, h: 4.4, html: '珠江口突袭', css: 'align-items:flex-start;font-size:7cqw;font-weight:900;font-family:var(--f-song);text-shadow:0 2px 6px rgba(0,0,0,.6)' },
+      { x: 7.9, y: 41.2, w: 84, h: 9, html: '生成于菲律宾以东洋面；8月23日12时50分在广东珠海金湾区登陆。路径：菲律宾以东→南海北部→广东珠海→广西。', css: 'align-items:flex-start;text-align:left;font-size:4cqw;font-weight:500;line-height:1.65;text-shadow:0 1px 4px rgba(0,0,0,.75)' },
+      { x: 13.5, y: 55.2, w: 45, h: 3.2, html: '珠海金湾区登陆', cls: 'pt-hatolabel' },
+      { x: 14, y: 60.6, w: 37.5, h: 2.8, html: '<span>七级风圈</span><b>约250公里</b>', cls: 'pt-row' },
+      { x: 14, y: 63.8, w: 37.5, h: 2.8, html: '<span>十级风圈</span><b>约80公里</b>', cls: 'pt-row' },
+      { x: 14, y: 67, w: 37.5, h: 2.8, html: '<span>紧急转移</span><b>约27万人</b>', cls: 'pt-row' },
+      { x: 6.1, y: 88.5, w: 88.8, h: 11.5, img: CF.hatoRed, html: '天鸽正面袭击珠江口，粤港澳多地遭遇狂风，城市基础设施严重受损。', cls: 'pt-red', css: 'font-size:4.5cqw' }
+    ] },
+    mangkhut: { title: '台风“山竹”', w: 907, base: CF.mangBase, close: [92, 5, 8], layers: [
+      { x: 0, y: 3.6, w: 100, h: 4.8, html: '台风山竹', css: 'font-size:7.8cqw;font-weight:900;letter-spacing:.1em;text-shadow:0 2px 6px rgba(0,0,0,.6)' },
+      { x: 4.4, y: 12.4, w: 15, h: 3.6, html: '2018', cls: 'pt-metal' },
+      { x: 72.8, y: 12.4, w: 22.7, h: 3.6, html: '巨型风圈', cls: 'pt-metal' },
+      { x: 20, y: 29.2, w: 20, h: 3.4, html: '七级风圈<br>约500公里', css: 'font-size:2.9cqw;text-shadow:0 1px 3px #000' },
+      { x: 62, y: 35, w: 20, h: 3.4, html: '十级风圈<br>约200公里', css: 'font-size:2.9cqw;text-shadow:0 1px 3px #000' },
+      { x: 4.4, y: 72.9, w: 91.1, h: 3, img: CF.mangBar, html: '<span>转移安置</span><b>约300万人</b>', cls: 'pt-bar' },
+      { x: 4.4, y: 77.15, w: 91.1, h: 3, img: CF.mangBar, html: '<span>直接经济损失</span><b>约300亿元</b>', cls: 'pt-bar' },
+      { x: 5, y: 84, w: 90.4, h: 11.75, img: CF.mangRed, html: '山竹以巨型风圈横扫华南，粤港澳多地出现强风暴雨和大面积灾害。', cls: 'pt-red', css: 'font-size:4.4cqw;padding:0 7cqw' }
+    ] },
+    lekima: { title: '台风“利奇马”', w: 907, base: CF.lekimaBase, close: [92, 2.6, 8], layers: [
+      { x: 0, y: 5.95, w: 100, h: 7.5, html: '台风利奇马', cls: 'pt-hero', css: 'font-size:11.5cqw' },
+      { x: 30.4, y: 14.4, w: 40.6, h: 3, html: '<span>2019</span><i>›</i><span>跨省北上</span>', cls: 'pt-darktag' },
+      { x: 57, y: 24.15, w: 34.5, h: 6.25, img: CF.lekimaPill, html: '七级风圈<b>400—500公里</b>', cls: 'pt-pill' },
+      { x: 61.5, y: 50.85, w: 33.5, h: 6.15, img: CF.lekimaPill, html: '十级风圈<b>100—150公里</b>', cls: 'pt-pill' },
+      { x: 61.5, y: 71.15, w: 33.5, h: 6.25, img: CF.lekimaPill, html: '直接经济损失<b>约537亿元</b>', cls: 'pt-pill' },
+      { x: 0, y: 88.6, w: 100, h: 9.15, img: CF.lekimaRed, html: '利奇马长途北上，<br>大范围强风雨席卷华东、华北多地。', css: 'font-size:4.1cqw;font-weight:800;line-height:1.5' }
+    ] },
+    higos: { title: '台风“黑格比”', w: 1037, base: CF.higosBase, close: [88, 4, 7.8], layers: [
+      { x: 3.1, y: 0, w: 93.8, h: 8.15, img: CF.header, html: '<small>2020　浙东再袭</small>台风“黑格比”', cls: 'pt-head' },
+      { x: 5.3, y: 79.75, w: 89.7, h: 11.5, img: CF.higosPanel, html: '<div>七级风圈<b>200—300公里</b></div><div>十级风圈<b>80—100公里</b><span>转移安置　约20万人</span></div>', cls: 'pt-split' },
+      { x: 5.3, y: 93.8, w: 89.7, h: 5.4, img: CF.higosRed, html: '黑格比登陆浙东，强风暴雨给浙江多地带来明显灾害损失。', css: 'font-size:3.3cqw;font-weight:800' }
+    ] },
+    infa: { title: '台风“烟花”', w: 907, base: CF.infaBase, close: [8, 2.6, 8], layers: [
+      { x: 14, y: 4.2, w: 66, h: 8.2, html: '台风烟花', cls: 'pt-hero', css: 'font-size:13cqw;font-style:italic' },
+      { x: 79, y: 7.8, w: 15, h: 2.2, html: '2021', css: 'font-size:3.8cqw;font-weight:800;border-bottom:1px solid rgba(255,214,160,.8)' },
+      { x: 68, y: 11.2, w: 26, h: 2.6, html: '缓慢北上', css: 'align-items:flex-end;font-size:4.4cqw;font-weight:800;text-shadow:0 1px 4px rgba(0,0,0,.6)' },
+      { x: 5.3, y: 73.4, w: 35.5, h: 7.2, img: CF.infaPill, html: '七级风圈<b class="amber">300—400公里</b>', cls: 'pt-pill' },
+      { x: 5.3, y: 82.6, w: 31.1, h: 7.4, img: CF.infaPill, html: '十级风圈<b class="amber">约100公里</b>', cls: 'pt-pill' },
+      { x: 37.7, y: 82.6, w: 30.9, h: 7.4, img: CF.infaPill, html: '转移安置<b class="amber">约50万人</b>', cls: 'pt-pill' },
+      { x: 0, y: 92.6, w: 100, h: 4.3, img: CF.infaRed, html: '烟花移动缓慢，持续风雨给长三角防汛带来压力。', css: 'font-size:3.5cqw;font-weight:800' }
+    ] },
+    muifa: { title: '台风“梅花”', w: 1007, base: CF.muifaBase, close: [87.3, 4.1, 7.6], layers: [
+      { x: 3.7, y: 0, w: 92.4, h: 8.4, img: CF.header, html: '<small>2022年　四次登陆</small>台风“梅花”', cls: 'pt-head' },
+      { x: 52.1, y: 20.15, w: 42, h: 5.1, html: '浙江舟山→上海<br>→山东青岛→辽宁大连', css: 'align-items:flex-start;text-align:left;font-size:3.3cqw;line-height:1.45;text-shadow:0 1px 4px rgba(0,0,0,.7)' },
+      { x: 65.8, y: 56.85, w: 30.2, h: 27.15, img: CF.muifaPanel, html: '<div style="height:30%">七级风圈<b>约300公里</b></div><div style="height:34%">十级风圈<b>80—120公里</b></div><div style="height:36%">转移安置<b>约40万人</b></div>', cls: 'pt-stack' },
+      { x: 3.7, y: 89, w: 92.4, h: 11, img: CF.muifaRed, html: '梅花四次登陆，持续风雨影响华东至东北沿海多地。', cls: 'pt-red', css: 'font-size:4.3cqw' }
+    ] },
+    dusurui: { title: '台风“杜苏芮”', w: 923, base: CF.dusuruiBase, close: [92, 2.6, 8], layers: [
+      { x: 0, y: 4.6, w: 100, h: 4.6, html: '台风杜苏芮', css: 'color:#1d2b45;font-size:7.4cqw;font-weight:900;letter-spacing:.08em;text-shadow:0 1px 6px rgba(255,255,255,.7)' },
+      { x: 5.4, y: 11.1, w: 40.8, h: 3.4, img: CF.dusuruiTag, html: '<span style="width:36%">2023</span><span style="flex:1;color:#2a2f4a">远距离水汽</span>', css: 'flex-direction:row;font-size:3.7cqw;font-weight:700' },
+      { x: 61.8, y: 37.9, w: 25, h: 2.6, html: '华北极端暴雨', cls: 'pt-redlabel' },
+      { x: 5.4, y: 57.6, w: 89.4, h: 23.9, img: CF.dusuruiPanel, html: '<div class="pp-top">七级风圈<br>约400公里<br>十级风圈 120—180公里</div><div class="pp-bot">直接经济损失<br>约1100亿元</div>', cls: 'pt-panel' },
+      { x: 5.4, y: 84.75, w: 89.4, h: 13.25, img: CF.dusuruiRed, html: '杜苏芮登陆后环流北上，在华北地区诱发极端暴雨和洪涝灾害。', cls: 'pt-red', css: 'font-size:4.8cqw' }
+    ] }
+  };
+  function cardImg(file, cls) {
+    var im = document.createElement('img');
+    im.className = cls; im.alt = ''; im.decoding = 'async'; im.draggable = false;
+    im.src = CARD_DIR + file;
+    return im;
+  }
+  function pct(v) { return v + '%'; }
+  function renderPoster(item) {
+    var stage = $('#p3Poster');
+    stage.innerHTML = '';
+    stage.style.setProperty('--r', String(item.w / 2000));
+    stage.style.aspectRatio = item.w + ' / 2000';
+    stage.style.background = item.stage || '#0f1c25';
+    var baseBox = document.createElement('div');
+    baseBox.className = 'pl-base' + (item.frame ? ' is-framed' : '');
+    var f = item.frame || [0, 0, 100, 100];
+    baseBox.style.cssText = 'left:' + pct(f[0]) + ';top:' + pct(f[1]) + ';width:' + pct(f[2]) + ';height:' + pct(f[3]);
+    baseBox.appendChild(cardImg(item.base, 'pl-base-img'));
+    stage.appendChild(baseBox);
+    item.layers.forEach(function (L) {
+      var box = document.createElement('div');
+      box.className = 'pl';
+      box.style.cssText = 'left:' + pct(L.x) + ';top:' + pct(L.y) + ';width:' + pct(L.w) + ';height:' + pct(L.h);
+      if (L.img) box.appendChild(cardImg(L.img, 'pl-img'));
+      var text = document.createElement('div');
+      text.className = 'pt' + (L.cls ? ' ' + L.cls : '');
+      if (L.css) text.style.cssText = L.css;
+      text.innerHTML = L.html;
+      box.appendChild(text);
+      stage.appendChild(box);
+    });
+    var c = item.close || [92, 2.6, 8];
+    detailClose.style.cssText = 'left:' + pct(c[0]) + ';top:' + pct(c[1]) + ';width:' + c[2] + 'cqw;height:' + c[2] + 'cqw;font-size:' + (c[2] * .62).toFixed(2) + 'cqw';
+    stage.appendChild(detailClose);
+    // CSS 自定义属性中的相对 URL 会相对样式表解析，因此先转为相对页面的绝对 URL。
+    detail.style.setProperty('--card-bg', 'url("' + new URL(CARD_DIR + item.base, document.baseURI).href + '")');
+  }
   var detailTrigger = null;
   var bodyOverflow = '';
   function openTyphoon(key, trigger) {
-    var item = typhoonInfo[key];
+    var item = typhoonPosters[key];
     if (!item || !detail) return;
-    [$('#p3DetailMediaOne'), $('#p3DetailMediaTwo')].forEach(function (video) {
-      if (!video) return;
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
-    });
     detailTrigger = trigger;
-    $('#p3DetailKicker').textContent = item.year + '  台风编号 ' + item.number;
-    $('#p3DetailTitle').textContent = '台风“' + item.name + '”';
-    $('#p3DetailMap').src = item.map;
-    $('#p3DetailMap').alt = item.name + '台风路径图';
-    $('#p3DetailPath').textContent = item.path;
-    $('#p3DetailImpact').textContent = item.impact;
-    $('#p3DetailLoss').textContent = item.loss;
-    var media = item.media || ['assets/p3/media/media-flood.jpg', 'assets/p3/media/media-news.jpg'];
-    var mediaCaption = item.mediaCaption || ['现场画面', '新闻播报'];
-    var mediaOne = $('#p3DetailMediaOne'), mediaTwo = $('#p3DetailMediaTwo');
-    var mediaOneCaption = $('#p3DetailMediaOneCaption'), mediaTwoCaption = $('#p3DetailMediaTwoCaption');
-    if (mediaOne) {
-      mediaOne.src = media[0];
-      mediaOne.alt = mediaCaption[0] + '：台风“' + item.name + '”';
-      mediaOne.autoplay = true;
-      mediaOne.loop = true;
-      mediaOne.muted = true;
-      mediaOne.playsInline = true;
-      mediaOne.load();
-      mediaOne.play().catch(function () {});
-      mediaOne.addEventListener('canplay', function () { mediaOne.play().catch(function () {}); }, { once: true });
-    }
-    if (mediaTwo) {
-      mediaTwo.src = media[1];
-      mediaTwo.alt = mediaCaption[1] + '：台风“' + item.name + '”';
-      mediaTwo.autoplay = true;
-      mediaTwo.loop = true;
-      mediaTwo.muted = true;
-      mediaTwo.playsInline = true;
-      mediaTwo.load();
-      mediaTwo.play().catch(function () {});
-      mediaTwo.addEventListener('canplay', function () { mediaTwo.play().catch(function () {}); }, { once: true });
-    }
-    if (mediaOneCaption) mediaOneCaption.textContent = mediaCaption[0];
-    if (mediaTwoCaption) mediaTwoCaption.textContent = mediaCaption[1];
-    var ticker = $('#p3DetailTicker');
-    if (ticker) ticker.textContent = item.ticker || (item.year + '台风“' + item.name + '”影响沿海地区，请关注预警信息。');
+    detail.dataset.card = key;
+    $('#p3DetailTitle').textContent = item.title;
+    renderPoster(item);
     detail.hidden = false;
     detail.scrollTop = 0;
     if (historyScene) historyScene.inert = true;

@@ -98,22 +98,7 @@
 .p3.is-paged.is-reading-page .chapter-toolbar { background:rgba(238,243,241,.96); backdrop-filter:blur(8px); }
 .p3.is-paged:has(.p3-typhoon-detail:not([hidden])) .chapter-toolbar { display: none; }
 
-/* Temperature, animation, and conditions remain one reading page. */
-.p3.is-paged .chapter-formation .chapter-content { overflow-y: auto; overscroll-behavior-y: auto; }
-.p3.is-paged .chapter-formation .p3-study-head { margin: 0 0 10px; }
-.p3.is-paged .chapter-formation .p3-study-head h2 { font-size:clamp(31px, calc(38 * var(--u)), 40px); }
-.p3.is-paged .chapter-formation .p3-study-back { display: none; }
-.p3.is-paged .chapter-formation .p3-thermo-stage { min-height: 0; padding-top: 10px; }
-.p3.is-paged .chapter-formation .p3-thermo-prompt,
-.p3.is-paged .chapter-formation .p3-thermo-value { font-size:clamp(21px, calc(24 * var(--u)), 25px); }
-.p3.is-paged .chapter-formation .p3-thermo-stage.is-hidden { display: none; }
-.p3.is-paged .chapter-formation .p3-origin-reveal { padding: 0; }
-.p3.is-paged .chapter-formation .p3-origin-kicker { font-size:clamp(28px, calc(34 * var(--u)), 36px); }
-.p3.is-paged .chapter-formation .p3-origin-video { width: 100%; margin: 14px auto 22px; }
-.p3.is-paged .chapter-formation .p3-origin-copy { gap: 16px; margin: 0; }
-.p3.is-paged .chapter-formation .p3-factor { grid-template-columns: 44px 1fr; gap: 10px; }
-.p3.is-paged .chapter-formation .p3-factor p { font-size:clamp(21px, calc(23 * var(--u)), 24px); line-height: 1.5; }
-.p3.is-paged .chapter-formation .p3-factor-icon { width: 42px; height: 42px; }
+/* 形成条件互动页由 formation-lab.css 管理。 */
 .p3.is-paged .chapter-routes .p3-origin-route { padding: 0; }
 .p3.is-paged .chapter-routes .p3-origin-route-heading { font-size:clamp(28px, calc(32 * var(--u)), 34px); }
 .p3.is-paged .route-controls button { min-height: 44px; font-size:clamp(17px, calc(19 * var(--u)), 20px); }
@@ -323,7 +308,126 @@
   .p3.is-paged .chapter-game-menu .p3-games-options button { min-height: 45px; }
   .p3.is-paged .chapter-game-menu .p3-games-continue { margin-top: 6px; }
 }
+
+/* 时间轴资料卡：使用用户提供的地图底图，文字作为可缩放的 HTML 叠层。 */
+.p3.is-paged .p3-typhoon-detail {
+  --card-accent:#f1c94b;
+  overflow:hidden;
+  padding:0;
+  color:#fff;
+  background-color:#18313d;
+  background-image:linear-gradient(180deg,rgba(5,20,29,.16),rgba(5,20,29,.03) 55%,rgba(4,15,23,.43)),var(--card-bg);
+  background-position:center;
+  background-size:cover;
+  isolation:isolate;
+}
+.p3.is-paged .p3-card-shade { position:absolute; z-index:-1; inset:0; background:linear-gradient(180deg,rgba(3,14,22,.08),transparent 28%,transparent 68%,rgba(3,12,20,.32)); pointer-events:none; }
+.p3.is-paged .p3-detail-header { position:absolute; z-index:2; top:calc(30 * var(--u)); left:calc(22 * var(--u)); right:calc(18 * var(--u)); display:block; min-height:0; margin:0; padding:0; background:none; text-shadow:0 2px 7px rgba(4,14,20,.58); }
+.p3.is-paged .p3-detail-header > div { max-width:calc(350 * var(--u)); }
+.p3.is-paged .p3-detail-header p { margin:0 0 calc(3 * var(--u)); color:#fff; font-size:calc(15 * var(--u)); font-weight:700; letter-spacing:.08em; }
+.p3.is-paged .p3-detail-header h3 { margin:0; color:#fff; font-family:var(--f-hei); font-size:calc(38 * var(--u)); font-weight:900; line-height:1.05; letter-spacing:.03em; }
+.p3.is-paged .p3-detail-header .p3-detail-subtitle { margin-top:calc(8 * var(--u)); color:#fff; font-size:calc(16 * var(--u)); line-height:1.4; letter-spacing:.02em; }
+.p3.is-paged .p3-detail-close { position:absolute; top:calc(-13 * var(--u)); right:0; display:grid; place-items:center; width:calc(34 * var(--u)); height:calc(34 * var(--u)); border-color:rgba(255,255,255,.5); background:rgba(12,30,41,.55); color:#fff; font-size:calc(24 * var(--u)); backdrop-filter:blur(4px); }
+.p3.is-paged .p3-card-story,.p3.is-paged .p3-card-loss { position:absolute; z-index:1; left:calc(22 * var(--u)); right:calc(22 * var(--u)); padding:calc(13 * var(--u)) calc(15 * var(--u)); border:1px solid rgba(178,210,223,.38); border-radius:calc(5 * var(--u)); background:linear-gradient(145deg,rgba(25,58,75,.96),rgba(12,36,51,.9)); box-shadow:0 5px 18px rgba(0,0,0,.24); }
+.p3.is-paged .p3-card-story[hidden],.p3.is-paged .p3-card-loss[hidden] { display:none; }
+.p3.is-paged .p3-card-story h4,.p3.is-paged .p3-card-loss h4 { margin:0 0 calc(7 * var(--u)); color:#fff; font-size:calc(20 * var(--u)); }
+.p3.is-paged .p3-card-story p,.p3.is-paged .p3-card-loss p { margin:0; color:#fff; font-size:calc(14 * var(--u)); line-height:1.55; }
+.p3.is-paged .p3-card-metrics { position:absolute; z-index:1; top:calc(205 * var(--u)); right:calc(20 * var(--u)); display:grid; gap:calc(8 * var(--u)); width:calc(190 * var(--u)); margin:0; }
+.p3.is-paged .p3-card-metrics > div { display:flex; align-items:center; justify-content:space-between; gap:calc(8 * var(--u)); min-height:calc(40 * var(--u)); padding:calc(7 * var(--u)) calc(11 * var(--u)); border:1px solid rgba(173,206,219,.48); border-radius:calc(7 * var(--u)); background:linear-gradient(145deg,rgba(25,57,74,.95),rgba(8,29,43,.92)); box-shadow:0 3px 12px rgba(0,0,0,.26); }
+.p3.is-paged .p3-card-metrics dt,.p3.is-paged .p3-card-metrics dd { margin:0; color:#fff; font-size:calc(14 * var(--u)); line-height:1.22; }
+.p3.is-paged .p3-card-metrics dt { font-weight:600; }
+.p3.is-paged .p3-card-metrics dd { font-weight:800; text-align:right; }
+.p3.is-paged .p3-detail-ticker { position:absolute; z-index:2; left:calc(16 * var(--u)); right:calc(16 * var(--u)); bottom:calc(18 * var(--u)); margin:0; padding:calc(13 * var(--u)) calc(16 * var(--u)); border:1px solid rgba(255,121,108,.48); border-radius:calc(3 * var(--u)); background:linear-gradient(135deg,rgba(183,37,34,.96),rgba(127,16,20,.94)); box-shadow:0 6px 20px rgba(0,0,0,.28); color:#fff; font-size:calc(16 * var(--u)); font-weight:800; line-height:1.48; text-align:left; }
+.p3.is-paged .p3-typhoon-detail[data-card="lekima"] .p3-detail-header,.p3.is-paged .p3-typhoon-detail[data-card="infa"] .p3-detail-header,.p3.is-paged .p3-typhoon-detail[data-card="mangkhut"] .p3-detail-header { text-align:center; }
+.p3.is-paged .p3-typhoon-detail[data-card="lekima"] .p3-detail-header > div,.p3.is-paged .p3-typhoon-detail[data-card="infa"] .p3-detail-header > div,.p3.is-paged .p3-typhoon-detail[data-card="mangkhut"] .p3-detail-header > div { max-width:none; }
+.p3.is-paged .p3-typhoon-detail[data-card="lekima"] .p3-card-metrics { top:calc(205 * var(--u)); width:calc(165 * var(--u)); }
+.p3.is-paged .p3-typhoon-detail[data-card="higos"] .p3-card-metrics { top:auto; right:calc(16 * var(--u)); bottom:calc(104 * var(--u)); width:calc(416 * var(--u)); grid-template-columns:repeat(3,1fr); }
+.p3.is-paged .p3-typhoon-detail[data-card="higos"] .p3-card-metrics > div,.p3.is-paged .p3-typhoon-detail[data-card="infa"] .p3-card-metrics > div,.p3.is-paged .p3-typhoon-detail[data-card="mangkhut"] .p3-card-metrics > div { display:block; text-align:center; }
+.p3.is-paged .p3-typhoon-detail[data-card="higos"] .p3-card-metrics dd,.p3.is-paged .p3-typhoon-detail[data-card="infa"] .p3-card-metrics dd,.p3.is-paged .p3-typhoon-detail[data-card="mangkhut"] .p3-card-metrics dd { margin-top:calc(3 * var(--u)); text-align:center; }
+.p3.is-paged .p3-typhoon-detail[data-card="infa"] .p3-card-metrics { top:auto; right:calc(17 * var(--u)); bottom:calc(118 * var(--u)); width:calc(414 * var(--u)); grid-template-columns:repeat(3,1fr); }
+.p3.is-paged .p3-typhoon-detail[data-card="mangkhut"] .p3-card-metrics { top:auto; right:calc(18 * var(--u)); bottom:calc(112 * var(--u)); width:calc(412 * var(--u)); grid-template-columns:repeat(2,1fr); }
+.p3.is-paged .p3-typhoon-detail[data-card="muifa"] .p3-card-metrics { top:auto; bottom:calc(120 * var(--u)); }
+.p3.is-paged .p3-typhoon-detail[data-card="dusurui"] .p3-card-metrics { top:auto; bottom:calc(155 * var(--u)); }
+.p3.is-paged .p3-typhoon-detail[data-card="meranti"] .p3-detail-header h3 { font-size:calc(43 * var(--u)); }
+.p3.is-paged .p3-typhoon-detail[data-card="meranti"] .p3-card-story { top:calc(345 * var(--u)); }
+.p3.is-paged .p3-typhoon-detail[data-card="meranti"] .p3-card-metrics { top:calc(530 * var(--u)); left:calc(94 * var(--u)); right:auto; width:calc(332 * var(--u)); }
+.p3.is-paged .p3-typhoon-detail[data-card="meranti"] .p3-card-loss { top:calc(700 * var(--u)); bottom:calc(92 * var(--u)); overflow:auto; }
+.p3.is-paged .p3-typhoon-detail[data-card="hato"] .p3-card-story { top:calc(360 * var(--u)); background:rgba(17,47,67,.52); }
+.p3.is-paged .p3-typhoon-detail[data-card="hato"] .p3-card-metrics { top:calc(575 * var(--u)); left:calc(62 * var(--u)); right:auto; width:calc(220 * var(--u)); }
+@media (max-height:700px) {
+  .p3.is-paged .p3-detail-header { top:16px; }
+  .p3.is-paged .p3-detail-header h3 { font-size:30px; }
+  .p3.is-paged .p3-card-metrics { transform:scale(.84); transform-origin:top right; }
+  .p3.is-paged .p3-detail-ticker { bottom:8px; padding:8px 12px; font-size:13px; }
+}
 @media (prefers-reduced-motion: reduce) {
   .p3.is-paged .p3-scroll { scroll-behavior: auto; }
 }
+
+/* ============ 时间轴资料卡（107素材版） ============
+   画布比例 = 例图比例；所有图层用百分比定位，字号用 cqw，整张卡等比缩放。
+   屏幕比画布宽时，两侧用同一张底图的模糊版补满，不留黑边。 */
+#p3TyphoonDetail.is-poster { display:flex; align-items:center; justify-content:center; overflow:hidden; padding:0; background:#0d1820; color:#fff; isolation:isolate; animation:none; }
+#p3TyphoonDetail.is-poster[hidden] { display:none; }
+#p3TyphoonDetail.is-poster::before { content:""; position:absolute; inset:-30px; z-index:-1; background-image:var(--card-bg); background-position:center; background-size:cover; filter:blur(16px) brightness(.55); }
+.p3-sr-only { position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.p3-poster { position:relative; width:min(100%, calc(var(--vh, 100vh) * var(--r, .4535))); max-height:var(--vh, 100vh); container-type:inline-size; overflow:hidden; font-family:var(--f-hei); box-shadow:0 0 30px rgba(0,0,0,.35); }
+.p3-poster .pl-base { position:absolute; overflow:hidden; }
+.p3-poster .pl-base.is-framed { border-radius:3cqw; box-shadow:0 2px 10px rgba(20,40,50,.25); }
+.p3-poster .pl-base-img { display:block; width:100%; height:100%; object-fit:cover; }
+.p3-poster .pl { position:absolute; }
+.p3-poster .pl-img { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; pointer-events:none; }
+.p3-poster .pt { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:#fff; font-weight:700; line-height:1.35; letter-spacing:.02em; }
+.p3-poster .pt b { font-weight:800; }
+/* 关闭按钮：跟着画布走，位置由 JS 按每张卡单独给 */
+#p3DetailClose.p3-poster-close { position:absolute; z-index:20; transform:translate(-50%,-50%); display:grid; place-items:center; padding:0; border:1px solid rgba(30,50,60,.25); border-radius:50%; background:#fff; color:#1f3540; line-height:1; box-shadow:0 2px 8px rgba(0,0,0,.25); backdrop-filter:none; cursor:pointer; }
+
+/* 通用文字样式 */
+.p3-poster .pt-red { align-items:flex-start; text-align:left; padding:0 6cqw; font-weight:800; line-height:1.45; }
+.p3-poster .pt-hero { font-weight:900; line-height:1; background:linear-gradient(180deg,#fff 0%,#dfe7ec 55%,#9fb0ba 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 .6cqw .8cqw rgba(0,0,0,.55)); }
+.p3-poster .pt-pill { font-size:3.7cqw; line-height:1.35; }
+.p3-poster .pt-pill b { display:block; color:#f6d9a6; font-size:4cqw; }
+.p3-poster .pt-pill b.amber { color:#f5a95b; }
+.p3-poster .pt-tagrow { flex-direction:row; justify-content:flex-start; border-radius:999px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.18); overflow:hidden; font-size:3.7cqw; }
+.p3-poster .pt-tagrow .tg-white { flex:0 0 42%; color:#1f2f38; font-weight:600; }
+.p3-poster .pt-tagrow .tg-red { flex:1; align-self:stretch; display:grid; place-items:center; border:.35cqw solid #a8262d; border-radius:999px; color:#a8262d; font-weight:800; }
+.p3-poster .pt-darktag { flex-direction:row; gap:3cqw; border:1px solid rgba(220,230,235,.5); border-radius:1cqw; background:linear-gradient(90deg,rgba(20,34,46,.88),rgba(28,46,60,.75)); font-size:4.2cqw; font-weight:800; }
+.p3-poster .pt-darktag span:first-child { color:#f2d6a2; }
+.p3-poster .pt-darktag i { font-style:normal; opacity:.7; }
+.p3-poster .pt-redlabel { border-radius:1.2cqw; background:#d9443f; font-size:3.6cqw; font-weight:900; box-shadow:0 1px 5px rgba(0,0,0,.35); }
+.p3-poster .pt-redtag { background:linear-gradient(90deg,rgba(150,32,30,.95),rgba(180,48,42,.9)); transform:skewX(-8deg); font-size:3.6cqw; font-weight:900; }
+.p3-poster .pt-metal { border:.3cqw solid #e6eaec; border-radius:1.2cqw; background:linear-gradient(180deg,#f5f7f8,#c9d0d4); color:#1d2a31; font-size:4.3cqw; font-weight:900; box-shadow:0 1px 5px rgba(0,0,0,.4); }
+.p3-poster .pt-bar { flex-direction:row; justify-content:space-between; padding:0 7cqw 0 8cqw; font-size:3.5cqw; }
+.p3-poster .pt-row { flex-direction:row; justify-content:flex-start; gap:2cqw; padding-left:2.5cqw; border:1px solid rgba(220,230,240,.45); background:rgba(16,30,48,.55); font-size:3.1cqw; }
+.p3-poster .pt-row > span,.p3-poster .pt-row > b { white-space:nowrap; }
+.p3-poster .pt-hatolabel { align-items:flex-start; padding-left:3cqw; background:linear-gradient(90deg,rgba(150,30,35,.85),rgba(150,30,35,0)); font-size:5.2cqw; font-weight:900; }
+.p3-poster .pt-head { align-items:flex-start; text-align:left; padding-left:5cqw; font-size:5.6cqw; font-weight:900; line-height:1.15; }
+.p3-poster .pt-head small { display:block; margin-bottom:.8cqw; font-size:3.1cqw; font-weight:500; opacity:.85; letter-spacing:.08em; }
+.p3-poster .pt-stack { justify-content:flex-start; align-items:stretch; }
+.p3-poster .pt-stack > div { display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding-left:12%; font-size:4cqw; font-weight:800; line-height:1.3; }
+.p3-poster .pt-stack b { font-size:3.7cqw; }
+.p3-poster .pt-split { flex-direction:row; align-items:stretch; }
+.p3-poster .pt-split > div { display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding-left:4.5cqw; font-size:3.6cqw; line-height:1.45; }
+.p3-poster .pt-split > div:first-child { flex:0 0 47.5%; }
+.p3-poster .pt-split > div:last-child { flex:1; }
+.p3-poster .pt-split b { display:block; font-weight:700; }
+.p3-poster .pt-panel { justify-content:flex-start; align-items:stretch; text-align:left; font-size:4.2cqw; line-height:1.5; }
+.p3-poster .pt-panel .pp-top { height:56%; display:flex; flex-direction:column; justify-content:center; padding:0 5cqw; }
+.p3-poster .pt-panel .pp-bot { flex:1; display:flex; flex-direction:column; justify-content:center; padding:0 5cqw; }
+/* 莫兰蒂：三张卡片 */
+.p3-poster .pt-time { justify-content:center; padding-top:1cqw; }
+.p3-poster .pt-time .t1 { font-size:4.6cqw; font-weight:800; }
+.p3-poster .pt-time .t2 { font-size:10.5cqw; font-weight:900; color:#f2c94c; line-height:1.05; }
+.p3-poster .pt-time .t3 { margin-top:1cqw; font-size:3.5cqw; font-weight:800; color:#f2c94c; }
+.p3-poster .pt-bluecard { justify-content:flex-start; align-items:flex-start; text-align:left; padding:3cqw 4cqw; border:1px solid rgba(255,255,255,.22); background:linear-gradient(160deg,#36526d,#2a4259); clip-path:polygon(0 3%,3% 0,97% 0,100% 3%,100% 97%,97% 100%,3% 100%,0 97%); box-shadow:0 3px 10px rgba(0,0,0,.35); }
+.p3-poster .pt-bluecard h4 { width:100%; margin:0 0 1.6cqw; padding-bottom:1.2cqw; border-bottom:1px solid rgba(255,255,255,.35); font-size:5cqw; font-weight:900; }
+.p3-poster .pt-bluecard p { margin:0; font-size:2.9cqw; font-weight:600; line-height:1.6; }
+.p3-poster .pt-harm h4,.p3-poster .pt-loss h4 { position:absolute; margin:0; font-size:5.2cqw; font-weight:900; }
+.p3-poster .pt-harm p,.p3-poster .pt-loss p { position:absolute; margin:0; text-align:left; font-size:2.9cqw; font-weight:600; line-height:1.6; }
+.p3-poster .pt-harm { color:#1d2530; }
+.p3-poster .pt-harm h4 { left:46%; top:33%; }
+.p3-poster .pt-harm p { left:9%; right:8%; top:52%; }
+.p3-poster .pt-loss h4 { left:27%; top:34%; }
+.p3-poster .pt-loss p { left:9%; right:7%; top:53%; }
+.p3-poster .pt-loss b { color:#f2c94c; }
 .p3-route-open #pager { display: none; }

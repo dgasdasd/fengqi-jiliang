@@ -41,9 +41,7 @@
   var study = $('#p3OriginStudy'), reveal = $('#p3OriginReveal');
   var seaPages = [], routePage;
   if (study && reveal) {
-    reveal.insertBefore(heading('台风形成的条件'), $('#p3OriginCopy'));
-    page(study, '海面温度与台风形成', [$('.p3-study-head', study), $('#p3ThermoStage'), reveal,
-      $('.p3-origin-next')], 'chapter-formation');
+    page(study, '台风形成条件', [$('#p3FormationLab'), reveal], 'chapter-formation');
   }
   var process = $('.p3-view[data-view="process"]');
   var evidence = $('.p3-view[data-view="evidence"]');
@@ -187,7 +185,7 @@
     var readingContent = event.target.closest('.chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-stories .chapter-content, .chapter-prep-combined .chapter-content, .chapter-profile-combined .chapter-content');
     if (readingContent && ((event.deltaY > 0 && readingContent.scrollTop < readingContent.scrollHeight - readingContent.clientHeight - 1) ||
       (event.deltaY < 0 && readingContent.scrollTop > 1))) return;
-    if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-thermo, .p3-typhoon-detail, .p3-prep-images')) return;
+    if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-typhoon-detail, .p3-prep-images')) return;
     event.preventDefault();
     if (Math.abs(event.deltaY) < 8 || Date.now() < wheelLock) return;
     wheelLock = Date.now() + 560;

@@ -1,0 +1,68 @@
+/* 参考图中的云海、圆形开关与椭圆孕育舱。尺寸跟随手机画布。 */
+.p3.is-paged .chapter-formation { background:#b6cbd9 url('../assets/formation/sky.webp') center/cover no-repeat; }
+.p3.is-paged .chapter-formation .chapter-content { padding:58px 14px 12px; overflow:hidden; }
+.formation-lab { position:relative; height:100%; color:#163e54; font-family:var(--f-hei); }
+.formation-lab:focus { outline:none; }
+.lab-workspace { display:grid; grid-template-rows:minmax(0,1fr) auto 96px 30px; height:100%; gap:10px; }
+.lab-arena { position:relative; min-height:0; }
+.lab-orbit { position:absolute; inset:10% 7% 8%; border:1px solid rgba(195,253,255,.85); border-radius:50%; box-shadow:0 0 18px rgba(131,232,255,.16); pointer-events:none; }
+.lab-orbit::after { content:""; position:absolute; inset:6%; border:1px dashed rgba(237,254,255,.48); border-radius:50%; }
+.lab-chamber { position:absolute; top:22%; left:26%; width:48%; height:55%; overflow:hidden; border-radius:49% / 25%; background:#3d8aaf; box-shadow:0 0 0 3px rgba(240,254,255,.75),0 0 0 7px rgba(194,230,244,.42),0 12px 24px rgba(40,91,124,.15); }
+.lab-chamber img,.lab-chamber video { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; }
+.lab-chamber video { opacity:0; transition:opacity .25s; }
+.formation-lab.is-playing .lab-chamber video { opacity:1; }
+.lab-title { position:absolute; top:25%; left:26%; width:48%; margin:0; text-align:center; font-size:clamp(19px,calc(27 * var(--u)),27px); color:white; letter-spacing:.12em; text-shadow:0 2px 8px #24587388; pointer-events:none; }
+.lab-switch { position:absolute; z-index:2; display:flex; flex-direction:column; align-items:center; width:30%; padding:0; border:0; background:none; color:#143e55; cursor:pointer; transform:translate(-50%,-50%); -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+.lab-switch img { display:block; width:clamp(60px,calc(90 * var(--u)),94px); aspect-ratio:1; filter:drop-shadow(0 5px 10px rgba(48,120,152,.16)); transition:transform .25s,filter .25s; }
+.lab-switch span { margin-top:4px; padding:2px 5px; border-radius:5px; font-size:clamp(11px,calc(14 * var(--u)),14px); font-weight:700; white-space:nowrap; background:rgba(231,247,253,.65); line-height:1.4; }
+.lab-switch i { position:absolute; top:2px; right:12%; display:none; width:20px; height:20px; border-radius:50%; background:#076b86; color:white; font:700 13px/20px var(--f-hei); box-shadow:0 0 0 2px #e5fbff; }
+.lab-switch[aria-pressed="true"] img { filter:drop-shadow(0 0 10px #56e3f7); }
+.lab-switch[aria-pressed="true"] i { display:block; }
+.lab-switch.is-current img { transform:scale(1.07); }
+.lab-switch:focus-visible { outline:2px solid #066788; outline-offset:3px; border-radius:50%; }
+.lab-switch-warm { left:50%; top:9%; }
+.lab-switch-moisture { left:13%; top:35%; }
+.lab-switch-disturbance { left:13%; top:69%; }
+.lab-switch-coriolis { left:87%; top:69%; }
+.lab-switch-shear { left:50%; top:89%; }
+.lab-progress { padding:10px 14px 12px; border:1px solid rgba(249,255,255,.8); border-radius:20px; background:rgba(242,251,255,.7); }
+.lab-progress-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:7px; font-size:14px; }
+.lab-progress-heading strong { font-size:19px; color:#066788; font-variant-numeric:tabular-nums; }
+.lab-progress-track { display:grid; grid-template-columns:repeat(5,1fr); gap:4px; height:7px; }
+.lab-progress-track span { border-radius:8px; background:#94adb9; transition:background .3s,box-shadow .3s; }
+.lab-progress-track span.is-filled { background:#07869f; box-shadow:0 0 6px #48dcf0; }
+.lab-explanation { padding:9px 13px; border-left:3px solid #4bafca; border-radius:0 10px 10px 0; background:rgba(247,253,255,.78); overflow-y:auto; }
+.lab-explanation h3 { margin:0 0 5px; font-size:15px; line-height:1.35; color:#175772; }
+.lab-explanation p { margin:0; font-size:13px; line-height:1.65; color:#284a5c; }
+.lab-actions { display:flex; align-items:center; justify-content:space-between; }
+.lab-actions button { min-height:30px; padding:2px 4px; border:0; background:none; color:#1c546e; font:600 13px/1.4 var(--f-hei); cursor:pointer; }
+.lab-actions .lab-continue { color:#075f7a; }
+.lab-success { position:fixed; inset:0; z-index:60; display:grid; place-items:center; padding:24px; background:rgba(30,69,90,.42); backdrop-filter:blur(7px); }
+.lab-success[hidden] { display:none; }
+.lab-success-card { width:min(100%,355px); padding:28px 22px 20px; border:1px solid #fff; border-radius:26px; background:linear-gradient(145deg,#fff,#e2f6fc); box-shadow:0 20px 80px #20465755; text-align:center; animation:lab-achievement .4s ease-out; }
+.lab-success-card > img { width:76px; height:80px; object-fit:contain; }
+.lab-success-kicker { margin:13px 0 10px !important; font-size:12px !important; letter-spacing:.1em; color:#29758b !important; }
+.lab-success-card h2 { margin:0 0 15px; font-size:23px; line-height:1.5; color:#194b65; }
+.lab-success-card > p { margin:0 0 22px; font-size:14px; line-height:1.8; color:#466574; }
+.lab-success-card button { display:block; width:100%; min-height:44px; border:0; border-radius:14px; background:#146c88; color:#fff; font:600 14px/1.4 var(--f-hei); cursor:pointer; }
+.lab-success-card #p3FormationSuccessClose { margin-top:8px; background:none; color:#3c6173; }
+.lab-actions button:focus-visible,.lab-success-card button:focus-visible { outline:2px solid #056a87; outline-offset:3px; }
+.formation-lab[data-energy="5"] .lab-chamber { box-shadow:0 0 0 3px #f0feff,0 0 0 7px #b8f2ff88,0 0 28px #64eeff; }
+.p3:has(.lab-success:not([hidden])) .chapter-toolbar { visibility:hidden; }
+@keyframes lab-achievement { from { opacity:0; transform:translateY(12px) scale(.96); } to { opacity:1; transform:none; } }
+@media (max-height:720px) {
+ .p3.is-paged .chapter-formation .chapter-content { padding-top:54px; padding-bottom:8px; }
+ .lab-workspace { grid-template-rows:minmax(0,1fr) auto 116px 26px; gap:7px; }
+ .lab-switch img { width:60px; }
+ .lab-switch span { margin-top:1px; font-size:11px; }
+ .lab-progress { padding:7px 12px 10px; }
+ .lab-progress-heading { font-size:13px; }
+ .lab-switch-warm { top:32px; }
+ .lab-title { top:28%; }
+ .lab-explanation p { font-size:12px; line-height:1.6; }
+}
+@media (max-height:600px) { .lab-switch img { width:54px; } .lab-title { font-size:18px; } }
+@media (prefers-reduced-motion:reduce) {
+ .lab-switch img,.lab-chamber video,.lab-progress-track span { transition:none; }
+ .lab-success-card { animation:none; }
+}
