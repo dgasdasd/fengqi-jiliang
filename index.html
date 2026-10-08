@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="css/style.css?v=20261007-cards1">
 <link rel="stylesheet" href="css/chapter-pages.css?v=20261008-timeline1">
 <link rel="stylesheet" href="css/formation-lab.css?v=20261008-thermo1">
+<link rel="stylesheet" href="css/impact-story.css?v=20261008-impact1">
 </head>
 <body>
 
@@ -203,55 +204,73 @@
         <h2>风带来了什么</h2>
         <img class="p3-impact-person p3-impact-guide" src="assets/p3/tree/guide.png" alt="蓝色 Q 版气象助手">
         <section class="p3-impact-dialog p3-impact-question" data-impact-dialog="question">
-          <button type="button" class="p3-impact-bubble" aria-label="查看台风影响">
+          <p class="p3-impact-bubble">
             大家谈起台风闻风色变，它到底带来了什么影响呢？
-          </button>
+          </p>
         </section>
         <img class="p3-impact-person p3-impact-fisher" data-impact-person="fisherman" src="assets/p3/tree/fisher.png" alt="渔民" hidden>
         <section class="p3-impact-dialog p3-impact-fisher-dialog" data-impact-dialog="fisherman" hidden>
-          <button type="button" class="p3-impact-bubble" aria-label="查看城市影响">
+          <p class="p3-impact-bubble">
             上游的台风掀起巨浪，把我们的渔船都打翻了，多少渔民因为这场台风损失惨重哟
-          </button>
+          </p>
         </section>
         <img class="p3-impact-person p3-impact-city" data-impact-person="city" src="assets/p3/tree/city.png" alt="城市居民" hidden>
         <section class="p3-impact-dialog p3-impact-city-dialog" data-impact-dialog="city" hidden>
-          <button type="button" class="p3-impact-bubble" aria-label="查看乡村影响">
+          <p class="p3-impact-bubble">
             中游的城市里被风刮倒的树木到处都是，成了严重积水，停水停电生活非常不便
-          </button>
+          </p>
         </section>
         <img class="p3-impact-person p3-impact-village" data-impact-person="village" src="assets/p3/tree/village.png" alt="乡村居民" hidden>
         <section class="p3-impact-dialog p3-impact-village-dialog" data-impact-dialog="village" hidden>
-          <button type="button" class="p3-impact-bubble" aria-label="查看下游影响">
+          <p class="p3-impact-bubble">
             中游的村子也没好到哪里去，泥石流把我的房子冲垮了，农田也毁了
-          </button>
+          </p>
         </section>
         <img class="p3-impact-person p3-impact-firefighter" data-impact-person="downstream" src="assets/p3/tree/firefighter.png" alt="消防员" hidden>
         <section class="p3-impact-dialog p3-impact-downstream-dialog" data-impact-dialog="downstream" hidden>
-          <button type="button" class="p3-impact-bubble" aria-label="查看灾害链">
+          <p class="p3-impact-bubble">
             下游人员伤亡惨重，城市内涝严重，疫病也频发，我们在争分夺秒的救人
-          </button>
+          </p>
         </section>
-        <button class="p3-impact-chain-trigger" id="p3ImpactChainTrigger" type="button" aria-label="展开上游中游下游灾害链" hidden>
-          <img src="assets/p3/tree/typhoon.png" alt="台风图标">
+        <div class="impact-story-controls"><button id="p3ImpactPause" type="button" aria-pressed="false">暂停对话</button><button id="p3ImpactReplay" type="button">重新播放</button></div>
+        <p class="impact-story-announcement" id="p3ImpactAnnouncement" aria-live="polite" aria-atomic="true"></p>
+        <button class="p3-impact-chain-trigger" id="p3ImpactChainTrigger" type="button" aria-label="查看下方灾害链" hidden>
+          <img src="assets/p3/tree/typhoon.png" alt=""><span>查看灾害链 ↓</span>
         </button>
         <section class="p3-impact-chain" id="p3ImpactChain" aria-label="上游中游下游灾害链" hidden>
           <div class="p3-impact-chain-lead">上游台风生成是灾害源头。中游物质伤害扩大。下游遭受综合冲击，民生受损。</div>
           <div class="p3-impact-chain-list">
             <article class="p3-impact-chain-row">
               <div class="p3-impact-chain-node"><i></i><strong>上游</strong><small>海上生成</small></div>
-              <div class="p3-impact-chain-copy"><h4>强风、巨浪，摧毁船只；风暴潮抬升海平面</h4><p>2019年利奇马：七级风圈近海掀起 8—12 米巨浪，摧毁船只 1699 艘、沉船 263 艘。</p></div>
+              <div class="impact-evidence">
+                <button class="impact-avatar" type="button" aria-label="查看上游渔民灾情数据" aria-expanded="false" aria-controls="p3ImpactUpstreamData"><img src="assets/impact/upstream-avatar.webp" alt="渔民头像"><span>点击头像查看数据</span></button>
+                <video class="impact-evidence-video" src="assets/impact/upstream.mp4" poster="assets/impact/upstream-poster.webp" muted loop playsinline webkit-playsinline preload="none" aria-label="上游海浪灾害视频"></video>
+                <div class="p3-impact-chain-copy" id="p3ImpactUpstreamData" hidden><h4>强风、巨浪，摧毁船只；风暴潮抬升海平面</h4><p>2019年利奇马：七级风圈近海掀起 8—12 米巨浪，摧毁船只 1699 艘、沉船 263 艘。</p></div>
+              </div>
             </article>
             <article class="p3-impact-chain-row">
               <div class="p3-impact-chain-node"><i></i><strong>中游</strong><small>城市影响</small></div>
-              <div class="p3-impact-chain-copy"><h4>狂风刮倒树木，高空坠物；强降雨造成内涝</h4><p>2023年杜苏芮：倒伏树木 11632 棵，积水路段 383 处，50 万户停电、550 余处停水。</p></div>
+              <div class="impact-evidence">
+                <button class="impact-avatar" type="button" aria-label="查看中游城市灾情数据" aria-expanded="false" aria-controls="p3ImpactCityData"><img src="assets/impact/city-avatar.webp" alt="城市居民头像"><span>点击头像查看数据</span></button>
+                <video class="impact-evidence-video impact-video-city" src="assets/impact/city.mp4" poster="assets/impact/city-poster.webp" muted loop playsinline webkit-playsinline preload="none" aria-label="中游城市强风暴雨视频"></video>
+                <div class="p3-impact-chain-copy" id="p3ImpactCityData" hidden><h4>狂风刮倒树木，高空坠物；强降雨造成内涝</h4><p>2023年杜苏芮：倒伏树木 11632 棵，积水路段 383 处，50 万户停电、550 余处停水。</p></div>
+              </div>
             </article>
             <article class="p3-impact-chain-row">
               <div class="p3-impact-chain-node"><i></i><strong>中游</strong><small>乡村影响</small></div>
-              <div class="p3-impact-chain-copy"><h4>房屋倒塌、农作物损毁；山体滑坡、道路失联</h4><p>2019年利奇马：冲毁农村房屋 3.6 万间，18.5 万公顷农作物受损，326 处山体滑坡掩埋房屋。</p></div>
+              <div class="impact-evidence">
+                <button class="impact-avatar" type="button" aria-label="查看中游乡村灾情数据" aria-expanded="false" aria-controls="p3ImpactVillageData"><img src="assets/impact/village-avatar.webp" alt="乡村居民头像"><span>点击头像查看数据</span></button>
+                <video class="impact-evidence-video" src="assets/impact/village.mp4" poster="assets/impact/village-poster.webp" muted loop playsinline webkit-playsinline preload="none" aria-label="中游乡村洪涝视频"></video>
+                <div class="p3-impact-chain-copy" id="p3ImpactVillageData" hidden><h4>房屋倒塌、农作物损毁；山体滑坡、道路失联</h4><p>2019年利奇马：冲毁农村房屋 3.6 万间，18.5 万公顷农作物受损，326 处山体滑坡掩埋房屋。</p></div>
+              </div>
             </article>
             <article class="p3-impact-chain-row">
               <div class="p3-impact-chain-node"><i></i><strong>下游</strong><small>综合冲击</small></div>
-              <div class="p3-impact-chain-copy"><h4>人员伤亡、停课停产停电；城市内涝、疫病频发</h4><p>2026年巴威：江苏、山东地区出现内涝、停电，企业停工，学校停课。</p></div>
+              <div class="impact-evidence">
+                <button class="impact-avatar" type="button" aria-label="查看下游救援灾情数据" aria-expanded="false" aria-controls="p3ImpactDownstreamData"><img src="assets/impact/downstream-avatar.webp" alt="消防员头像"><span>点击头像查看数据</span></button>
+                <video class="impact-evidence-video" src="assets/impact/downstream.mp4" poster="assets/impact/downstream-poster.webp" muted loop playsinline webkit-playsinline preload="none" aria-label="下游救援视频"></video>
+                <div class="p3-impact-chain-copy" id="p3ImpactDownstreamData" hidden><h4>人员伤亡、停课停产停电；城市内涝、疫病频发</h4><p>2026年巴威：江苏、山东地区出现内涝、停电，企业停工，学校停课。</p></div>
+              </div>
             </article>
           </div>
           <section class="p3-impact-statistics" aria-label="近十年典型台风统计">
@@ -565,7 +584,8 @@
 
 <script src="js/formation-lab.js?v=20261008-lab1"></script>
 <script src="js/formation-temperature.js?v=20261008-thermo1"></script>
-<script src="js/main.js?v=20261008-thermo1"></script>
+<script src="js/impact-story.js?v=20261008-impact1"></script>
+<script src="js/main.js?v=20261008-impact1"></script>
 <script src="js/p3-games.js?v=20261005-impactgames1"></script>
 <script src="js/chapter-pages.js?v=20261008-thermo1"></script>
 <script src="js/teshu-bridge.js?v=20261004-carousel1"></script>

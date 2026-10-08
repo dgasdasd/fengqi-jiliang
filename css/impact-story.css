@@ -1,0 +1,22 @@
+.p3-impact-dialog .p3-impact-bubble { margin:0; cursor:default; display:grid; }
+.p3-impact-dialog .p3-impact-bubble:hover { transform:none; box-shadow:0 2px 9px rgba(38,48,49,.11); }
+.impact-line-size,.impact-line-text { grid-area:1 / 1; }
+.impact-line-size { visibility:hidden; }
+.impact-story-controls { position:absolute; inset:auto 16px 8%; display:flex; justify-content:center; gap:12px; z-index:5; }
+.impact-story-controls button { min-height:42px; padding:7px 16px; border:1px solid #a6b7ba; border-radius:999px; background:rgba(255,255,255,.9); font:18px var(--f-cal); color:#28556a; cursor:pointer; }
+.impact-story-controls button:focus-visible,.impact-avatar:focus-visible { outline:2px solid #1875a5; outline-offset:3px; }
+.impact-story-announcement { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.p3-impact-chain-trigger { top:auto; bottom:18%; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:8px; width:auto; height:auto; min-height:44px; padding:8px 16px; border:1px solid #a6b7ba; border-radius:999px; background:rgba(255,255,255,.9); font:18px var(--f-cal); color:#28556a; white-space:nowrap; animation:none; }
+.p3-impact-chain-trigger img { width:28px; height:28px; }
+.p3-impact-chain-row .impact-evidence { display:contents; }
+.impact-avatar { grid-column:2; justify-self:end; display:flex; flex-direction:column; align-items:center; padding:0; border:0; background:none; color:#28556a; cursor:pointer; }
+.impact-avatar img { width:88px; height:88px; object-fit:contain; }
+.impact-avatar span { font:13px/1.5 var(--f-hei); }
+.impact-avatar[aria-expanded="true"] img { filter:drop-shadow(0 0 4px #588da5); }
+.impact-evidence-video { grid-column:1 / -1; display:block; width:100%; aspect-ratio:4 / 3; object-fit:contain; border-radius:5px; background:#253b43; }
+.impact-video-city { aspect-ratio:5 / 3; }
+.p3-impact-chain-row .p3-impact-chain-copy { grid-column:1 / -1; }
+.p3-impact-chain-row .p3-impact-chain-node { align-self:center; }
+.p3-impact-chain-row { margin-bottom:20px; grid-template-columns:minmax(100px,1fr) auto; }
+.p3-impact-chain-list::before { left:50px; }
+.p3-impact-chain-row .p3-impact-chain-node { width:100px; }

@@ -262,7 +262,6 @@ function initP3() {
   var flightLayer = $('#p3FlightLayer'), flightPathEl = $('#p3FlightPath'), flightIcon = $('#p3TyphoonFlight'), mapHit = $('#p3MapHit');
   var treeFlightPathEl = $('#p3TreeFlightPath'), treeFlightIcon = $('#p3TreeTyphoonFlight'), treeHit = $('#p3TreeHit'), impactScene = $('#p3ImpactScene');
   var greatWallFlightPathEl = $('#p3GreatWallFlightPath'), greatWallFlightIcon = $('#p3GreatWallTyphoonFlight'), greatWallHit = $('#p3GreatWallHit');
-  var impactChainTrigger = $('#p3ImpactChainTrigger'), impactChain = $('#p3ImpactChain');
   var impactReturn = $('#p3ImpactReturn'), impactBack = $('#p3ImpactBack');
   var puzzleBoard = $('#p3PuzzleBoard'), puzzleGrid = $('#p3PuzzleGrid'), puzzleFull = $('#p3PuzzleFull'), mapgameBack = $('#p3MapgameBack');
   var puzzleCountdown = $('#p3PuzzleCountdown'), puzzleStart = $('#p3PuzzleStart'), puzzleStatus = $('#p3PuzzleStatus');
@@ -445,58 +444,9 @@ function initP3() {
   }
   if (greatWallHit) greatWallHit.addEventListener('click', playGreatWallFlight);
 
-  var impactStep = 'question';
-  var impactDialogs = $$('.p3-impact-dialog');
-  var impactStatistics = $('.p3-impact-statistics');
   function setImpactStep(step) {
-    impactStep = step;
-    if (impactScene) impactScene.dataset.impactStep = step;
-    impactDialogs.forEach(function (dialog) {
-      dialog.hidden = dialog.dataset.impactDialog !== step;
-    });
-    $$('[data-impact-person]').forEach(function (person) {
-      person.hidden = person.dataset.impactPerson !== step;
-    });
-    if (impactChainTrigger) impactChainTrigger.hidden = step !== 'downstream';
-    if (step !== 'downstream' && impactChain) {
-      impactChain.hidden = true;
-      if (impactStatistics) impactStatistics.hidden = true;
-      if (impactScene) impactScene.dataset.chainOpen = 'false';
-    }
-    if (step === 'question') {
-      var readingContent = impactScene && impactScene.closest('.chapter-content');
-      if (readingContent) readingContent.scrollTop = 0;
-    }
+    if (window.TyphoonImpact) window.TyphoonImpact.reset(step);
   }
-  impactDialogs.forEach(function (dialog) {
-    var bubble = dialog.querySelector('.p3-impact-bubble');
-    if (!bubble) return;
-    bubble.addEventListener('click', function () {
-      if (impactStep === 'question') {
-        setImpactStep('fisherman');
-      } else if (impactStep === 'fisherman') {
-        setImpactStep('city');
-      } else if (impactStep === 'city') {
-        setImpactStep('village');
-      } else if (impactStep === 'village') {
-        setImpactStep('downstream');
-      }
-      var active = document.querySelector('.p3-impact-dialog:not([hidden]) .p3-impact-bubble');
-      if (active) active.focus({ preventScroll: true });
-    });
-  });
-  if (impactChainTrigger) impactChainTrigger.addEventListener('click', function () {
-    if (impactStep !== 'downstream' || !impactChain) return;
-    impactChain.hidden = false;
-    if (impactStatistics) impactStatistics.hidden = false;
-    if (impactScene) impactScene.dataset.chainOpen = 'true';
-    impactChainTrigger.hidden = true;
-    window.setTimeout(function () {
-      var lead = impactChain.querySelector('.p3-impact-chain-lead');
-      if (lead) lead.setAttribute('tabindex', '-1');
-      if (lead) lead.focus({ preventScroll: true });
-    }, 40);
-  });
   if (impactReturn) impactReturn.addEventListener('click', function () {
     show('origin');
     if (scroll) scroll.scrollTop = 0;
