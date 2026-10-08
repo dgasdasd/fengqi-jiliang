@@ -21,7 +21,8 @@
     bubble.textContent = ''; bubble.appendChild(size); bubble.appendChild(display);
     return { key:dialog.dataset.impactDialog, text:text, display:display };
   });
-  var index = 0, offset = 0, timer = null, deadline = 0, remaining = 80;
+  var typeInterval = 35, linePause = 1500;
+  var index = 0, offset = 0, timer = null, deadline = 0, remaining = typeInterval;
   var visible = false, paused = false, finished = false;
   function canRun() { return visible && !paused && !finished && !document.hidden && !scene.closest('[hidden]'); }
   function stopTimer() {
@@ -57,11 +58,11 @@
       line.display.textContent = line.text.slice(0, offset);
       if (offset === line.text.length) {
         announcement.textContent = line.text;
-        // 完整说完后停留三秒，再出现下一位人物。
-        schedule(reduced ? Math.max(3000, line.text.length * 140) + 3000 : 3000);
-      } else schedule(80);
+        // 完整说完后短暂停留；减少动态时整句显示，保留同等阅读时间。
+        schedule(linePause + (reduced ? line.text.length * typeInterval : 0));
+      } else schedule(typeInterval);
     } else if (index < lines.length - 1) {
-      index++; offset = 0; showLine(); schedule(80);
+      index++; offset = 0; showLine(); schedule(typeInterval);
     } else {
       finished = true; openChain(); pause.hidden = true;
     }
@@ -73,7 +74,7 @@
   function reset(step) {
     stopTimer();
     index = Math.max(0, lines.findIndex(function (line) { return line.key === (step || 'question'); }));
-    offset = 0; remaining = 80; paused = false; finished = false;
+    offset = 0; remaining = typeInterval; paused = false; finished = false;
     pause.hidden = false; pause.textContent = '暂停对话'; pause.setAttribute('aria-pressed', 'false');
     announcement.textContent = ''; chain.hidden = true; statistics.hidden = true; trigger.hidden = true;
     scene.dataset.chainOpen = 'false';

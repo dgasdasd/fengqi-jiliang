@@ -63,12 +63,12 @@
 
 /* 只在导引页显示时播放；最后一帧保留，不循环、不随滚动重新隐藏。 */
 .guide-title,.guide-subtitle,.guide-lead,.guide-art,.guide-caption,.guide-ending{opacity:0}
-.page-menu.on .guide-title{animation:guideFade .75s ease .15s both}
-.page-menu.on .guide-subtitle{animation:guideFade .75s ease .5s both}
-.page-menu.on .guide-lead{animation:guideFade .75s ease .85s both}
-.page-menu.on .guide-art{animation:guideRise 1.1s cubic-bezier(.2,.65,.3,1) var(--art-delay) both}
-.page-menu.on .guide-caption{animation:guideRise .8s cubic-bezier(.2,.65,.3,1) var(--caption-delay) both}
-.page-menu.on .guide-ending{animation:guideFade .9s ease 8.5s both}
+.page-menu.on .guide-title{animation:guideFade .35s ease both}
+.page-menu.on .guide-subtitle{animation:guideFade .35s ease .08s both}
+.page-menu.on .guide-lead{animation:guideFade .35s ease .16s both}
+.page-menu.on .guide-art{animation:guideRise .45s cubic-bezier(.2,.65,.3,1) var(--art-delay) both}
+.page-menu.on .guide-caption{animation:guideRise .4s cubic-bezier(.2,.65,.3,1) var(--caption-delay) both}
+.page-menu.on .guide-ending{animation:guideFade .35s ease 1.65s both}
 @keyframes guideFade{from{opacity:0}to{opacity:1}}
 @keyframes guideRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 

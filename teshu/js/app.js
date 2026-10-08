@@ -911,9 +911,9 @@
     var sections = el('section', 'guide-chapters');
     sections.setAttribute('aria-label', '选择风雨故事板块');
     var chapters = [
-      { key: 'sea', title: '沧溟起势', sub: '沧溟蓄势，寻风暴行经之途', image: 'guide-storm.jpg', delay: 1.85 },
-      { key: 'tree', title: '疆土临险', sub: '风雨过境，察大地所承之困', image: 'guide-land.jpg', delay: 4.1 },
-      { key: 'wall', title: '人间筑防', sub: '凡人赴险，守万家安固之基', image: 'guide-people.jpg', delay: 6.35 }
+      { key: 'sea', title: '沧溟起势', sub: '沧溟蓄势，寻风暴行经之途', image: 'guide-storm.jpg', delay: .3 },
+      { key: 'tree', title: '疆土临险', sub: '风雨过境，察大地所承之困', image: 'guide-land.jpg', delay: .7 },
+      { key: 'wall', title: '人间筑防', sub: '凡人赴险，守万家安固之基', image: 'guide-people.jpg', delay: 1.1 }
     ];
     var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function openRoute(key) {
@@ -929,7 +929,7 @@
       button.dataset.chapter = chapter.key;
       button.setAttribute('aria-label', chapter.title + '：' + chapter.sub);
       button.style.setProperty('--art-delay', chapter.delay + 's');
-      button.style.setProperty('--caption-delay', (chapter.delay + .75) + 's');
+      button.style.setProperty('--caption-delay', (chapter.delay + .2) + 's');
       button.disabled = !reducedMotion;
       var art = el('span', 'guide-art');
       var picture = document.createElement('img');
