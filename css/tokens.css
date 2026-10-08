@@ -39,9 +39,9 @@
 
   /* ---------- 2. 字体 ---------- */
   --f-li:"LiSu","隶书","MSZ","FandolKai",serif;                           /* 隶书：主标题 */
-  --f-cal:"KaiTi","STKaiti","楷体","FandolKai",serif;                    /* 楷体：小标题 */
-  --f-hei:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;      /* 黑体：新闻、注释 */
-  --f-fang:"FangSong","仿宋","FandolFang",serif;                         /* 仿宋：正文 */
+  --f-cal:"FandolKai","KaiTi","STKaiti","楷体",serif;                    /* 楷体：小标题、正文与界面 */
+  --f-hei:var(--f-cal);
+  --f-fang:var(--f-cal);
   --f-song:var(--f-fang);
 
   /* ---------- 3. 舞台与单位 ----------

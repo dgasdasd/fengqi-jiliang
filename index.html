@@ -12,6 +12,7 @@
 <link rel="preload" as="image" href="assets/img/bg-eye.webp" fetchpriority="high">
 <link rel="preload" as="image" href="assets/img/people-new.png">
 <link rel="preload" as="font" type="font/woff2" href="fonts/msz.subset.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/fandol-kai.subset.woff2" crossorigin>
 <style>
 /* 方正温情雅漓体 */
 @font-face {
@@ -22,9 +23,9 @@
   font-display: swap;
 }
 </style>
-<link rel="stylesheet" href="css/tokens.css?v=20261004-fonts1">
-<link rel="stylesheet" href="css/style.css?v=20261007-cards1">
-<link rel="stylesheet" href="css/chapter-pages.css?v=20261008-inline1">
+<link rel="stylesheet" href="css/tokens.css?v=20261008-type1">
+<link rel="stylesheet" href="css/style.css?v=20261008-type1">
+<link rel="stylesheet" href="css/chapter-pages.css?v=20261008-type1">
 <link rel="stylesheet" href="css/formation-lab.css?v=20261008-thermo1">
 <link rel="stylesheet" href="css/impact-story.css?v=20261008-impact1">
 </head>
@@ -33,7 +34,7 @@
 <!-- teshu 原版前三页：第一页、第二页和四图标导引页只在入口阶段显示。
      图标点击后由 bridge 交给下面现有的第三页内容，其他页面结构保持原样。 -->
 <div id="teshuEntry" class="teshu-entry" aria-label="风栖过的脊梁导引页">
-  <iframe id="teshuEntryFrame" src="teshu/index.html?v=20261008-speed1" title="风掠大地，人作脊梁导引页" allow="autoplay"></iframe>
+  <iframe id="teshuEntryFrame" src="teshu/index.html?v=20261008-type1" title="风掠大地，人作脊梁导引页" allow="autoplay"></iframe>
 </div>
 
 <main class="frame" id="frame">
@@ -367,15 +368,20 @@
           <img src="assets/p3/after/charts/2021-infa-rescue.jpg" alt="2021年台风烟花救灾情况雷达图">
           <img src="assets/p3/after/charts/2023-haikui-rescue.jpg" alt="2023年第十一号台风海葵救灾情况面积图">
         </div>
-        <p class="p3-story-analysis">从台风预警鸣响到灾后家园复苏的全过程，基层干部、消防员、医护人员、民兵与人民群众五股力量始终同向而行、并肩相守。基层干部扎根一线筑牢防控根基，消防员逆险而上扛起攻坚重任，医护人员坚守阵地托举生命希望，民兵冲锋在前守护一方平安，人民群众守望相助汇聚温暖暖流。五类角色缺一不可，每份坚守各有分量，不同的岗位拧成同一股抗灾合力，以平凡的担当筑起风雨不透的防线，生动诠释了众志成城的精神内核，挺起了风栖之下始终挺立的中国脊梁。</p>
+        <div class="p3-story-analysis">
+          <p>从台风预警鸣响到灾后家园复苏的全过程，基层干部、消防员、医护人员、民兵与人民群众五股力量始终<strong class="p3-text-emphasis">同向而行、并肩相守</strong>。</p>
+          <p>基层干部扎根一线筑牢防控根基，消防员逆险而上扛起攻坚重任，医护人员坚守阵地托举生命希望，民兵冲锋在前守护一方平安，人民群众守望相助汇聚温暖暖流。</p>
+          <p>五类角色<strong class="p3-text-emphasis">缺一不可</strong>，每份坚守各有分量，<strong class="p3-text-emphasis">不同的岗位拧成同一股抗灾合力</strong>，以平凡的担当筑起风雨不透的防线，生动诠释了众志成城的精神内核，<strong class="p3-text-emphasis">挺起了风栖之下始终挺立的中国脊梁。</strong></p>
+        </div>
       </section>
 
       <section class="p3-prep" id="p3Prep" aria-labelledby="p3PrepTitle">
         <div class="p3-transition-text">
           <p>一张张档案卡片，记下风雨之中普通人挺身而出的选择。</p>
-          <p>危难不只是突发的一瞬，抵御风雨的底气，藏在风暴来临前的每一份筹备之中。</p>
-          <p>风从海上来，而守护的防线，早已提前筑起。在风暴抵达之前，他们早已行动，开展隐患排查、落实防灾预案，不屈于风雨，守护千家万户。这些逆行者，究竟做了哪些防灾筹备？</p>
-          <p>无论身处沿海或是内陆，都需要读懂风险，提前做好应对，让每一次准备，都早台风一步。</p>
+          <p>危难不只是突发的一瞬，<br><strong class="p3-text-emphasis">抵御风雨的底气，藏在风暴来临前的每一份筹备之中。</strong></p>
+          <p>风从海上来，而守护的防线，早已提前筑起。在风暴抵达之前，他们早已行动，开展隐患排查、落实防灾预案，不屈于风雨，守护千家万户。</p>
+          <p><strong class="p3-text-emphasis">这些逆行者，究竟做了哪些防灾筹备？</strong></p>
+          <p>无论身处沿海或是内陆，都需要读懂风险，提前做好应对，<br><strong class="p3-text-emphasis">让每一次准备，都早台风一步。</strong></p>
         </div>
         <p class="p3-after-section-kicker">NEXT · 防灾准备</p>
         <h3 id="p3PrepTitle">风从海上来，但伤害不止于海岸线</h3>

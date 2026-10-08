@@ -26,10 +26,10 @@
   --blue:#2E598F;       /* rgb(46,89,143) 引用蓝 */
   --near:#161414;       /* rgb(22,20,20) */
   --white:#fff;
-  --font-kai:'KaiTi','STKaiti','楷体','FandolKai',serif;
-  --font-fang:'FangSong','仿宋','FandolFang',serif;
+  --font-kai:'FandolKai','KaiTi','STKaiti','楷体',serif;
+  --font-fang:var(--font-kai);
   --font-song:var(--font-fang);
-  --font-hei:'PingFang SC','Microsoft YaHei','微软雅黑',sans-serif;
+  --font-hei:var(--font-kai);
   --font-art:var(--font-kai);
   --font-lishu:'LiSu','隶书','MSZ','FandolKai',serif;
   --t:.65s;

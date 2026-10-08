@@ -116,7 +116,7 @@ body{
 /* 水墨台风：只出现、旋转、缩小、飘走 —— 不留痕 */
 .typhoon{ opacity:0; }
 
-/* 标题：使用方正劲豪榜书字体，"风"和"脊梁"字号加大 */
+/* 标题：使用统一隶书字体，"风"和"脊梁"字号加大 */
 .title{
   position:absolute; inset:0; z-index:var(--z-title); pointer-events:none;
   display:flex; align-items:center; justify-content:center;
@@ -128,7 +128,7 @@ body{
   to  { opacity:1; filter:blur(0); }
 }
 .title-text{
-  font-family: 'FZFont', 'Microsoft YaHei', '微软雅黑', serif;
+  font-family:var(--f-li);
   text-align:center;
   line-height:1.2;
   color:#000;
