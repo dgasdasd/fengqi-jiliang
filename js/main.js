@@ -670,25 +670,23 @@ function initP3() {
   function setPuzzleSolved() {
     puzzleMode = 'complete';
     completedAt = performance.now();
-    if (puzzleStatus) puzzleStatus.textContent = '拼图完成。点击地图，下方显示年份路径。';
+    if (puzzleStatus) puzzleStatus.textContent = '拼图完成！可以再玩一次，或查看下方时间轴。';
     if (puzzleBoard) {
       puzzleBoard.classList.remove('is-playing');
       puzzleBoard.classList.add('is-complete');
-      puzzleBoard.setAttribute('aria-label', '拼图已完成，点击地图查看下方年份路径');
+      puzzleBoard.setAttribute('aria-label', '拼图已完成，点击地图前往下方台风时间轴');
     }
     if (puzzleGrid) puzzleGrid.hidden = true;
     if (puzzleFull) puzzleFull.hidden = false;
-    if (puzzleStart) puzzleStart.hidden = true;
+    if (puzzleStart) { puzzleStart.hidden = false; puzzleStart.textContent = '再玩一次'; }
   }
-  function revealHistoryBelowMap() {
-    if (!historyBlock || puzzleMode !== 'complete') return;
-    historyBlock.hidden = false;
+  function goToHistoryBelowMap() {
+    if (!historyBlock) return;
     if (historyScene) {
       historyScene.classList.remove('is-entering');
       void historyScene.offsetWidth;
       historyScene.classList.add('is-entering');
     }
-    if (puzzleStatus) puzzleStatus.textContent = '线路已展开。点击年份节点查看台风详情。';
     window.setTimeout(function () {
       if (window.P3Pages) window.P3Pages.goTo(historyBlock.querySelector('.chapter-page'), true);
       else historyBlock.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
@@ -770,7 +768,7 @@ function initP3() {
     var slot = Number(tile.dataset.slot), row = Math.floor(slot / 3), col = slot % 3, target = -1;
     if (puzzleMode === 'complete' && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
-      revealHistoryBelowMap();
+      goToHistoryBelowMap();
       return;
     }
     if (puzzleMode !== 'playing') return;
@@ -784,10 +782,12 @@ function initP3() {
     }
   }
   function startPuzzle() {
-    if (puzzleMode !== 'ready' || !puzzleBoard) return;
+    if ((puzzleMode !== 'ready' && puzzleMode !== 'complete') || !puzzleBoard) return;
     puzzleMode = 'memory';
     if (puzzleStart) puzzleStart.hidden = true;
     puzzleBoard.classList.add('is-memory');
+    puzzleBoard.classList.remove('is-complete');
+    puzzleBoard.setAttribute('aria-label', '中国地图拼图');
     var seconds = 5;
     if (puzzleFull) puzzleFull.hidden = false;
     if (puzzleGrid) puzzleGrid.hidden = true;
@@ -823,16 +823,18 @@ function initP3() {
   }
   if (puzzleBoard) {
     puzzleBoard.addEventListener('click', function () {
-      if (puzzleMode === 'complete' && performance.now() - completedAt > 450) revealHistoryBelowMap();
+      if (puzzleMode === 'complete' && performance.now() - completedAt > 450) goToHistoryBelowMap();
     });
     puzzleBoard.addEventListener('keydown', function (e) {
       if (puzzleMode === 'complete' && (e.key === 'Enter' || e.key === ' ')) {
         e.preventDefault();
-        revealHistoryBelowMap();
+        goToHistoryBelowMap();
       }
     });
   }
   if (puzzleStart) puzzleStart.addEventListener('click', startPuzzle);
+  var puzzleTimeline = $('#p3PuzzleTimeline');
+  if (puzzleTimeline) puzzleTimeline.addEventListener('click', goToHistoryBelowMap);
   if (mapgameBack) mapgameBack.addEventListener('click', function () {
     flightRun++;
     treeFlightRun++;
@@ -1054,8 +1056,8 @@ function initP3() {
       if (puzzleCountdown) puzzleCountdown.hidden = true;
       if (puzzleFull) puzzleFull.hidden = false;
       if (puzzleGrid) puzzleGrid.hidden = true;
-      if (puzzleStart) puzzleStart.hidden = false;
-      if (puzzleStatus) puzzleStatus.textContent = '先观察完整地图，再开始拼图';
+      if (puzzleStart) { puzzleStart.hidden = false; puzzleStart.textContent = '开始游戏'; }
+      if (puzzleStatus) puzzleStatus.textContent = '可以挑战拼图，也可以直接查看下方时间轴';
     }
     views.forEach(function (v) {
       v.hidden = seaFlow ? ['origin', 'process', 'evidence', 'mapgame'].indexOf(v.dataset.view) < 0 : v.dataset.view !== name;

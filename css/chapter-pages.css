@@ -144,6 +144,9 @@
 .p3.is-paged .chapter-puzzle .p3-puzzle-heading h3 { font-size:24px; }
 .p3.is-paged .chapter-puzzle .p3-puzzle-heading p { font-size:18px; }
 .p3.is-paged .chapter-puzzle .p3-puzzle-start { min-height: 46px; font-size:22px; }
+.p3-puzzle-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:9px; }
+.p3-puzzle-actions .p3-puzzle-start { min-width:0; padding-inline:16px; }
+.p3-puzzle-actions .p3-puzzle-timeline { background:#fff; color:#285a72; border:1px solid #285a72; }
 .p3.is-paged .chapter-puzzle .p3-puzzle-preview figcaption { font-size:16px; }
 .p3.is-paged .chapter-years-original .chapter-content { overflow-y: auto; overflow-x: hidden; padding-top: 66px; padding-bottom: 26px; }
 .p3.is-paged .chapter-years-original .chapter-content > h2 { margin-bottom: 4px; }

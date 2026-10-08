@@ -54,20 +54,19 @@
   var routeView = $('.p3-view[data-view="route"]');
   if (routeView) page(routeView, '台风的类型', children(routeView), 'chapter-route-extra');
 
-  // 地图：拼图独占一屏；年份与台风名称沿原本的完整曲线展示。
+  // 地图档案始终可翻阅，拼图仅作为独立小游戏。
   var map = $('.p3-mapgame'), history = $('#p3HistoryBlock'), scene = $('#p3HistoryScene');
   if (map && history && scene) {
     var puzzlePage = page(map, '中国地图拼图', [$('.p3-mapgame > .p3-subtitle'), $('.p3-puzzle-panel', map)], 'chapter-puzzle');
     map.insertBefore(puzzlePage, history);
-    seaPages.push(puzzlePage);
     var timeline = $('.p3-timeline', scene);
     var oldTitle = $('.p3-subtitle', scene), oldHint = $('.p3-history-hint', scene);
     oldHint.textContent = '点击年份，查看台风路径与影响';
-    seaPages.push(page(scene, '近十年最具代表台风', [oldTitle, oldHint, timeline], 'chapter-years chapter-years-original'));
+    page(scene, '近十年最具代表台风', [oldTitle, oldHint, timeline], 'chapter-years chapter-years-original');
     var report = $('.p3-loss-report', map), charts = $$('.p3-loss-chart', report);
     var analysis = $('.p3-loss-analysis', report), lines = children(analysis);
-    seaPages.push(page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0],
-      heading('复合灾害的影响'), lines[1], charts[1]], 'chapter-loss chapter-loss-combined'));
+    page(report, '台风损害影响', [$('#p3LossReportTitle'), $('.p3-loss-intro', report), charts[0], lines[0],
+      heading('复合灾害的影响'), lines[1], charts[1]], 'chapter-loss chapter-loss-combined');
     analysis.remove();
   }
   seaPages.forEach(function (section) {
