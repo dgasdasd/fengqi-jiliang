@@ -188,6 +188,9 @@
 .p3.is-paged .chapter-impact-journey .p3-impact-chain-node strong { font-size:19px; }
 .p3.is-paged .chapter-impact-journey .p3-impact-chain-node small { font-size:16px; }
 .p3.is-paged .chapter-impact-chart .p3-impact-chart { width: 100%; }
+.p3.is-paged .chapter-impact-charts-combined .chapter-content { overflow-y:auto; overflow-x:hidden; padding-top:66px; }
+.p3.is-paged .chapter-impact-charts-combined .p3-impact-source { padding:0; overflow:hidden; margin:18px 0 12px; }
+.p3-impact-source img { display:block; width:100%; height:auto; }
 .p3.is-paged .chapter-impact-chart .p3-impact-chart figcaption { font-size:21px; }
 .p3.is-paged .chapter-impact-chart .impact-bar-row,
 .p3.is-paged .chapter-impact-chart .impact-bar-row em,

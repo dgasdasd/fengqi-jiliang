@@ -80,8 +80,8 @@
     var impactStats = $('.p3-impact-statistics', chain), impactCharts = $$('.p3-impact-chart', impactStats);
     var impactCopies = $$('.p3-impact-stat-copy', impactStats);
     impact.appendChild(impactStats);
-    page(impactStats, '台风灾害链平均伤害', [$('.p3-impact-statistics h3'), $('.p3-impact-stat-intro'), impactCharts[0], impactCopies[0]], 'chapter-impact-chart');
-    page(impactStats, '灾害损失构成', [heading('灾害损失构成'), impactCharts[1], impactCopies[1], $('#p3ImpactReturn')], 'chapter-impact-chart');
+    page(impactStats, '近十年典型台风统计', [$('.p3-impact-statistics h3'), $('.p3-impact-stat-intro'),
+      impactCharts[0], impactCopies[0], impactCharts[1], impactCopies[1], $('#p3ImpactReturn')], 'chapter-impact-chart chapter-impact-charts-combined');
     var chartGrid = $('.p3-impact-chart-grid', impactStats);
     if (chartGrid) chartGrid.remove();
   }
@@ -149,7 +149,7 @@
       return Math.abs(topOf(a) - scroller.scrollTop) <= Math.abs(topOf(b) - scroller.scrollTop) ? a : b;
     });
     root.classList.toggle('is-reading-page', current.classList.contains('chapter-chart-overview') ||
-      current.classList.contains('chapter-loss-combined') || current.classList.contains('chapter-impact-journey') ||
+      current.classList.contains('chapter-loss-combined') || current.classList.contains('chapter-impact-journey') || current.classList.contains('chapter-impact-charts-combined') ||
       current.classList.contains('chapter-stories') || current.classList.contains('chapter-prep-combined') ||
       current.classList.contains('chapter-profile-combined'));
     toolbar.querySelector('span').textContent = current.dataset.pageTitle || '';
@@ -181,7 +181,7 @@
   toolbar.querySelector('button').addEventListener('click', function () { root.dispatchEvent(new CustomEvent('p3-return-menu')); });
   scroller.addEventListener('scroll', function () { clearTimeout(scrollTimer); scrollTimer = setTimeout(update, 70); }, { passive: true });
   scroller.addEventListener('wheel', function (event) {
-    var readingContent = event.target.closest('.chapter-map-timeline .chapter-content, .chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-stories .chapter-content, .chapter-prep-combined .chapter-content, .chapter-profile-combined .chapter-content');
+    var readingContent = event.target.closest('.chapter-map-timeline .chapter-content, .chapter-chart-overview .chapter-content, .chapter-loss-combined .chapter-content, .chapter-impact-journey .chapter-content, .chapter-impact-charts-combined .chapter-content, .chapter-stories .chapter-content, .chapter-prep-combined .chapter-content, .chapter-profile-combined .chapter-content');
     if (readingContent && ((event.deltaY > 0 && readingContent.scrollTop < readingContent.scrollHeight - readingContent.clientHeight - 1) ||
       (event.deltaY < 0 && readingContent.scrollTop > 1))) return;
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.target.closest('.chapter-formation .chapter-content, .p3-process-scrollbox, .p3-evidence-scrollbox, .p3-game-canvas, .p3-puzzle-board, .p3-typhoon-detail, .p3-prep-images')) return;
@@ -218,7 +218,7 @@
     if (event.key === 'PageDown' || event.key === 'PageUp') {
       event.preventDefault();
       var direction = event.key === 'PageDown' ? 1 : -1;
-      var content = current && current.classList.contains('chapter-map-timeline') && $('.chapter-content', current);
+      var content = current && (current.classList.contains('chapter-map-timeline') || current.classList.contains('chapter-impact-charts-combined')) && $('.chapter-content', current);
       if (content && ((direction > 0 && content.scrollTop < content.scrollHeight - content.clientHeight - 1) || (direction < 0 && content.scrollTop > 1))) {
         content.scrollBy({ top:direction * content.clientHeight * .85, behavior:reduced ? 'auto' : 'smooth' });
       } else turn(direction);
