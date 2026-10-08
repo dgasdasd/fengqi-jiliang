@@ -190,6 +190,29 @@
     wheelLock = Date.now() + 560;
     turn(event.deltaY > 0 ? 1 : -1);
   }, { passive: false });
+  // 灾害链和统计页：先在本页阅读，到边界后用下一次竖向手势翻页。
+  var impactSwipe = null;
+  scroller.addEventListener('touchstart', function (event) {
+    impactSwipe = null;
+    if (event.touches.length !== 1) return;
+    var content = event.target.closest('.chapter-impact-journey .chapter-content, .chapter-impact-chart .chapter-content');
+    if (!content || event.target.closest('input, [role="slider"], .p3-typhoon-detail')) return;
+    var touch = event.touches[0];
+    impactSwipe = { x:touch.clientX, y:touch.clientY, page:content.closest('.chapter-page'),
+      top:content.scrollTop <= 1, bottom:content.scrollTop >= content.scrollHeight - content.clientHeight - 1 };
+  }, { passive:true });
+  scroller.addEventListener('touchend', function (event) {
+    var start = impactSwipe;
+    impactSwipe = null;
+    if (!start || event.touches.length || event.changedTouches.length !== 1) return;
+    var touch = event.changedTouches[0], dy = start.y - touch.clientY, dx = start.x - touch.clientX;
+    if (Math.abs(dy) < 50 || Math.abs(dy) <= Math.abs(dx) * 1.3) return;
+    if ((dy > 0 && !start.bottom) || (dy < 0 && !start.top)) return;
+    update();
+    if (current !== start.page) return;
+    turn(dy > 0 ? 1 : -1);
+  }, { passive:true });
+  scroller.addEventListener('touchcancel', function () { impactSwipe = null; }, { passive:true });
   root.addEventListener('keydown', function (event) {
     if (event.target.closest('button, input, [role="slider"], .p3-puzzle-board, .p3-game-canvas, .p3-typhoon-detail')) return;
     if (event.key === 'PageDown' || event.key === 'PageUp') {

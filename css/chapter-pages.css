@@ -172,6 +172,7 @@
 
 /* Dialogue keeps its scene coordinates; the complete chain follows in the same scrollable page. */
 .p3.is-paged .chapter-impact-journey .chapter-content { padding: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; }
+.p3.is-paged .chapter-impact-chart .chapter-content { overscroll-behavior-y: contain; }
 .p3.is-paged .chapter-impact-journey .p3-impact-scene { width: 100%; height: var(--vh); min-height: var(--vh); padding: 0; overflow: hidden; }
 .p3.is-paged .chapter-impact-journey .p3-impact-back { display: none; }
 .p3.is-paged .chapter-impact-journey .p3-impact-scene h2 { display: none; }
